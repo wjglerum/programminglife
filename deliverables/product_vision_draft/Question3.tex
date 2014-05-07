@@ -1,2 +1,8 @@
 \section{question 3}
-Crucial components are the calculations performed and having them visualized in a way genetic biologists can understand.
+The product attributes that are crucial to satisfy the customer needs are an intuitive GUI for the user to use the application, an ability for the user to input data and a visual output of the results. There aren't any constraints on the so called non functional requirements; the applications could be a web service or a standalone desktop program. A file format for the used data is already available: VCF (Variant Call Format). The application should handle these files.
+
+Furthermore, there should be existing information available (a reference sequence) so the application can compare input data and find annotations and report variants. Readed input data should be mapped to the reference data to detect variants like SNPs, deletions, insertions, etc. To distinguish true variants from sequencing errors, some statistics are needed to end up with a solid result. These data on mutations/variants is useful for the users.
+
+One of the main topic users would like to treat is which mutations cause which kind of diseases. The applications could help the users by using one of the five given methods: looking for known 'disease mutations', use family data of the persons whose data is used as input, filtering, looking at nearby SNPs or lastly, looking at nearby genes. The power of the application could lie in expressing the results of these methods in a nice visual way.
+
+In some of these methods it's needed to perform some calculations. The application should be able to execute these calculations fast. It would be possible to use a server-client model for the application where at client side, there's an interface for the user and where computations take place at server side.
