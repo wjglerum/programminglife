@@ -1,0 +1,12 @@
+@Misc{cbio,
+author =   {Jianjiong Gao and Arman Aksoy, B. and others},
+title =    {cBioPortal for Cancer Genomics},
+howpublished = {\url{http://www.cbioportal.org/public-portal/index.do}},
+year = {2014}
+}
+@Misc{circos,
+author = {Krzywinski, Martin I and Schein, Jacqueline E and Birol, Inanc and Connors, Joseph and Gascoyne, Randy and Horsman, Doug and Jones, Steven J and Marra, Marco A}, 
+title = {Circos: An information aesthetic for comparative genomics},
+howpublished {\url{http://genome.cshlp.org/content/early/2009/06/15/gr.092759.109.abstract}}, 
+year = {2009}
+}
