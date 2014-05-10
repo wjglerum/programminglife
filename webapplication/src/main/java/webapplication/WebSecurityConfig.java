@@ -10,7 +10,7 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
 @EnableWebMvcSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
+        protected final void configure(final HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
                 .anyRequest().authenticated();
@@ -24,13 +24,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected final void configure(final AuthenticationManagerBuilder auth) throws Exception {
         auth
             .inMemoryAuthentication()
-                .withUser("ruben").password("4227492").roles("USER").and()
-        		.withUser("mathijs").password("4237676").roles("USER").and()
-                .withUser("jasper").password("4212584").roles("USER").and()
-        		.withUser("robbert").password("1527118").roles("USER").and()
-        		.withUser("willemjan").password("4141040").roles("USER");
+                .withUser("ruben").password("4227492").roles("USER")
+                .and()
+                .withUser("mathijs").password("4237676").roles("USER")
+                .and()
+                .withUser("jasper").password("4212584").roles("USER")
+                .and()
+                .withUser("robbert").password("1527118").roles("USER")
+                .and()
+                .withUser("willemjan").password("4141040").roles("USER");
     }
 }

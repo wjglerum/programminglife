@@ -1,13 +1,23 @@
 package core;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+/**
+ * Person class, alle patiënten worden in dit object gecreëerd.
+ * @author mathijs
+ *
+ */
 public class Person {
-    @Size(min=2, max=30)
+    /**
+     * Een naam bestaat uit minimaal 2, en maximaal 30 tekens.
+     */
+    @Size(min = 2, max = 30)
     private String name;
 
     @NotNull
+    @Min(0)
     private Integer age;
 
     public String getName() {
