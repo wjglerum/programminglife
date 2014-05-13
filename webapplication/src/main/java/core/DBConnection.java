@@ -37,7 +37,7 @@ public class DBConnection {
 		Class.forName("org.postgresql.Driver");
 		dbConn = DriverManager.getConnection(url+"/"+dbName, dbUser, dbPassword);
 
-		System.out.println("Database connection established");
+		System.out.println("Database connection established with " + url+"/"+dbName);
 
 		return dbConn;
 	}
