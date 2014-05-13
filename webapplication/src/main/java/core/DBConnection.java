@@ -21,20 +21,21 @@ public class DBConnection {
 	private static Connection dbConn = null;
 	private static final String dbUser = "student";
 	private static final String dbPassword = "genomebrowser";
-	private static final String url = "jdbc:postgresql://localhost:5432/string";
+	private static final String url = "jdbc:postgresql://localhost:5432";
 
 	/**
 	 * GetConnection makes the connection and returns it.
 	 *
+	 * @param dbName The name of the database to connect to
 	 * @return
 	 * @throws SQLException
 	 * @throws ClassNotFoundException
 	 */
-	public static Connection getConnection() throws SQLException, ClassNotFoundException {
+	public static Connection getConnection(String dbName) throws SQLException, ClassNotFoundException {
 
 		//database connectivity for postgres
 		Class.forName("org.postgresql.Driver");
-		dbConn = DriverManager.getConnection(url, dbUser, dbPassword);
+		dbConn = DriverManager.getConnection(url+"/"+dbName, dbUser, dbPassword);
 
 		System.out.println("Database connection established");
 

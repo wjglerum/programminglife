@@ -19,8 +19,10 @@ public class QueryProcesser {
 	 * @throws SQLException In case it goes wrong
 	 */
 	public static void testQuery(final Connection con) throws SQLException {
-
-		String query = "SELECT protein_b.preferred_name, combined_score FROM "
+		
+		String query = "SELECT "
+			+ "protein_b.preferred_name, combined_score "
+			+ "FROM "
 			+ "network.node_node_links, "
 			+ "items.proteins AS protein_a, "
 			+ "items.proteins AS protein_b, "
@@ -54,7 +56,7 @@ public class QueryProcesser {
 	 * @throws SQLException In case something goes wrong with the sql
 	 */
 	public static void main(final String[] args) throws ClassNotFoundException, SQLException {
-		Connection conn = DBConnection.getConnection();
-		testQuery(conn);
+		Connection stringConn = DBConnection.getConnection("string");
+		testQuery(stringConn);
 	}
 }
