@@ -1,0 +1,21 @@
+\section{Introduction}
+	This document provides information on the system that will be built during the context project programming life. We have also set up a couple of goals which will be followed as much as possible. The architecture of the product will be discussed in the form of high level components. These may be split up into subcomponents and/or subsystems.
+	\subsection{Design goals}
+	Our product will focus on:
+	\begin{itemize}
+		\item Availability
+			\subitem We plan to have a working system at all times, with more functionality being added each week. Using this approach, our customer can try the product after each iteration, resulting in feasible feedback which we can use to quickly alter course.
+		\item Manageability
+			\subitem Doctors will not have to manage anything, as they have no direct access to the databases or any data. They will only be provided visualizations to interact with.
+		\item Ease of use
+			\subitem Since our application runs on a server and a doctor can access our data with a web page, no extra programs are required. The user will log on with his credentials and can select a vcf-file to upload to our server as well as provide some data on the trio.
+		\item Performance
+			\subitem As vcf-files are quite large, the data will be sent to the server while the doctor can still access the website. The data can be analysed quickly by the server and the results will be returned and locally visualized.
+		\item Scalability
+			\subitem Our application will be scalable in a sense that multiple users can upload files. However the databases containing information about the genetic variations (string, dbSNP and CADD) will continue to grow and thus the computational power required to gather the information needed will also grow. This however is not the problem of our server, but of the host of the server.
+		\item Reliability
+			\subitem The application should be very reliable, as servers are generally always on. The user only needs to connect to the web page.
+		\item Secureness
+			\subitem Doctors are required to log onto our system via the web page, thus unauthorized access is prevented. The data sent over will only be saved for a short time, long enough for it to be analyzed. After this it is deleted and the results are submitted.
+	\end{itemize}
+	\subsection{Programming languages and programs}
