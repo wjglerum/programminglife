@@ -4,34 +4,31 @@
 \usepackage{graphicx}
 \usepackage[english]{babel}
 
-
 \begin{document}
 	\input{title.tex}
 	
+	\section*{Abstract}
+	\input{abstract.tex}
+	\newpage
+	
 	\tableofcontents
-	\clearpage
+	\newpage
 	
 	\section{Introduction}
+	\input{introduction.tex}
 	
 	\section{Product}
-		\subsection{High-level product backlog}
-			Set of epics aligned with the product vision
-		\subsection{Roadmap}
-			Major release schedule, release goals.
+	\input{product.tex}
 	
 	\section{Product backlog}
-		First version with estimates and prioritized user stories.
-		\subsection{User stories of features}
-		\subsection{User stories of defects}
-			(if applicable)
-		\subsection{User stories of technical improvements}
-			(if applicable)
-		\subsection{User stories of know-how acquisition}
-		\subsection{Initial release plan}
-			milestones, MRFs per release
+	\input{backlog.tex}
 	
 	\section{Definition of Done}
-		(backlog items, sprints, releases)
+	\input{defdone.tex}
 		
 	\section{Glossary}
+	\input{glossary.tex}
+	
+	\bibliography{bibtex}{}
+	\bibliographystyle{unsrt}
 \end{document}
