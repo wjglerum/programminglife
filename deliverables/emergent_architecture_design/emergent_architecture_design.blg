@@ -3,53 +3,44 @@ Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: emergent_architecture_design.aux
 The style file: unsrt.bst
 Database file #1: bibtex.bib
-Warning--all relevant fields are empty in string
-Warning--all relevant fields are empty in dbSNP
-Too many commas in name 1 of "Kircher M, Witten DM, Jain P, O'Roak BJ, Cooper GM, Shendure J" for entry CADD
-while executing---line 944 of file unsrt.bst
-Too many commas in name 1 of "Kircher M, Witten DM, Jain P, O'Roak BJ, Cooper GM, Shendure J" for entry CADD
-while executing---line 944 of file unsrt.bst
-Too many commas in name 1 of "Kircher M, Witten DM, Jain P, O'Roak BJ, Cooper GM, Shendure J" for entry CADD
-while executing---line 944 of file unsrt.bst
 You've used 3 entries,
             1791 wiz_defined-function locations,
-            453 strings with 3774 characters,
-and the built_in function-call counts, 309 in all, are:
-= -- 13
-> -- 6
+            468 strings with 4403 characters,
+and the built_in function-call counts, 991 in all, are:
+= -- 74
+> -- 78
 < -- 0
-+ -- 4
-- -- 1
-* -- 5
-:= -- 35
-add.period$ -- 5
++ -- 27
+- -- 24
+* -- 99
+:= -- 176
+add.period$ -- 9
 call.type$ -- 3
-change.case$ -- 1
+change.case$ -- 3
 chr.to.int$ -- 0
-cite$ -- 5
-duplicate$ -- 15
-empty$ -- 55
-format.name$ -- 1
-if$ -- 72
+cite$ -- 3
+duplicate$ -- 27
+empty$ -- 75
+format.name$ -- 24
+if$ -- 197
 int.to.chr$ -- 0
 int.to.str$ -- 3
-missing$ -- 0
-newline$ -- 14
-num.names$ -- 1
-pop$ -- 16
+missing$ -- 3
+newline$ -- 18
+num.names$ -- 3
+pop$ -- 3
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 23
+skip$ -- 9
 stack$ -- 0
-substring$ -- 0
+substring$ -- 81
 swap$ -- 3
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
-warning$ -- 2
-while$ -- 1
+warning$ -- 0
+while$ -- 9
 width$ -- 4
-write$ -- 20
-(There were 3 error messages)
+write$ -- 35
