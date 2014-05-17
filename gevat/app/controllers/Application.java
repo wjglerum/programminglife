@@ -12,7 +12,7 @@ public class Application extends Controller {
   }
 
   public static Result dashboard() {
-    return ok(dashboard.render("Welcome to GEVATT!!! Dit is even een test om te kijken of de auto deploy functie werkt."));
+    return ok(dashboard.render("Welcome to GEVATT!"));
   }
 
   public static Result help() {
