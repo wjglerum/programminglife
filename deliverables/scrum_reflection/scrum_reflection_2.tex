@@ -1,0 +1,37 @@
+\documentclass[a4paper]{report}
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage{natbib}
+\usepackage{hyperref}
+\usepackage[english]{babel}
+\usepackage{lscape}
+
+\begin{document}
+\input{title.tex}
+
+\begin{landscape}
+\setlength\extrarowheight{5pt}
+\begin{table}[ht]
+\begin{tabular}{p{6cm}|l|l|l|p{2cm}|p{7cm}}
+
+\textbf{Task} & \textbf{Effort} & \textbf{Assignment} & \textbf{Actual effort} & \textbf{Done} & \textbf{Notes}\\
+\hline \hline
+
+Algorithm to find varations in TrioData & 8 & Robbert & 2 hours & Needs optimization & \\
+Integration of databases & 4 & Ruben & 6 hours & Needs play integration & At first it didn't work because of the double SSH, and database access wasn't working properly in the beginning\\
+Final product vision & 4 & All & 5 hours & Yes & Everyone put in about an hour\\
+Read VCF files & 4 & Willem Jan & 10 hours & Yes & Was actually done by Robbert. Includes debugging the VCF-file(because it was corrupt) and finding tools, which cost the most time.\\
+Read data from database & 4 & Ruben & 4 hours & Yes & Willem Jan helped. Need to make more queries\\
+Initial layout of website & 3 & Jasper & 1 hour & Yes & \\
+Initial commit with basic setup containing framework, test suite, maven & 2 & Mathijs & 40 hours & Yes & See large note on next page\\
+Decide on protocol between server and client & 2 & & & No & Will be done next sprint\\
+Decide on platform, programming language and framework & 1 & All & 2 hours & Yes & Chose for JAVA and Play framework with Bootstrap for front-end and postgresql for databases\\
+Setup Jenkins & 1 & Jasper and Willem Jan & 2 hours & Yes & Needed to install plugins and play\\
+
+\end{tabular}
+\end{table}
+\end{landscape}
+\section*{Note}
+Mathijs managed to get Spring working with maven, had some problems with the pom-file, but once it was working, made a basic login page and a file upload page.\\
+Jasper and Willem Jan tried getting Spring to work, but everything failed to work. They also tried Typesave activator for Play, which was a beautiful application, but had terrible integration with Maven. Then tried Spring again, but to no avail. After this they tried the Play framework and finally succeeded in making a few basic pages.
+\end{document}
