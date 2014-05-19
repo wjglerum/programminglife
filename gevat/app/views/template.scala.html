@@ -1,4 +1,4 @@
-@(title: String)(content: Html)
+@(title: String, user: User)(content: Html)
 
 <!DOCTYPE html>
 
@@ -21,6 +21,11 @@
 						<li><a href="/dashboard">Dashboard</a></li>
 						<li><a href="/help">Help</a></li>
 						<li><a href="/about">About</a></li>
+						@if(user == null) {
+						  <li><a href="/login">Log in</a></li>
+						} else {
+						  <li><a href="/logout">Log out</a></li>
+						}
 					</ul>
 				</div>
 			</div>

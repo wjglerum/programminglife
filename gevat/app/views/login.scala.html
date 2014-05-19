@@ -1,6 +1,6 @@
 @(form: Form[Application.Login])
 
-@template_general("Login") {
+@template_general("Login", null) {
 	
 	@helper.form(routes.Application.authenticate, 'role -> "form", 'class -> "form-login form-horizontal") {
 	

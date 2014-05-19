@@ -23,21 +23,21 @@ public class Application extends Controller {
    */
   @Security.Authenticated(Secured.class)
   public static Result dashboard() {
-    return ok(dashboard.render("Welcome to GEVATT!"));
+    return ok(dashboard.render("Welcome to GEVATT!", getUser()));
   }
 
   /**
    * Render the help page (no authentication required).
    */
   public static Result help() {
-    return ok(help.render());
+    return ok(help.render(getUser()));
   }
 
   /**
    * Render the about page (no authentication required).
    */
   public static Result about() {
-    return ok(about.render());
+    return ok(about.render(getUser()));
   }
   
   /**
@@ -93,6 +93,17 @@ public class Application extends Controller {
     return redirect(
       routes.Application.login()
     );
+  }
+  
+  /**
+   * Get the current session User
+   */
+  public static User getUser() {
+    String username = session("username");
+    
+    // TODO query User from database based on username
+    
+    return new User(username, "Test User", "pass");
   }
 
 }
