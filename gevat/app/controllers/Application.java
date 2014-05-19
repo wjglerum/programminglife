@@ -11,6 +11,10 @@ public class Application extends Controller {
     return redirect("/dashboard");
   }
 
+  public static Result login() {
+    return ok(login.render());
+  }
+
   public static Result dashboard() {
     return ok(dashboard.render("Welcome to GEVATT!"));
   }
