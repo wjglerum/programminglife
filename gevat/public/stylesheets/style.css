@@ -39,6 +39,14 @@ body {
 }
 
 /*
+ * Header
+ */
+.navbar-text {
+	margin-right: 50px;
+	color: #eee !important;
+}
+
+/*
  * Main content
  */
 .main {
