@@ -61,6 +61,8 @@ public class Application extends Controller {
    * Render the login form.
    */
   public static Result login() {
+    session().clear();
+    
     return ok(login.render(form(Login.class)));
   }
   
