@@ -8,13 +8,15 @@ GET     /help                       controllers.Application.help()
 GET     /about                      controllers.Application.about()
 
 # Authentication
-GET     /login                      controllers.Application.login()
-POST	/login						controllers.Application.authenticate()
-GET     /logout                     controllers.Application.logout()
+GET     /login                      controllers.Authentication.login()
+POST	/login						controllers.Authentication.authenticate()
+GET     /logout                     controllers.Authentication.logout()
 
 # App
 GET     /dashboard                  controllers.Application.dashboard()
 GET     /patients                   controllers.Patients.showAll()
+GET     /patients/add               controllers.Patients.add()
+POST    /patients/add               controllers.Patients.insert()
 GET     /patients/:id               controllers.Patients.show(id: Int)
 
 # Map static resources from the /public folder to the /assets URL path

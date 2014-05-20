@@ -1,14 +1,14 @@
-@(form: Form[Application.Login])
+@(form: Form[Authentication.Login])
 
 @template_general("Login", null) {
 	
-	@helper.form(routes.Application.authenticate, 'role -> "form", 'class -> "form-login form-horizontal") {
+	@helper.form(routes.Authentication.authenticate, 'role -> "form", 'class -> "form-login form-horizontal") {
 	
 		<p>Please log in with your credentials.</p>
 		
-		@if(flash.contains("success")) {
+		@if(flash.contains("logged-out")) {
 			<p class="bg-success">
-				@flash.get("success")
+				@flash.get("logged-out")
 			</p>
 		}
 	
