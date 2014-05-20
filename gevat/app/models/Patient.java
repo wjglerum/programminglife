@@ -1,5 +1,8 @@
 package models;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Patient {
 
   public int id;
@@ -11,5 +14,17 @@ public class Patient {
 		this.name = name;
 		this.surname = surname;
 	}
+  
+  public static Patient get(int id) {
+    return new Patient(id,"A","A");
+  }
+  
+  public static List<Patient> getAll() {
+    Patient a = new Patient(1,"A","A");
+    Patient b = new Patient(2,"B","B");
+    Patient c = new Patient(3,"C","C");
+    
+    return Arrays.asList(a,b,c);
+  }
 	
 }
