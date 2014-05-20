@@ -68,9 +68,7 @@ public class Authentication extends Controller {
 	public static User getUser() {
 		String username = session("username");
 
-		// TODO query User from database based on username
-
-		return new User(username, "Test User", "pass");
+		return User.getUser(username);
 	}
 
 }

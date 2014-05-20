@@ -45,9 +45,9 @@ public class Patient {
 	/*
 	 * Make a list of all the patients in the database
 	 */
-	public static List<Patient> getAll() {
+	public static List<Patient> getAll(int u_id) {
 		try (Connection con = DB.getConnection("data");) {
-			String query = "SELECT * FROM patient;";
+			String query = "SELECT * FROM patient WHERE u_id = '" + u_id + "';";
 			ResultSet rs = con.createStatement().executeQuery(query);
 			List<Patient> patients = new ArrayList<Patient>();
 
@@ -67,10 +67,10 @@ public class Patient {
 	/*
 	 * Add users to the database, id's will be auto incremented
 	 */
-	public static void add(String name, String surname) {
+	public static void add(int u_id, String name, String surname) {
 		try (Connection con = DB.getConnection("data");) {
-			String query = "INSERT INTO patient VALUES (nextval('p_id_seq'::regclass), 1 ,'"
-					+ name + "', '" + surname + "');";
+			String query = "INSERT INTO patient VALUES (nextval('p_id_seq'::regclass),"
+					+ u_id + ",'" + name + "', '" + surname + "');";
 			Statement st = con.createStatement();
 			st.executeUpdate(query);
 		} catch (SQLException e) {

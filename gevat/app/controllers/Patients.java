@@ -25,7 +25,7 @@ public class Patients extends Controller {
 			flash("patient-not-found",
 					"The requested patient could not be found. Please select another one below.");
 
-			return notFound(patients.render(Patient.getAll(),
+			return notFound(patients.render(Patient.getAll(Authentication.getUser().id),
 					Authentication.getUser()));
 		}
 
@@ -38,7 +38,7 @@ public class Patients extends Controller {
 	 */
 	@Security.Authenticated(Secured.class)
 	public static Result showAll() {
-		return ok(patients.render(Patient.getAll(), Authentication.getUser()));
+		return ok(patients.render(Patient.getAll(Authentication.getUser().id), Authentication.getUser()));
 	}
 
 	/**
@@ -79,8 +79,7 @@ public class Patients extends Controller {
 		} else {
 			String name = addForm.get().name;
 			String surname = addForm.get().surname;
-
-			Patient.add(name, surname);
+			Patient.add(Authentication.getUser().id, name, surname);
 
 			flash("patient-added", "The patient " + name + " " + surname
 					+ " is successfully added to the database.");
