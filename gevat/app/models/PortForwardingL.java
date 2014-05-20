@@ -1,4 +1,4 @@
-package model;
+package models;
 //TODO add correct comments and formatting
 /* -*-mode:java; c-basic-offset:2; indent-tabs-mode:nil -*- */
 /**
