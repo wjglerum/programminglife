@@ -1,6 +1,12 @@
 @(patients: List[Patient], user: User)
 
 @template_app("Patients overview", user, "patients") {
+		
+	@if(flash.contains("patient-not-found")) {
+		<p class="bg-danger">
+			@flash.get("patient-not-found")
+		</p>
+	}
 	
 	<table class="table-patients table table-hover clickable-rows">
 		<thead>
