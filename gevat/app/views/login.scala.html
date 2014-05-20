@@ -6,9 +6,9 @@
 	
 		<p>Please log in with your credentials.</p>
 		
-		@if(flash.contains("success")) {
+		@if(flash.contains("logged-out")) {
 			<p class="bg-success">
-				@flash.get("success")
+				@flash.get("logged-out")
 			</p>
 		}
 	
