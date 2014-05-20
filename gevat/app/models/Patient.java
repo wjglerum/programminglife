@@ -3,6 +3,7 @@ package models;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +50,7 @@ public class Patient {
 			String query = "SELECT * FROM patient;";
 			ResultSet rs = con.createStatement().executeQuery(query);
 			List<Patient> patients = new ArrayList<Patient>();
-			
+
 			while (rs.next()) {
 				int id = rs.getInt("p_id");
 				String name = rs.getString("name");
@@ -61,5 +62,19 @@ public class Patient {
 			Logger.info((e.toString()));
 		}
 		return null;
+	}
+
+	/*
+	 * Add users to the database, id's will be auto incremented
+	 */
+	public static void add(String name, String surname) {
+		try (Connection con = DB.getConnection("data");) {
+			String query = "INSERT INTO patient VALUES (nextval('p_id_seq'::regclass), 1 ,'"
+					+ name + "', '" + surname + "');";
+			Statement st = con.createStatement();
+			st.executeUpdate(query);
+		} catch (SQLException e) {
+			Logger.info((e.toString()));
+		}
 	}
 }

@@ -31,7 +31,7 @@ public class User {
 				String name = rs.getString("name");
 				String surname = rs.getString("surname");
 				String pw = rs.getString("password");
-				
+				Logger.info(name + " " + surname + " logged in!");
 				// check with BCrypt if hashed pw matches password
 				if (BCrypt.checkpw(password, pw)) {
 					return new User(username, name + " " + surname, password);
