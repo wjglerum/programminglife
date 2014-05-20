@@ -61,9 +61,7 @@ public class Authentication extends Controller {
     
     flash("logged-out", "You've been successfully logged out");
     
-    return redirect(
-      routes.Authentication.login()
-    );
+    return redirect(routes.Authentication.login());
   }
   
   /**
