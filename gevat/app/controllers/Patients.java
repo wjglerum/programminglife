@@ -1,6 +1,10 @@
 package controllers;
 
 import static play.data.Form.form;
+
+import java.util.List;
+
+import models.Mutation;
 import models.Patient;
 import play.data.Form;
 import play.mvc.Controller;
@@ -18,6 +22,7 @@ public class Patients extends Controller {
 	@Security.Authenticated(Secured.class)
 	public static Result show(int id) {
 		Patient p = Patient.get(id);
+		List<Mutation> mutations = Mutation.getMutations(id);
 
 		// Return to the patients overview and display a message the requested
 		// patient isn't found
@@ -25,12 +30,13 @@ public class Patients extends Controller {
 			flash("patient-not-found",
 					"The requested patient could not be found. Please select another one below.");
 
-			return notFound(patients.render(Patient.getAll(Authentication.getUser().id),
+			return notFound(patients.render(
+					Patient.getAll(Authentication.getUser().id),
 					Authentication.getUser()));
 		}
 
 		// Render the patient otherwise
-		return ok(patient.render(p, Authentication.getUser()));
+		return ok(patient.render(p, mutations, Authentication.getUser()));
 	}
 
 	/**
@@ -38,7 +44,8 @@ public class Patients extends Controller {
 	 */
 	@Security.Authenticated(Secured.class)
 	public static Result showAll() {
-		return ok(patients.render(Patient.getAll(Authentication.getUser().id), Authentication.getUser()));
+		return ok(patients.render(Patient.getAll(Authentication.getUser().id),
+				Authentication.getUser()));
 	}
 
 	/**

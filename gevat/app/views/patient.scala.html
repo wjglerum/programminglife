@@ -1,7 +1,29 @@
-@(patient: Patient, user: User)
+@(patient: Patient, mutations: List[Mutation], user: User)
 
-@template_app("Patient " + patient.name, user, "patients") {
+@template_app("Patient " + patient.name + " " + patient.surname, user, "patients") {
 	
-	@patient.name
-	
+	<table class="table-mutations table table-hover clickable-rows">
+		<thead>
+			<tr>
+				<th>Type</th>
+				<th>rsID</th>
+				<th>Chromosome</th>
+				<th>Child</th>
+				<th>Father</th>
+				<th>Mother</th>
+			</tr>
+		</thead>
+		<tbody>
+		@for(mutation <- mutations) {
+			<tr>
+				<td>@mutation.sort</td>
+				<td>@mutation.rsID</td>
+				<td>@mutation.chromosome</td>
+				<td>@mutation.child()</td>
+				<td>@mutation.father()</td>
+				<td>@mutation.mother()</td>
+			</tr>
+		} 
+		</tbody>
+	</table>
 }
