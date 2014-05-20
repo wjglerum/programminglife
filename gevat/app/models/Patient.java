@@ -2,7 +2,6 @@ package models;
 
 public class Patient {
 
-<<<<<<< HEAD
 	private String name;
 	private String surname;
 	private int bsn;
@@ -36,14 +35,4 @@ public class Patient {
 	public void setBsn(int bsn) {
 		this.bsn = bsn;
 	}
-=======
-  public String name;
-  public int id;
-  
-  public Patient(String name, int id) {
-    this.name = name;
-    this.id = id;
-  }
-  
->>>>>>> a698499449ab7ec08a1015bd3a855138e641b09f
 }
