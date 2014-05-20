@@ -49,9 +49,7 @@ public class Authentication extends Controller {
       session().clear();
       session("username", loginForm.get().username);
       
-      return redirect(
-        routes.Application.index()
-      );
+      return redirect(routes.Application.dashboard());
     }
   }
 
