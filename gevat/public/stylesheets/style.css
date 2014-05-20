@@ -69,6 +69,6 @@ body {
 /*
  * Patients page
  */
-.table-patients tr:hover {
+.table-patients tbody tr:hover {
 	cursor: pointer;
 }
