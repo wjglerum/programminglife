@@ -2,6 +2,9 @@ package controllers;
 
 import play.*;
 import play.mvc.*;
+import play.mvc.Http.*;
+import play.data.*;
+import static play.data.Form.*;
 
 import models.*;
 import views.html.*;
@@ -32,6 +35,47 @@ public class Patients extends Controller {
   @Security.Authenticated(Secured.class)
   public static Result showAll() {
     return ok(patients.render(Patient.getAll(), Authentication.getUser()));
+  }
+  
+  /**
+   * Form class for adding new patients
+   */
+  public static class Add {
+
+    public String name;
+    public String surname;
+    
+    public String validate() {
+      if (name == null || name.length() < 3)
+        return "An invalid name is entered. Please fill in a name consisting of at least 3 characters";
+      else if (surname == null || surname.length() < 3)
+        return "An invalid surname is entered. Please fill in a surname consisting of at least 3 characters";
+      else
+        return "blaat";
+    }
+
+  }
+  
+  /**
+   * Render the form to add a patient.
+   */
+  public static Result add() {
+    return ok(patient_add.render(form(Add.class), Authentication.getUser()));
+  }
+  
+  /**
+   * Insert the newly added patient in the database
+   */
+  public static Result insert() {
+    Form<Add> addForm = form(Add.class).bindFromRequest();
+    
+    if (addForm.hasErrors()) {
+      return badRequest(patient_add.render(addForm, Authentication.getUser()));
+    } else {
+      // TODO add patient
+      
+      return redirect(routes.Application.dashboard());
+    }
   }
 
 }

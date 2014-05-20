@@ -69,6 +69,9 @@ body {
 .table-patients tbody tr:hover {
 	cursor: pointer;
 }
+.form-add-patient p {
+	margin-bottom: 15px;
+}
 
 /*
  * Miscellaneous
