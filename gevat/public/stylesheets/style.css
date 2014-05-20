@@ -62,13 +62,17 @@ body {
 .form-login p {
   margin-bottom: 2em;
 }
-.form-login .bg-success, .form-login .bg-danger {
-  padding: 1em;
-}
 
 /*
  * Patients page
  */
 .table-patients tbody tr:hover {
 	cursor: pointer;
+}
+
+/*
+ * Miscellaneous
+ */
+.bg-success, .bg-danger {
+  padding: 1em;
 }
