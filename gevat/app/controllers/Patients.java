@@ -19,11 +19,11 @@ public class Patients extends Controller {
     if (p == null) {
       flash("patient-not-found", "The requested patient could not be found. Please select another one below.");
       
-      return notFound(patients.render(Patient.getAll(), Application.getUser()));
+      return notFound(patients.render(Patient.getAll(), Authentication.getUser()));
     }
     
     // Render the patient otherwise
-    return ok(patient.render(p, Application.getUser()));
+    return ok(patient.render(p, Authentication.getUser()));
   }
 
   /**
@@ -31,7 +31,7 @@ public class Patients extends Controller {
    */
   @Security.Authenticated(Secured.class)
   public static Result showAll() {
-    return ok(patients.render(Patient.getAll(), Application.getUser()));
+    return ok(patients.render(Patient.getAll(), Authentication.getUser()));
   }
 
 }

@@ -1,8 +1,8 @@
-@(form: Form[Application.Login])
+@(form: Form[Authentication.Login])
 
 @template_general("Login", null) {
 	
-	@helper.form(routes.Application.authenticate, 'role -> "form", 'class -> "form-login form-horizontal") {
+	@helper.form(routes.Authentication.authenticate, 'role -> "form", 'class -> "form-login form-horizontal") {
 	
 		<p>Please log in with your credentials.</p>
 		
