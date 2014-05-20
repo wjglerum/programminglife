@@ -65,3 +65,10 @@ body {
 .form-login .bg-success, .form-login .bg-danger {
   padding: 1em;
 }
+
+/*
+ * Patients page
+ */
+.table-patients tr:hover {
+	cursor: pointer;
+}

@@ -2,10 +2,23 @@
 
 @template_app("Patients overview", user, "patients") {
 	
-	<ul>
-	@for(patient <- patients) {
-		<li>@patient.name</li>
-	} 
-	</ul>
+	<table class="table-patients table table-hover clickable-rows">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Name</th>
+				<th>Surname</th>
+			</tr>
+		</thead>
+		<tbody>
+		@for(patient <- patients) {
+			<tr href="/patients/@patient.id">
+				<td>@patient.id</td>
+				<td>@patient.name</td>
+				<td>@patient.surname</td>
+			</tr>
+		} 
+		</tbody>
+	</table>
 	
 }
