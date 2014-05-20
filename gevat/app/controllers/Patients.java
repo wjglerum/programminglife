@@ -15,7 +15,7 @@ public class Patients extends Controller {
    */
   @Security.Authenticated(Secured.class)
   public static Result show(int id) {
-    Patient a = new Patient("A", id);
+    Patient a = new Patient(id,"A","A");
     
     return ok(patient.render(a, Application.getUser()));
   }
@@ -25,9 +25,9 @@ public class Patients extends Controller {
    */
   @Security.Authenticated(Secured.class)
   public static Result showAll() {
-    Patient a = new Patient("A", 1);
-    Patient b = new Patient("B", 2);
-    Patient c = new Patient("C", 3);
+    Patient a = new Patient(1,"A","A");
+    Patient b = new Patient(2,"B","B");
+    Patient c = new Patient(3,"C","C");
     
     return ok(patients.render(Arrays.asList(a,b,c), Application.getUser()));
   }
