@@ -1,0 +1,11 @@
+@(patients: List[Patient], user: User)
+
+@template_app("Patients overview", user, "patients") {
+	
+	<ul>
+	@for(patient <- patients) {
+		<li>@patient.name</li>
+	} 
+	</ul>
+	
+}

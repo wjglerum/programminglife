@@ -1,4 +1,6 @@
-@(title: String, user: User)(content: Html)
+@(title: String, user: User, nav: String)(content: Html)
+
+@import scala.collection.immutable.Map
 
 @template(title, user) {	
 
@@ -6,10 +8,12 @@
 			<div class="row">
 				<div class="sidebar col-sm-3 col-md-2">
 					<ul class="nav nav-sidebar">
-						<li class="active"><a href="/dashboard">Overview</a></li>
-						<li><a href="/reports">Reports</a></li>
-						<li><a href="/analytics">Analytics</a></li>
-						<li><a href="/export">Export</a></li>
+						@for((url,item) <- Map(
+								"dashboard" -> "Overview",
+								"patients" -> "Patients"
+							)) {
+							<li @if(url.equals(nav)){class="active"}><a href="/@url">@item</a></li>
+						}
 					</ul>
 				</div>
 				<div class="main col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2">
