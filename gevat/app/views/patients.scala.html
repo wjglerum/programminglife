@@ -7,6 +7,12 @@
 			@flash.get("patient-not-found")
 		</p>
 	}
+		
+	@if(flash.contains("patient-added")) {
+		<p class="bg-success">
+			@flash.get("patient-added")
+		</p>
+	}
 	
 	<table class="table-patients table table-hover clickable-rows">
 		<thead>

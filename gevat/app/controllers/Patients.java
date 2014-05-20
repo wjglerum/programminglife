@@ -52,7 +52,7 @@ public class Patients extends Controller {
       else if (surname == null || surname.length() < 3)
         return "An invalid surname is entered. Please fill in a surname consisting of at least 3 characters";
       else
-        return "blaat";
+        return null;
     }
 
   }
@@ -73,9 +73,14 @@ public class Patients extends Controller {
     if (addForm.hasErrors()) {
       return badRequest(patient_add.render(addForm, Authentication.getUser()));
     } else {
+      String name = addForm.get().name;
+      String surname = addForm.get().surname;
+      
       // TODO add patient
       
-      return redirect(routes.Application.dashboard());
+      flash("patient-added", "The patient " + name + " " + surname + " is successfully added to the database.");
+      
+      return redirect(routes.Patients.showAll());
     }
   }
 
