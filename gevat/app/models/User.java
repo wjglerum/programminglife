@@ -22,7 +22,7 @@ public class User {
 	/*
 	 * Authenticate user by checking username and password
 	 */
-	public static User authenticate(String username, String pass) {
+	public static User authenticate(String username, String password) {
 		try (Connection con = DB.getConnection("data");) {
 			String query = "SELECT * FROM users WHERE username = '" + username
 					+ "';";
@@ -31,9 +31,10 @@ public class User {
 				String name = rs.getString("name");
 				String surname = rs.getString("surname");
 				String pw = rs.getString("password");
-
-				if (pw.equals(pass)) {
-					return new User(username, name + " " + surname, pass);
+				
+				// check with BCrypt if hashed pw matches password
+				if (BCrypt.checkpw(password, pw)) {
+					return new User(username, name + " " + surname, password);
 				}
 			}
 		} catch (SQLException e) {

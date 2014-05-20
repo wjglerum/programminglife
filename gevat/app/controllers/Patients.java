@@ -1,13 +1,14 @@
 package controllers;
 
-import play.*;
-import play.mvc.*;
-import play.mvc.Http.*;
-import play.data.*;
-import static play.data.Form.*;
-
-import models.*;
-import views.html.*;
+import static play.data.Form.form;
+import models.Patient;
+import play.data.Form;
+import play.mvc.Controller;
+import play.mvc.Result;
+import play.mvc.Security;
+import views.html.patient;
+import views.html.patient_add;
+import views.html.patients;
 
 public class Patients extends Controller {
 
