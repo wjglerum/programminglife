@@ -23,13 +23,17 @@
 			</tr>
 		</thead>
 		<tbody>
-		@for(patient <- patients) {
-			<tr href="/patients/@patient.id">
-				<td>@patient.id</td>
-				<td>@patient.name</td>
-				<td>@patient.surname</td>
-			</tr>
-		} 
+		@if(patients.length > 0){
+			@for(patient <- patients) {
+				<tr href="/patients/@patient.id">
+					<td>@patient.id</td>
+					<td>@patient.name</td>
+					<td>@patient.surname</td>
+				</tr>
+			}
+		} else {
+			<tr><td colspan="3">No patients found...</td></tr>
+		}
 		</tbody>
 	</table>
 	
