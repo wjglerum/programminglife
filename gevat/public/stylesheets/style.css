@@ -82,3 +82,7 @@ body {
 .clickable-rows tbody tr.not-clickable:hover {
 	cursor: default;
 }
+.table-hover > tbody > tr.not-clickable:hover > td,
+.table-hover > tbody > tr.not-clickable:hover > th {
+  background-color: #fff;
+}
