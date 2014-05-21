@@ -3,21 +3,22 @@
 # ~~~~
 
 # General pages
-GET     /                           controllers.Application.index()
-GET     /help                       controllers.Application.help()
-GET     /about                      controllers.Application.about()
+GET     /                                 controllers.Application.index()
+GET     /help                             controllers.Application.help()
+GET     /about                            controllers.Application.about()
 
 # Authentication
-GET     /login                      controllers.Authentication.login()
-POST	/login						controllers.Authentication.authenticate()
-GET     /logout                     controllers.Authentication.logout()
+GET     /login                            controllers.Authentication.login()
+POST	/login					      	  controllers.Authentication.authenticate()
+GET     /logout                           controllers.Authentication.logout()
 
 # App
-GET     /dashboard                  controllers.Application.dashboard()
-GET     /patients                   controllers.Patients.showAll()
-GET     /patients/add               controllers.Patients.add()
-POST    /patients/add               controllers.Patients.insert()
-GET     /patients/:id               controllers.Patients.show(id: Int)
+GET     /dashboard                        controllers.Application.dashboard()
+GET     /patients                         controllers.Patients.showAll()
+GET     /patients/add                     controllers.Patients.add()
+POST    /patients/add                     controllers.Patients.insert()
+GET     /patients/:p                      controllers.Patients.show(p: Int)
+GET     /patients/:p/mutation/:m          controllers.Mutations.show(p: Int, m: Int)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
