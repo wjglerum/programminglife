@@ -79,3 +79,6 @@ body {
 .clickable-rows tbody tr:hover {
 	cursor: pointer;
 }
+.clickable-rows tbody tr.not-clickable:hover {
+	cursor: default;
+}
