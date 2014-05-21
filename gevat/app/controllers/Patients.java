@@ -104,7 +104,12 @@ public class Patients extends Controller {
    * Handle the ajax request for removing patients
    */
   public static Result remove(int p_id) {
-    // TODO Remove patient with id = p_id
+    Patient p = Patient.get(p_id, Authentication.getUser().id);
+    
+    if (p == null)
+      return badRequest();
+    
+    // TODO Remove patient p
     
     return ok();
   }
