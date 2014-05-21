@@ -20,19 +20,21 @@
 				<th>#</th>
 				<th>Name</th>
 				<th>Surname</th>
+				<th>Delete</th>
 			</tr>
 		</thead>
 		<tbody>
 		@if(patients.length > 0){
 			@for(patient <- patients) {
-				<tr href="/patients/@patient.id">
+				<tr data-id="@patient.id" href="/patients/@patient.id">
 					<td>@patient.id</td>
 					<td>@patient.name</td>
 					<td>@patient.surname</td>
+					<td class="remove"><a class="center-block text-danger"><span class="glyphicon glyphicon-remove"></span></a></td>
 				</tr>
 			}
 		} else {
-			<tr class="not-clickable"><td colspan="3">No patients found...</td></tr>
+			<tr class="not-clickable"><td colspan="4">No patients found...</td></tr>
 		}
 		</tbody>
 	</table>

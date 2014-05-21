@@ -3,4 +3,7 @@ jQuery(document).ready(function($) {
 	$(".clickable-rows tbody tr").not(".not-clickable").click(function() {
 		window.document.location = $(this).attr("href");
 	});
+	$(".clickable-rows tbody tr a").click(function(e) {
+		e.stopPropagation(); 
+	});
 });
