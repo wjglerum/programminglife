@@ -33,19 +33,24 @@ public class Patients extends Controller {
     Patient p = Patient.get(p_id, Authentication.getUser().id);
     List<Mutation> mutations = Mutation.getMutations(p_id);
 
-    // Return to the patients overview and display a message the requested
-    // patient isn't found
-    if (p == null) {
-      flash("patient-not-found",
-        "The requested patient could not be found. Please select another one below.");
-
-      return notFound(patients.render(
-        Patient.getAll(Authentication.getUser().id),
-        Authentication.getUser()));
-    }
+    if (p == null)
+      return patientNotFound();
 
     // Render the patient otherwise
     return ok(patient.render(p, mutations, Authentication.getUser()));
+  }
+  
+  /**
+   * Return to the patients overview and display a message the requested patient isn't found
+   */
+  @Security.Authenticated(Secured.class)
+  public static Result patientNotFound() {
+    flash("patient-not-found",
+      "The requested patient could not be found. Please select another one below.");
+
+    return notFound(patients.render(
+      Patient.getAll(Authentication.getUser().id),
+      Authentication.getUser()));
   }
 
 	/**

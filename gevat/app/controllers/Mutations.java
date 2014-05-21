@@ -23,16 +23,8 @@ public class Mutations extends Controller {
     Patient p = Patient.get(p_id, Authentication.getUser().id);
     List<Mutation> mutations = Mutation.getMutations(p_id);
 
-    // Return to the patients overview and display a message the requested
-    // patient isn't found
-    if (p == null) {
-      flash("patient-not-found",
-        "The requested patient could not be found. Please select another one below.");
-
-      return notFound(patients.render(
-        Patient.getAll(Authentication.getUser().id),
-        Authentication.getUser()));
-    }
+    if (p == null)
+      return Patients.patientNotFound();
     
     // Render the mutation if it's found in the requested patient's mutations
     for (Mutation m : mutations) {
