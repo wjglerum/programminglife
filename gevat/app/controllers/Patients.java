@@ -16,37 +16,37 @@ import views.html.patients;
 
 public class Patients extends Controller {
 
-	/**
-	 * Display a patient.
-	 */
-	@Security.Authenticated(Secured.class)
-	public static Result show(int id) {
-		Patient p = Patient.get(id);
-		List<Mutation> mutations = Mutation.getMutations(id);
+  /**
+   * List all patients.
+   */
+  @Security.Authenticated(Secured.class)
+  public static Result showAll() {
+    return ok(patients.render(Patient.getAll(Authentication.getUser().id),
+        Authentication.getUser()));
+  }
 
-		// Return to the patients overview and display a message the requested
-		// patient isn't found
-		if (p == null) {
-			flash("patient-not-found",
-					"The requested patient could not be found. Please select another one below.");
+  /**
+   * Display a patient.
+   */
+  @Security.Authenticated(Secured.class)
+  public static Result show(int id) {
+    Patient p = Patient.get(id);
+    List<Mutation> mutations = Mutation.getMutations(id);
 
-			return notFound(patients.render(
-					Patient.getAll(Authentication.getUser().id),
-					Authentication.getUser()));
-		}
+    // Return to the patients overview and display a message the requested
+    // patient isn't found
+    if (p == null) {
+      flash("patient-not-found",
+        "The requested patient could not be found. Please select another one below.");
 
-		// Render the patient otherwise
-		return ok(patient.render(p, mutations, Authentication.getUser()));
-	}
+      return notFound(patients.render(
+        Patient.getAll(Authentication.getUser().id),
+        Authentication.getUser()));
+    }
 
-	/**
-	 * List all patients.
-	 */
-	@Security.Authenticated(Secured.class)
-	public static Result showAll() {
-		return ok(patients.render(Patient.getAll(Authentication.getUser().id),
-				Authentication.getUser()));
-	}
+    // Render the patient otherwise
+    return ok(patient.render(p, mutations, Authentication.getUser()));
+  }
 
 	/**
 	 * Form class for adding new patients
