@@ -4,11 +4,9 @@ import java.util.List;
 
 import models.Mutation;
 import models.Patient;
-
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
-
 import views.html.patient;
 import views.html.patients;
 import views.html.mutation;
@@ -31,11 +29,18 @@ public class Mutations extends Controller {
       if (m.id == m_id)
         return ok(mutation.render(p, m, Authentication.getUser()));
     }
-
-    // Return to the patient page and display a message the requested mutation isn't found
+    
+    return mutationNotFound(p, mutations);
+  }
+  
+  /**
+   * Return to the patient page and display a message the requested mutation isn't found
+   */
+  @Security.Authenticated(Secured.class)
+  public static Result mutationNotFound(Patient p, List<Mutation> mutations) { 
     flash("mutation-not-found",
         "The requested mutation could not be found or you don't have permissions to view the mutation. Select another one in the overview below.");
-  
+
     return notFound(patient.render(p, mutations, Authentication.getUser()));
   }
 
