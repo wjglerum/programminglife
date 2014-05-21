@@ -25,16 +25,15 @@ public class Patient {
 	/*
 	 * Lookup patient in the database by p_id
 	 */
-	public static Patient get(int id) {
+	public static Patient get(int p_id, int u_id) {
 		try (Connection con = DB.getConnection("data");) {
-			String query = "SELECT * FROM patient WHERE p_id=" + id + ";";
+			String query = "SELECT * FROM patient WHERE p_id=" + p_id + " AND u_id=" + u_id + ";";
 			ResultSet rs = con.createStatement().executeQuery(query);
 
 			if (rs.next()) {
-				id = rs.getInt("p_id");
 				String name = rs.getString("name");
 				String surname = rs.getString("surname");
-				return new Patient(id, name, surname);
+				return new Patient(p_id, name, surname);
 			}
 		} catch (SQLException e) {
 			Logger.info((e.toString()));

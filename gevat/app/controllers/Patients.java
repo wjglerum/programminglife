@@ -29,9 +29,9 @@ public class Patients extends Controller {
    * Display a patient.
    */
   @Security.Authenticated(Secured.class)
-  public static Result show(int id) {
-    Patient p = Patient.get(id);
-    List<Mutation> mutations = Mutation.getMutations(id);
+  public static Result show(int p_id) {
+    Patient p = Patient.get(p_id, Authentication.getUser().id);
+    List<Mutation> mutations = Mutation.getMutations(p_id);
 
     // Return to the patients overview and display a message the requested
     // patient isn't found
