@@ -100,4 +100,13 @@ public class Patients extends Controller {
 		}
 	}
 
+  /**
+   * Handle the ajax request for removing patients
+   */
+  public static Result remove(int p_id) {
+    // TODO Remove patient with id = p_id
+    
+    return ok();
+  }
+
 }

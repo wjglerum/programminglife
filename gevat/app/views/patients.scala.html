@@ -26,11 +26,11 @@
 		<tbody>
 		@if(patients.length > 0){
 			@for(patient <- patients) {
-				<tr data-id="@patient.id" href="/patients/@patient.id">
+				<tr data-patient="@patient.id" href="/patients/@patient.id">
 					<td>@patient.id</td>
 					<td>@patient.name</td>
 					<td>@patient.surname</td>
-					<td class="remove"><a class="center-block text-danger"><span class="glyphicon glyphicon-remove"></span></a></td>
+					<td class="remove"><a class="remove-patient center-block text-danger"><span class="glyphicon glyphicon-remove"></span></a></td>
 				</tr>
 			}
 		} else {

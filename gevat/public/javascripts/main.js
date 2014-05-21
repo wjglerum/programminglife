@@ -4,6 +4,17 @@ jQuery(document).ready(function($) {
 		window.document.location = $(this).attr("href");
 	});
 	$(".clickable-rows tbody tr a").click(function(e) {
-		e.stopPropagation(); 
+		e.stopPropagation();
+	});
+	
+	// Remove a patient via Ajax
+	$(".table-patients .remove-patient").click(function() {
+		var p_id = $(this).parent().parent().data('patient');
+		
+		jsRoutes.controllers.Patients.remove(p_id).ajax({
+			success: function() {
+				$(".table-patients tr[data-patient=" + p_id + "]").remove();
+			}
+		});
 	});
 });

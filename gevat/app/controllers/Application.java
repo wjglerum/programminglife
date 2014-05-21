@@ -1,5 +1,6 @@
 package controllers;
 
+import play.Routes;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
@@ -36,6 +37,22 @@ public class Application extends Controller {
    */
   public static Result about() {
     return ok(about.render(Authentication.getUser()));
+  }    // -- Javascript routing
+
+  /**
+   * JavaScript routing for handling Ajax request
+   */
+  public static Result javascriptRoutes() {
+      response().setContentType("text/javascript");
+      
+      return ok(
+          Routes.javascriptRouter("jsRoutes",
+
+              // Routes for Projects
+              controllers.routes.javascript.Patients.remove()
+
+          )
+      );
   }
 
 }
