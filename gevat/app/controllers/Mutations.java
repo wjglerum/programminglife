@@ -1,12 +1,10 @@
 package controllers;
 
-import static play.data.Form.form;
-
 import java.util.List;
 
 import models.Mutation;
 import models.Patient;
-import play.data.Form;
+
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
@@ -24,6 +22,7 @@ public class Mutations extends Controller {
     Patient p = Patient.get(p_id);
     List<Mutation> mutations = Mutation.getMutations(p_id);
     
+    // Render the mutation if it's found in the requested patient's mutations
     for (Mutation m : mutations) {
       if (m.id == m_id)
         return ok(mutation.render(p, m, Authentication.getUser()));
@@ -31,7 +30,7 @@ public class Mutations extends Controller {
 
     // Return to the patient page and display a message the requested mutation isn't found
     flash("mutation-not-found",
-        "The requested mutation could not be found or you don't have permissions to view the mutation.");
+        "The requested mutation could not be found or you don't have permissions to view the mutation. Select another one in the overview below.");
   
     return notFound(patient.render(p, mutations, Authentication.getUser()));
   }

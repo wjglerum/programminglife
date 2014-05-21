@@ -1,6 +1,12 @@
 @(patient: Patient, mutations: List[Mutation], user: User)
 
 @template_app("Patient " + patient.name + " " + patient.surname, user, "patients") {
+		
+	@if(flash.contains("mutation-not-found")) {
+		<p class="bg-danger">
+			@flash.get("mutation-not-found")
+		</p>
+	}
 	
 	<table class="table-mutations table table-hover clickable-rows">
 		<thead>
