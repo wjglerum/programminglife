@@ -1,0 +1,65 @@
+\subsection{High-level product backlog}
+	This section describes the desired features of the final application according to the MoSCoW method \cite{brennan2009guide}. These features are categorized into four groups:
+	
+	\begin{itemize}
+		\item \textbf{Must have} 
+			\subitem Requirements that must be statisfied in the final version
+		\item \textbf{Should haves} 
+			\subitem Requirements of high priority that should be included if possible
+		\item \textbf{Could haves} 
+			\subitem Requirements that are considered desirable but not necessary
+		\item \textbf{Would haves} 
+			\subitem Requirements that stakeholders have agreed will not be implemented in the final version, but could be added in the future
+	\end{itemize}
+	
+	\subsubsection{Must haves}
+		\begin{itemize}
+			\item Visualize the triodata of the father, mother and child
+			\item Visualize mutations and gene interaction
+			\item Looking for known disease mutations
+			\item Retrieving data from existing genetic databases
+			\item Reading VCF-files
+			\item Easy to use GUI for doctors, e.g. no redundancy
+		\end{itemize}
+	
+	\subsubsection{Should haves}
+		\begin{itemize}
+			\item Save patient data in a database
+			\item Secure login
+			\item Uploading VCF files to the server in the background
+		\end{itemize}
+	
+	\subsubsection{Could haves}
+		\begin{itemize}
+			\item Exporting visualization data
+		\end{itemize}
+	
+	\subsubsection{Would haves}
+		\begin{itemize}
+			\item Spread computational power over multiple threads, cores, or systems
+			\item Support for mobile web browsers
+		\end{itemize}
+
+\subsection{Roadmap}
+	This is our major release schema. Because we are using scrum with sprints of one week, the end of every week indicates the end of a sprint. This also means that we will have a working product after each sprint, with new, more or improved features every week.
+
+	\subsubsection*{Sprint 1 10/05-16/05}
+		Basic setup of framework, read VCF files and connect to database.
+	
+	\subsubsection*{Sprint 2 17/05-23/05}
+		Make useful query's for the database and find all mutations in the VCF file. Also set up the front end.
+	
+	\subsubsection*{Sprint 3 24/05-30/05}
+		Retrieve data from the database associated with the mutations found in the VCF file and make a visualization of the mutations.
+	
+	\subsubsection*{Sprint 4 31/05-06/06}
+		Visualize the found mutations and possible connections with genes associated with a disease.
+	
+	\subsubsection*{Sprint 5 07/06-13/06}
+		Improve usability of the product.
+	
+	\subsubsection*{Sprint 6 14/06-20/06}
+		Improve visualizations.
+	
+	\subsubsection*{Sprint 7 21/06-27/06}
+		Finish report and presentation.
