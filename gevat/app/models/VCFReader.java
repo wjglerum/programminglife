@@ -1,6 +1,6 @@
 package models;
 
-import java.io.BufferedReader;
+/*import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -12,10 +12,10 @@ import org.broad.tribble.AbstractFeatureReader;
 import org.broad.tribble.FeatureReader;
 import org.broadinstitute.variant.variantcontext.Allele;
 import org.broadinstitute.variant.variantcontext.VariantContext;
-import org.broadinstitute.variant.vcf.VCFCodec;
+import org.broadinstitute.variant.vcf.VCFCodec;*/
 
 public class VCFReader {
-    public static void main(String args[]) throws IOException
+/*    public static void main(String args[]) throws IOException
     {
         getMutations("/home/rhvanstaveren/programming_life/anonymous_trio1.vcf");
     }
@@ -65,5 +65,5 @@ public class VCFReader {
     public static boolean possibleAlleleSet(List<Allele> D, List<Allele> F, List<Allele> M)
     {
         return ((F.contains(D.get(0)) && M.contains(D.get(1))) || (F.contains(D.get(1)) && M.contains(D.get(0))));
-    }
+    }*/
 }
