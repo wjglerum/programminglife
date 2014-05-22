@@ -14,7 +14,7 @@ import org.broadinstitute.variant.variantcontext.Allele;
 import org.broadinstitute.variant.variantcontext.VariantContext;
 import org.broadinstitute.variant.vcf.VCFCodec;
 
-public class readVCF {
+public class VCFReader {
     public static void main(String args[]) throws IOException
     {
         getMutations("/home/rhvanstaveren/programming_life/anonymous_trio1.vcf");
