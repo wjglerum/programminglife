@@ -3,7 +3,7 @@
 	
 	\begin{itemize}
 		\item \textbf{Must have} 
-			\subitem Requirements that must be statisfied in the final version
+			\subitem Requirements that must be satisfied in the final version
 		\item \textbf{Should haves} 
 			\subitem Requirements of high priority that should be included if possible
 		\item \textbf{Could haves} 
@@ -14,24 +14,27 @@
 	
 	\subsubsection{Must haves}
 		\begin{itemize}
-			\item Visualize the triodata of the father, mother and child
-			\item Visualize mutations and gene interaction
+			\item Visualize the trio data of the father, mother and child
+			\item Visualize mutations
+			\item Visualize gene interaction
 			\item Looking for known disease mutations
 			\item Retrieving data from existing genetic databases
 			\item Reading VCF-files
+			\item Uploading VCF-files to the server
 			\item Easy to use GUI for doctors, e.g. no redundancy
 		\end{itemize}
 	
 	\subsubsection{Should haves}
 		\begin{itemize}
 			\item Save patient data in a database
-			\item Secure login
-			\item Uploading VCF files to the server in the background
+			\item Login securely
+			\item Uploading VCF-files to the server in the background
 		\end{itemize}
 	
 	\subsubsection{Could haves}
 		\begin{itemize}
-			\item Exporting visualization data
+			\item Exporting visualization as raw data which can later be read by the application to reproduce the visualization
+			\item Export visualization as image
 		\end{itemize}
 	
 	\subsubsection{Would haves}
@@ -44,22 +47,43 @@
 	This is our major release schema. Because we are using scrum with sprints of one week, the end of every week indicates the end of a sprint. This also means that we will have a working product after each sprint, with new, more or improved features every week.
 
 	\subsubsection*{Sprint 1 10/05-16/05}
-		Basic setup of framework, read VCF files and connect to database.
+		\begin{itemize}
+			\item Basic setup of framework, read VCF files and connect to database.
+		\end{itemize}		
+		At this point, the application will consist of an extremely basic website, without useful code connected to it. In the background we will have developed ways to read VCF-files and establish a connection to the database. This sprint focuses mainly on setting up the project.
 	
 	\subsubsection*{Sprint 2 17/05-23/05}
-		Make useful query's for the database and find all mutations in the VCF file. Also set up the front end.
+		\begin{itemize}
+			\item Make useful query's for the database and find all mutations in the VCF file. Also set up the front end, and look into different kinds of visualizations.
+		\end{itemize}	
+		At this point, the application will consist of a simple website, with very basic functionality such as logging in and adding patients. In the background we will have developed code to read VCF-files, analyze them and discover and output the mutations. We will also have built basic queries, which will later be combined to receive more useful information. We will also have taken a quick look into what kind of visualizations we want to display.
 	
 	\subsubsection*{Sprint 3 24/05-30/05}
-		Retrieve data from the database associated with the mutations found in the VCF file and make a visualization of the mutations.
+		\begin{itemize}
+			\item 	Retrieve data from the database associated with the mutations found in the VCF file and make basic visualizations of the mutations. Also link the code and front end.
+		\end{itemize}
+		At this point, the application will consist of a simple website, with basic functionality such as logging in, adding patients and supplying VCF-files. In the background we will have developed code to read VCF-files, analyze them and discover and output the mutations. We will also have built more advanced queries, which combine data from multiple databases. We will also have decided what visualizations we want, and have built basic variants of them into the application. We now have a functional although basic application.
 	
 	\subsubsection*{Sprint 4 31/05-06/06}
-		Visualize the found mutations and possible connections with genes associated with a disease.
+		\begin{itemize}
+			\item Visualize the trio data and genes interactions, as well as showing connections between mutations and diseases. The website will now be able to show more information, as well as more visualizations.
+		\end{itemize}
+		At this point, the application will consist of a website, with functionality such as logging in, adding patients, supplying VCF-files and displaying the made visualizations. In the background we will have developed code to read VCF-files, analyze them and discover and output the mutations. We will also have built more advanced queries, which combine data from multiple databases. We will also have improved our visualizations. We now have a functional application.
 	
 	\subsubsection*{Sprint 5 07/06-13/06}
-		Improve usability of the product.
+		\begin{itemize}
+			\item Improve visualizations, as well as ironing out issues.
+		\end{itemize}
+		At this point, our application will be the same, except for the visualizations, which will have been further improved.
 	
 	\subsubsection*{Sprint 6 14/06-20/06}
-		Improve visualizations.
+		\begin{itemize}
+			\item Improve usability of the website.
+		\end{itemize}
+		At  this point, our application will be the same, except that it will be easier to use, and might me quicker and more responsive.
 	
 	\subsubsection*{Sprint 7 21/06-27/06}
-		Finish report and presentation.
+		\begin{itemize}
+			\item Finish report and presentation.
+		\end{itemize}
+		At this point, our application is finished. If, however, small bugs are found, they will be fixed. This sprint focuses mainly on our presentation and reports.
