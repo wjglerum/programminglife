@@ -23,4 +23,15 @@ jQuery(document).ready(function($) {
 			}
 		});
 	});
+	
+	// Highlight mutations in the table while hovering over a mutation in the visualization
+	$(".visualization-mutations .mutation").hover(function(){
+		var mutationId = $(this).data("mutation-id");
+		
+		$(".table-mutations tr[data-mutation-id=" + mutationId + "]").addClass("highlight");
+	}, function() {
+		var mutationId = $(this).data("mutation-id");
+		
+		$(".table-mutations tr[data-mutation-id=" + mutationId + "]").removeClass("highlight");
+	});
 });

@@ -10,6 +10,22 @@
 	
 	<p class="bg-info"><strong>VCF file</strong> used for processing: <em>@patient.vcf_file (@patient.vcf_lengthMB() MB)</em></p>
 	
+	@if(mutations.length > 0){
+	<h3>Browse mutations</h3>
+	
+	<p>[visualization here]</p>
+	
+	<div class="visualization-mutations">
+		<ul>
+		@for(mutation <- mutations) {
+			<li><a class="mutation" data-mutation-id="@mutation.id" href="/patients/@patient.id/mutation/@mutation.id">@mutation.rsID</a></li>
+		}
+		</ul>
+	</div>
+	}
+	
+	<h3>Mutations overview</h3>
+	
 	<table class="table-mutations table table-hover clickable-rows">
 		<thead>
 			<tr>
@@ -24,7 +40,7 @@
 		<tbody>
 		@if(mutations.length > 0){
 			@for(mutation <- mutations) {
-				<tr href="/patients/@patient.id/mutation/@mutation.id">
+				<tr href="/patients/@patient.id/mutation/@mutation.id" data-mutation-id="@mutation.id">
 					<td>@mutation.sort</td>
 					<td>@mutation.rsID</td>
 					<td>@mutation.chromosome</td>
