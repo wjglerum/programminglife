@@ -10,6 +10,8 @@ public class Patient {
 	public int id;
 	public String name;
 	public String surname;
+	public String vcf_file;
+	public Long vcf_length;
 
 	/**
 	 * Basic Patient information
@@ -18,10 +20,13 @@ public class Patient {
 	 * @param name
 	 * @param surname
 	 */
-	public Patient(int id, String name, String surname) {
+	public Patient(int id, String name, String surname, String vcf_file,
+			Long vcf_length) {
 		this.id = id;
 		this.name = name;
 		this.surname = surname;
+		this.vcf_file = vcf_file;
+		this.vcf_length = vcf_length;
 	}
 
 	/**
@@ -30,7 +35,7 @@ public class Patient {
 	 * @param p_id
 	 * @param u_id
 	 * @return Patient
-	 * @throws SQLException 
+	 * @throws SQLException
 	 */
 	public static Patient get(int p_id, int u_id) throws SQLException {
 		String query = "SELECT * FROM patient WHERE p_id=" + p_id
@@ -40,7 +45,9 @@ public class Patient {
 		if (rs.next()) {
 			String name = rs.getString("name");
 			String surname = rs.getString("surname");
-			return new Patient(p_id, name, surname);
+			String vcf_file = rs.getString("vcf_file");
+			Long vcf_length = rs.getLong("vcf_length");
+			return new Patient(p_id, name, surname, vcf_file, vcf_length);
 		}
 		return null;
 	}
@@ -62,7 +69,9 @@ public class Patient {
 			int id = rs.getInt("p_id");
 			String name = rs.getString("name");
 			String surname = rs.getString("surname");
-			patients.add(new Patient(id, name, surname));
+			String vcf_file = rs.getString("vcf_file");
+			Long vcf_length = rs.getLong("vcf_length");
+			patients.add(new Patient(id, name, surname, vcf_file, vcf_length));
 		}
 		return patients;
 	}

@@ -13,7 +13,13 @@ jQuery(document).ready(function($) {
 		
 		jsRoutes.controllers.Patients.remove(p_id).ajax({
 			success: function() {
+				// Remove the patient data from the table
 				$(".table-patients tr[data-patient=" + p_id + "]").remove();
+				
+				// Display the 'no patients found' message if there are no patients left
+				if ($(".table-patients tr.patient").length == 0) {
+					$(".table-patients tr.no-patients").show();
+				}
 			}
 		});
 	});

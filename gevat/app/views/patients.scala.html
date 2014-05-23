@@ -20,22 +20,23 @@
 				<th>#</th>
 				<th>Name</th>
 				<th>Surname</th>
+				<th>VCF File</th>
+				<th>Size</th>
 				<th>Delete</th>
 			</tr>
 		</thead>
 		<tbody>
-		@if(patients.length > 0){
 			@for(patient <- patients) {
-				<tr data-patient="@patient.id" href="/patients/@patient.id">
+				<tr class="patient" data-patient="@patient.id" href="/patients/@patient.id">
 					<td>@patient.id</td>
 					<td>@patient.name</td>
 					<td>@patient.surname</td>
+					<td>@patient.vcf_file</td>
+					<td>@(Math.round(patient.vcf_length.toDouble/1024/1024 * 10).toDouble / 10) MB</td>
 					<td class="remove"><a class="remove-patient center-block text-danger"><span class="glyphicon glyphicon-remove"></span></a></td>
 				</tr>
 			}
-		} else {
-			<tr class="not-clickable"><td colspan="4">No patients found...</td></tr>
-		}
+			<tr class="no-patients not-clickable" @if(patients.length > 0){ style="display:none" }><td colspan="6">No patients found...</td></tr>
 		</tbody>
 	</table>
 	
