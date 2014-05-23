@@ -63,17 +63,34 @@ public class Patient {
 		return null;
 	}
 
-	/*
-	 * Add users to the database, id's will be auto incremented
-	 */
-	public static void add(int u_id, String name, String surname) {
-		try (Connection con = DB.getConnection("data");) {
-			String query = "INSERT INTO patient VALUES (nextval('p_id_seq'::regclass),"
-					+ u_id + ",'" + name + "', '" + surname + "');";
-			Statement st = con.createStatement();
-			st.executeUpdate(query);
-		} catch (SQLException e) {
-			Logger.info((e.toString()));
-		}
-	}
+  /*
+   * Add users to the database, id's will be auto incremented
+   */
+  public static void add(int u_id, String name, String surname) {
+    try (Connection con = DB.getConnection("data");) {
+      String query = "INSERT INTO patient VALUES (nextval('p_id_seq'::regclass),"
+          + u_id + ",'" + name + "', '" + surname + "');";
+      Statement st = con.createStatement();
+      st.executeUpdate(query);
+    } catch (SQLException e) {
+      Logger.info((e.toString()));
+    }
+  }
+
+  /*
+   * Remove a patient and it's mutations from the database
+   */
+  public static void remove(Patient p) {
+    try (Connection con = DB.getConnection("data");) {
+      String queryDeletePatient = "DELETE FROM patient WHERE p_id = " + p.id;
+      String queryDeleteMutations = "DELETE FROM mutations WHERE p_id = " + p.id;
+      
+      Statement st = con.createStatement();
+      
+      st.execute(queryDeletePatient);
+      st.execute(queryDeleteMutations);
+    } catch (SQLException e) {
+      Logger.info((e.toString()));
+    }
+  }
 }

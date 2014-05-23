@@ -109,7 +109,7 @@ public class Patients extends Controller {
     if (p == null)
       return badRequest();
     
-    // TODO Remove patient p
+    Patient.remove(p);
     
     return ok();
   }
