@@ -104,4 +104,8 @@ public class Patient {
       Logger.info((e.toString()));
     }
   }
+  
+  public Double vcf_lengthMB() {
+    return ((double) (Math.round(vcf_length.doubleValue()/1024/1024 * 10))) / 10;
+  }
 }
