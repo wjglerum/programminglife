@@ -83,9 +83,9 @@ public class Patient {
 	 * @param name
 	 * @param surname
 	 */
-	public static void add(int u_id, String name, String surname) {
+	public static void add(int u_id, String name, String surname, String vcf_File, Long vcf_length) {
 		String query = "INSERT INTO patient VALUES (nextval('p_id_seq'::regclass),"
-				+ u_id + ",'" + name + "', '" + surname + "');";
+				+ u_id + ",'" + name + "', '" + surname + "', '" + vcf_File + "', " + vcf_length + ");";
 		Database.insert("data", query);
 	}
 
