@@ -12,6 +12,8 @@ import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
+import play.mvc.Http.MultipartFormData;
+import play.mvc.Http.MultipartFormData.FilePart;
 import views.html.patient;
 import views.html.patient_add;
 import views.html.patients;
@@ -71,8 +73,27 @@ public class Patients extends Controller {
 				return "An invalid name is entered. Please fill in a name consisting of at least 3 characters";
 			else if (surname == null || surname.length() < 3)
 				return "An invalid surname is entered. Please fill in a surname consisting of at least 3 characters";
-			else
-				return null;
+			else {
+        MultipartFormData body = request().body().asMultipartFormData();
+        FilePart vcf = body.getFile("vcf");
+        
+        if (vcf != null) {
+          String fileName = vcf.getFilename();
+          String contentType = vcf.getContentType();
+          
+          // Check file extension
+          if (fileName.length() < 4 || ! fileName.substring(fileName.length() - 4).equals(".vcf"))
+            return "The uploaded file hasn't the .vcf extension";
+          
+          // Check content type
+          if (!contentType.equals("text/directory"))
+            return "File has wrong content type";
+        } else {
+          return "No VCF file provided";   
+        }
+      }
+      
+      return null;
 		}
 
 	}
@@ -96,14 +117,29 @@ public class Patients extends Controller {
 			return badRequest(patient_add.render(addForm,
 					Authentication.getUser()));
 		} else {
-			String name = addForm.get().name;
-			String surname = addForm.get().surname;
-			Patient.add(Authentication.getUser().id, name, surname);
-
-			flash("patient-added", "The patient " + name + " " + surname
-					+ " is successfully added to the database.");
-
-			return redirect(routes.Patients.showAll());
+      String name = addForm.get().name;
+      String surname = addForm.get().surname;
+      
+      // Process VCF file
+      MultipartFormData body = request().body().asMultipartFormData();
+      FilePart vcf = body.getFile("vcf");
+      File file = vcf.getFile();
+      
+      Long fileSize = file.length();
+      String fileName = vcf.getFilename();
+      String filePath = file.getAbsolutePath();
+      
+      // TODO processing of VCF file at filePath by Robberts code
+      // TODO add mutations found by Robberts processing to database
+      
+      // Add Patient to database
+      Patient.add(Authentication.getUser().id, name, surname, fileName, fileSize);
+      
+      // Make user happy
+      flash("patient-added", "The patient " + name + " " + surname
+          + " is successfully added to the database.");
+      
+      return redirect(routes.Patients.showAll());
 		}
 	}
 
