@@ -2,6 +2,7 @@ package controllers;
 
 import static play.data.Form.form;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import models.Mutation;
@@ -18,18 +19,20 @@ public class Patients extends Controller {
 
   /**
    * List all patients.
+ * @throws SQLException 
    */
   @Security.Authenticated(Secured.class)
-  public static Result showAll() {
+  public static Result showAll() throws SQLException {
     return ok(patients.render(Patient.getAll(Authentication.getUser().id),
         Authentication.getUser()));
   }
 
   /**
    * Display a patient.
+ * @throws SQLException 
    */
   @Security.Authenticated(Secured.class)
-  public static Result show(int p_id) {
+  public static Result show(int p_id) throws SQLException {
     Patient p = Patient.get(p_id, Authentication.getUser().id);
     List<Mutation> mutations = Mutation.getMutations(p_id);
 
@@ -42,9 +45,10 @@ public class Patients extends Controller {
   
   /**
    * Return to the patients overview and display a message the requested patient isn't found
+ * @throws SQLException 
    */
   @Security.Authenticated(Secured.class)
-  public static Result patientNotFound() {
+  public static Result patientNotFound() throws SQLException {
     flash("patient-not-found",
       "The requested patient could not be found. Please select another one below.");
 
@@ -74,15 +78,17 @@ public class Patients extends Controller {
 
 	/**
 	 * Render the form to add a patient.
+	 * @throws SQLException 
 	 */
-	public static Result add() {
+	public static Result add() throws SQLException {
 		return ok(patient_add.render(form(Add.class), Authentication.getUser()));
 	}
 
 	/**
 	 * Insert the newly added patient in the database
+	 * @throws SQLException 
 	 */
-	public static Result insert() {
+	public static Result insert() throws SQLException {
 		Form<Add> addForm = form(Add.class).bindFromRequest();
 
 		if (addForm.hasErrors()) {
@@ -102,14 +108,15 @@ public class Patients extends Controller {
 
   /**
    * Handle the ajax request for removing patients
+ * @throws SQLException 
    */
-  public static Result remove(int p_id) {
+  public static Result remove(int p_id) throws SQLException {
     Patient p = Patient.get(p_id, Authentication.getUser().id);
     
     if (p == null)
       return badRequest();
     
-    // TODO Remove patient p
+    Patient.remove(p);
     
     return ok();
   }

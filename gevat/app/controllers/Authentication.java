@@ -1,6 +1,9 @@
 package controllers;
 
 import static play.data.Form.form;
+
+import java.sql.SQLException;
+
 import models.User;
 import play.data.Form;
 import play.mvc.Controller;
@@ -17,7 +20,7 @@ public class Authentication extends Controller {
 		public String username;
 		public String password;
 
-		public String validate() {
+		public String validate() throws SQLException {
 			if (User.authenticate(username, password) == null)
 				return "Invalid username or password";
 			else
@@ -64,8 +67,9 @@ public class Authentication extends Controller {
 
 	/**
 	 * Get the current session User
+	 * @throws SQLException 
 	 */
-	public static User getUser() {
+	public static User getUser() throws SQLException {
 		String username = session("username");
 
 		return User.getUser(username);
