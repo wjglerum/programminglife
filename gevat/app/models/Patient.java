@@ -15,11 +15,16 @@ public class Patient {
 	public int id;
 	public String name;
 	public String surname;
+	
+	public String vcf_file;
+	public Long vcf_length;
 
-	public Patient(int id, String name, String surname) {
+	public Patient(int id, String name, String surname, String vcf_file, Long vcf_length) {
 		this.id = id;
 		this.name = name;
 		this.surname = surname;
+		this.vcf_file = vcf_file;
+		this.vcf_length = vcf_length;
 	}
 
 	/*
@@ -33,7 +38,10 @@ public class Patient {
 			if (rs.next()) {
 				String name = rs.getString("name");
 				String surname = rs.getString("surname");
-				return new Patient(p_id, name, surname);
+        String vcf_file = rs.getString("vcf_file");
+        Long vcf_length = rs.getLong("vcf_length");
+				
+				return new Patient(p_id, name, surname, vcf_file, vcf_length);
 			}
 		} catch (SQLException e) {
 			Logger.info((e.toString()));
@@ -54,7 +62,10 @@ public class Patient {
 				int id = rs.getInt("p_id");
 				String name = rs.getString("name");
 				String surname = rs.getString("surname");
-				patients.add(new Patient(id, name, surname));
+        String vcf_file = rs.getString("vcf_file");
+        Long vcf_length = rs.getLong("vcf_length");
+        
+				patients.add(new Patient(id, name, surname, vcf_file, vcf_length));
 			}
 			return patients;
 		} catch (SQLException e) {
@@ -66,10 +77,10 @@ public class Patient {
   /*
    * Add users to the database, id's will be auto incremented
    */
-  public static void add(int u_id, String name, String surname) {
+  public static void add(int u_id, String name, String surname, String vcf_File, Long vcf_length) {
     try (Connection con = DB.getConnection("data");) {
       String query = "INSERT INTO patient VALUES (nextval('p_id_seq'::regclass),"
-          + u_id + ",'" + name + "', '" + surname + "');";
+          + u_id + ",'" + name + "', '" + surname + "', '" + vcf_File + "', " + vcf_length + ");";
       Statement st = con.createStatement();
       st.executeUpdate(query);
     } catch (SQLException e) {
