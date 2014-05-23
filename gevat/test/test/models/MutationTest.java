@@ -49,15 +49,7 @@ public class MutationTest {
 					List<Mutation> list = Mutation.getMutations(1);
 					assertEquals(list.size(), 2);
 					
-					String q = "SELECT "
-							+ "SNP.snp_id, SNP.tax_id, SubSNP.subsnp_id "
-							+ "FROM "
-							+ "SNP, SNPSubSNPLink, SubSNP "
-							+ "WHERE "
-							+ "SNP.snp_id = " + 1 + " AND "
-							+ "SNP.snp_id = SNPSubSNPLink.snp_id AND "
-							+ "SNPSubSNPLink.subsnp_id = SubSNP.subsnp_id;";
-					Database.select("snp", q);
+					
 					Logger.info("done balblalal");
 				} catch (SQLException e) {
 					Logger.error(e.toString());

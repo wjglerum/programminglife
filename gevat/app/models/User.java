@@ -30,9 +30,9 @@ public class User {
 	/**
 	 * Returns a new user with data from the database, based on the username.
 	 * 
-	 * @param username
-	 * @return User
-	 * @throws SQLException
+	 * @param username adsfad
+	 * @return User adfasd
+	 * @throws SQLException asdfa
 	 */
 	public static User getUser(String username) throws SQLException {
 		String query = "SELECT u_id, name, surname FROM users WHERE username = '"
