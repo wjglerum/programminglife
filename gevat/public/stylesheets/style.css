@@ -73,7 +73,7 @@ body {
 /*
  * Miscellaneous
  */
-.bg-success, .bg-danger {
+.bg-success, .bg-info, .bg-danger {
   padding: 1em;
 }
 .clickable-rows tbody tr:hover {

@@ -103,4 +103,8 @@ public class Patient {
 		Database.delete("data", queryDeletePatient);
 		Database.delete("data", queryDeleteMutations);
 	}
+  
+  public Double vcf_lengthMB() {
+    return ((double) (Math.round(vcf_length.doubleValue()/1024/1024 * 10))) / 10;
+  }
 }
