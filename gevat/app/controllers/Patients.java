@@ -6,8 +6,13 @@ import java.sql.SQLException;
 import java.io.File;
 import java.util.List;
 
+import org.broadinstitute.variant.variantcontext.Allele;
+
+import models.Database;
 import models.Mutation;
 import models.Patient;
+import models.VCFReader;
+import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -120,7 +125,7 @@ public class Patients extends Controller {
       String name = addForm.get().name;
       String surname = addForm.get().surname;
       
-      // Process VCF file
+      // Get VCF file data
       MultipartFormData body = request().body().asMultipartFormData();
       FilePart vcf = body.getFile("vcf");
       File file = vcf.getFile();
@@ -129,11 +134,18 @@ public class Patients extends Controller {
       String fileName = vcf.getFilename();
       String filePath = file.getAbsolutePath();
       
-      // TODO processing of VCF file at filePath by Robberts code
-      // TODO add mutations found by Robberts processing to database
-      
       // Add Patient to database
-      Patient.add(Authentication.getUser().id, name, surname, fileName, fileSize);
+      Patient p = Patient.add(Authentication.getUser().id, name, surname, fileName, fileSize);
+      
+      // Process VCF file
+      List<Mutation> mutations = VCFReader.getMutations(filePath);
+      
+      // Add each mutation to the database
+      for (Mutation m : mutations) {
+        String query = "INSERT INTO mutations VALUES (nextval('m_id_seq'::regclass)," + p.id + ",'" + m.getMutationType() + "','" + m.getRsID() + "'," + m.getChromosome() + ",'" + m.toAllelesString() + "');";
+        Logger.info(query);
+        Database.insert("data", query);
+      }
       
       // Make user happy
       flash("patient-added", "The patient " + name + " " + surname
