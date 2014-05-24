@@ -6,6 +6,8 @@ import java.util.*;
 
 import org.broadinstitute.variant.variantcontext.Allele;
 import org.broadinstitute.variant.variantcontext.GenotypesContext;
+import org.broadinstitute.variant.variantcontext.Genotype;
+import org.broadinstitute.variant.variantcontext.GenotypeBuilder;
 import org.broadinstitute.variant.variantcontext.VariantContext;
 
 public class Mutation extends VariantContext {
@@ -28,14 +30,14 @@ public class Mutation extends VariantContext {
 	 * @param alleles
 	 */
 	public Mutation(int id, String mutationType, String rsID, int chromosome,
-			Collection<Allele> alleles) {
-        super(null, rsID, Integer.toString(chromosome), id, id, alleles, null, 0, null, null, false, EnumSet.noneOf(Validation.class));
+			Collection<Allele> alleles, GenotypesContext genotypes) {
+        super(null, rsID, Integer.toString(chromosome), id, id, alleles, genotypes, 0, null, null, false, EnumSet.noneOf(Validation.class));
         this.mutationType=mutationType;
 	}
 
    public Mutation(int id, String mutationType, String rsID, int chromosome,
            char[] alleles) {
-       super(null, rsID, Integer.toString(chromosome), id, id, toAlleleCollection(new String(alleles)), null, 0, null, null, false, EnumSet.noneOf(Validation.class));
+       super(null, rsID, Integer.toString(chromosome), id, id, toAlleleCollection(new String(alleles)), toGenotypesContext(new String(alleles)), 0, null, null, false, EnumSet.noneOf(Validation.class));
        this.mutationType=mutationType;
    }
 
@@ -69,7 +71,7 @@ public class Mutation extends VariantContext {
 	 * @return String
 	 */
 	public String child() {
-        return getAlleles().toString();
+        return toBaseString(getAlleles());
 	}
 
 	/**
@@ -78,7 +80,7 @@ public class Mutation extends VariantContext {
 	 * @return String
 	 */
 	public String father() {
-        return getGenotype("FATHER").getAlleles().toString();
+        return toBaseString(getGenotype("FATHER").getAlleles());
 	}
 
 	/**
@@ -87,7 +89,11 @@ public class Mutation extends VariantContext {
 	 * @return String
 	 */
 	public String mother() {
-        return getGenotype("MOTHER").getAlleles().toString();
+        return toBaseString(getGenotype("MOTHER").getAlleles());
+	}
+	
+	public String toBaseString(List<Allele> alleles) {
+	    return "[" + alleles.get(0).getBaseString() + ", " + alleles.get(1).getBaseString() + "]";
 	}
 
 	/**
@@ -108,7 +114,8 @@ public class Mutation extends VariantContext {
 			String rsID = rs.getString("rsID");
 			int chromosome = rs.getInt("chromosome");
 			Collection<Allele> alleles = toAlleleCollection(rs.getString("alleles"));
-			mutations.add(new Mutation(id, sort, rsID, chromosome, alleles));
+			GenotypesContext genotypescontext = toGenotypesContext(rs.getString("alleles"));
+			mutations.add(new Mutation(id, sort, rsID, chromosome, alleles, genotypescontext));
 		}
 		return mutations;
 	}
@@ -119,6 +126,22 @@ public class Mutation extends VariantContext {
         alleles.add(toAllele(allelesString.substring(0,1), true));
         alleles.add(toAllele(allelesString.substring(1,2), false));
 	    return alleles;
+	}
+	
+	public static GenotypesContext toGenotypesContext(String s)
+	{
+	    GenotypesContext gc = GenotypesContext.create();
+        gc.add(toGenotype(s.substring(2,4), "FATHER"));
+        gc.add(toGenotype(s.substring(4,6), "MOTHER"));
+        return gc;
+	}
+	
+	public static Genotype toGenotype(String allelesString, String name)
+	{
+	    List<Allele> alleles = new ArrayList<Allele>();
+        alleles.add(toAllele(allelesString.substring(0,1), false));
+        alleles.add(toAllele(allelesString.substring(1,2), false));
+        return GenotypeBuilder.create(name, alleles);
 	}
 	
 	public static Allele toAllele(String s, boolean isref)
