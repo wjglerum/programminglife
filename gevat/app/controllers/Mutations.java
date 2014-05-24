@@ -28,7 +28,7 @@ public class Mutations extends Controller {
     
     // Render the mutation if it's found in the requested patient's mutations
     for (Mutation m : mutations) {
-      if (m.id == m_id)
+      if (m.getId() == m_id)
         return ok(mutation.render(p, m, Authentication.getUser()));
     }
     

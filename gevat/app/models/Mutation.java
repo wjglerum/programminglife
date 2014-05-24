@@ -4,18 +4,21 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collection;
 
-public class Mutation {
+import org.broadinstitute.variant.variantcontext.Allele;
+import org.broadinstitute.variant.variantcontext.GenotypesContext;
+import org.broadinstitute.variant.variantcontext.VariantContext;
 
-	public int id;
-	public String sort;
-	public String rsID;
-	public int chromosome;
+public class Mutation extends VariantContext {
 
-	/**
-	 * contains the alleles of child, father and mother
-	 */
-	public char[] alleles;
+    public String mutationType;
+/*
+    protected Mutation(String source, String ID, String contig, long start, long stop, Collection<Allele> alleles, GenotypesContext genotypes,
+                         double log10PError, Set<String> filters, Map<String,Object> attributes,
+                         boolean fullyDecoded, EnumSet<VariantContext.Validation> validationToPerform) {
+        super(source, ID, contig, start, stop, alleles, genotypes, log10PError, filters, attributes, fullyDecoded, validationToPerform);
+    }*/
 
 	/**
 	 * Store information about a mutation
@@ -27,13 +30,34 @@ public class Mutation {
 	 * @param alleles
 	 */
 	public Mutation(int id, String sort, String rsID, int chromosome,
-			char[] alleles) {
-		this.id = id;
-		this.sort = sort;
-		this.rsID = rsID;
-		this.chromosome = chromosome;
-		this.alleles = alleles;
+			Collection<Allele> alleles) {
+        super(null, rsID, Integer.toString(chromosome), id, id, null, null, 0, null, null, false, null);
+        this.mutationType=mutationType;
 	}
+
+    public Mutation(VariantContext vc) {
+        super(vc);
+    }
+    
+    public String getMutationType()
+    {
+        return mutationType;
+    }
+    
+    public String getRsID()
+    {
+        return getID();
+    }
+    
+    public long getId()
+    {
+        return start;
+    }
+    
+    public int getChromosome()
+    {
+        return Integer.parseInt(contig);
+    }
 
 	/**
 	 * Return the alleles of the child
@@ -41,7 +65,7 @@ public class Mutation {
 	 * @return String
 	 */
 	public String child() {
-		return "[" + alleles[0] + ", " + alleles[1] + "]";
+        return getAlleles().toString();
 	}
 
 	/**
@@ -50,7 +74,7 @@ public class Mutation {
 	 * @return String
 	 */
 	public String father() {
-		return "[" + alleles[2] + ", " + alleles[3] + "]";
+        return getGenotype("FATHER").getAlleles().toString();
 	}
 
 	/**
@@ -59,7 +83,7 @@ public class Mutation {
 	 * @return String
 	 */
 	public String mother() {
-		return "[" + alleles[4] + ", " + alleles[5] + "]";
+        return getGenotype("MOTHER").getAlleles().toString();
 	}
 
 	/**
@@ -79,9 +103,21 @@ public class Mutation {
 			String sort = rs.getString("sort");
 			String rsID = rs.getString("rsID");
 			int chromosome = rs.getInt("chromosome");
-			char[] alleles = rs.getString("alleles").toCharArray();
+			Collection<Allele> alleles = toAlleleCollection(rs.getString("alleles"));
 			mutations.add(new Mutation(id, sort, rsID, chromosome, alleles));
 		}
 		return mutations;
+	}
+	
+	public static Collection<Allele> toAlleleCollection(String allelesString)
+	{
+	    Collection<Allele> alleles = new ArrayList<Allele>();
+	    alleles.add(toAllele(allelesString.substring(0,2)));
+	    return alleles;
+	}
+	
+	public static Allele toAllele(String s)
+	{
+	    return Allele.create(s);
 	}
 }

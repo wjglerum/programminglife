@@ -18,7 +18,7 @@
 	<div class="visualization-mutations">
 		<ul>
 		@for(mutation <- mutations) {
-			<li><a class="mutation" data-mutation-id="@mutation.id" href="/patients/@patient.id/mutation/@mutation.id">@mutation.rsID</a></li>
+			<li><a class="mutation" data-mutation-id="@mutation.getId()" href="/patients/@patient.id/mutation/@mutation.getId()">@mutation.getRsID()</a></li>
 		}
 		</ul>
 	</div>
@@ -40,10 +40,10 @@
 		<tbody>
 		@if(mutations.length > 0){
 			@for(mutation <- mutations) {
-				<tr href="/patients/@patient.id/mutation/@mutation.id" data-mutation-id="@mutation.id">
-					<td>@mutation.sort</td>
-					<td>@mutation.rsID</td>
-					<td>@mutation.chromosome</td>
+				<tr href="/patients/@patient.id/mutation/@mutation.getId()" data-mutation-id="@mutation.getId()">
+					<td>@mutation.getMutationType()</td>
+					<td>@mutation.getRsID()</td>
+					<td>@mutation.getChromosome()</td>
 					<td>@mutation.child()</td>
 					<td>@mutation.father()</td>
 					<td>@mutation.mother()</td>

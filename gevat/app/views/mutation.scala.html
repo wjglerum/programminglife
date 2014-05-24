@@ -1,6 +1,6 @@
 @(patient: Patient, mutation: Mutation, user: User)
 
-@template_app("Mutation " + mutation.rsID + " of patient " + patient.name + " " + patient.surname, user, "patients") {
+@template_app("Mutation " + mutation.getRsID + " of patient " + patient.name + " " + patient.surname, user, "patients") {
 	
 	<table class="table-mutation table">
 		<thead>
@@ -15,9 +15,9 @@
 		</thead>
 		<tbody>
 			<tr>
-				<td>@mutation.sort</td>
-				<td>@mutation.rsID</td>
-				<td>@mutation.chromosome</td>
+				<td>@mutation.getMutationType()</td>
+				<td>@mutation.getRsID()</td>
+				<td>@mutation.getChromosome()</td>
 				<td>@mutation.child()</td>
 				<td>@mutation.father()</td>
 				<td>@mutation.mother()</td>
