@@ -2,9 +2,7 @@ package models;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Collection;
+import java.util.*;
 
 import org.broadinstitute.variant.variantcontext.Allele;
 import org.broadinstitute.variant.variantcontext.GenotypesContext;
@@ -29,11 +27,17 @@ public class Mutation extends VariantContext {
 	 * @param chromosome
 	 * @param alleles
 	 */
-	public Mutation(int id, String sort, String rsID, int chromosome,
+	public Mutation(int id, String mutationType, String rsID, int chromosome,
 			Collection<Allele> alleles) {
-        super(null, rsID, Integer.toString(chromosome), id, id, null, null, 0, null, null, false, null);
+        super(null, rsID, Integer.toString(chromosome), id, id, alleles, null, 0, null, null, false, EnumSet.noneOf(Validation.class));
         this.mutationType=mutationType;
 	}
+
+   public Mutation(int id, String mutationType, String rsID, int chromosome,
+           char[] alleles) {
+       super(null, rsID, Integer.toString(chromosome), id, id, toAlleleCollection(new String(alleles)), null, 0, null, null, false, EnumSet.noneOf(Validation.class));
+       this.mutationType=mutationType;
+   }
 
     public Mutation(VariantContext vc) {
         super(vc);
@@ -112,12 +116,13 @@ public class Mutation extends VariantContext {
 	public static Collection<Allele> toAlleleCollection(String allelesString)
 	{
 	    Collection<Allele> alleles = new ArrayList<Allele>();
-	    alleles.add(toAllele(allelesString.substring(0,2)));
+        alleles.add(toAllele(allelesString.substring(0,1), true));
+        alleles.add(toAllele(allelesString.substring(1,2), false));
 	    return alleles;
 	}
 	
-	public static Allele toAllele(String s)
+	public static Allele toAllele(String s, boolean isref)
 	{
-	    return Allele.create(s);
+	    return Allele.create(s, isref);
 	}
 }
