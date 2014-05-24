@@ -83,10 +83,16 @@ public class Patient {
 	 * @param name
 	 * @param surname
 	 */
-	public static void add(int u_id, String name, String surname, String vcf_File, Long vcf_length) {
+	public static Patient add(int u_id, String name, String surname, String vcf_file, Long vcf_length) throws SQLException {
 		String query = "INSERT INTO patient VALUES (nextval('p_id_seq'::regclass),"
-				+ u_id + ",'" + name + "', '" + surname + "', '" + vcf_File + "', " + vcf_length + ");";
+				+ u_id + ",'" + name + "', '" + surname + "', '" + vcf_file + "', " + vcf_length + ");";
 		Database.insert("data", query);
+		
+		// TODO get id of added patient efficiently
+		
+		List<Patient> patients = getAll(u_id);
+		
+		return patients.get(patients.size() - 1);
 	}
 
 	/**
