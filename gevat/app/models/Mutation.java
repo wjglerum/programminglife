@@ -43,6 +43,8 @@ public class Mutation extends VariantContext {
 
     public Mutation(VariantContext vc) {
         super(vc);
+        
+        this.mutationType = "SNP";
     }
     
     public String getMutationType()
@@ -94,6 +96,14 @@ public class Mutation extends VariantContext {
 	
 	public String toBaseString(List<Allele> alleles) {
 	    return "[" + alleles.get(0).getBaseString() + ", " + alleles.get(1).getBaseString() + "]";
+	}
+	
+	public String toAllelesString() {
+	  List<Allele> childAlleles = getAlleles();
+	  List<Allele> fatherAlleles = getGenotype("FATHER").getAlleles();
+	  List<Allele> motherAlleles = getGenotype("MOTHER").getAlleles();
+	  
+	  return childAlleles.get(0).getBaseString() + childAlleles.get(1).getBaseString() + fatherAlleles.get(0).getBaseString() + fatherAlleles.get(1).getBaseString() + motherAlleles.get(0).getBaseString() + motherAlleles.get(1).getBaseString();
 	}
 
 	/**
