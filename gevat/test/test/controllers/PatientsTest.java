@@ -1,3 +1,4 @@
+package test.controllers;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertNull;
 import static play.mvc.Http.Status.OK;
@@ -17,7 +18,7 @@ import play.mvc.Http.Cookie;
 import play.mvc.Result;
 import controllers.Patients.Add;
 
-public class ApplicationPatientsTest {
+public class PatientsTest {
 
 	/**
 	 * Check if we get an an error message if a name is not set
@@ -66,18 +67,6 @@ public class ApplicationPatientsTest {
 		String warning = new String();
 		warning = "An invalid surname is entered. Please fill in a surname consisting of at least 3 characters";
 		assertThat(warning).isEqualTo(newAdd.validate());
-	}
-
-	/**
-	 * Check if we get back NULL if the name and surname are valid
-	 */
-	@Test
-	public void ValidNameTest() {
-		Add newAdd = new Add();
-		newAdd.name = "John";
-		newAdd.surname = "Doe";
-		assertNull(newAdd.validate());
-
 	}
 
 	@Test
