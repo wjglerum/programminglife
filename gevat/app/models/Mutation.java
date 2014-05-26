@@ -93,7 +93,7 @@ public class Mutation extends VariantContext {
 				+ alleles.get(1).getBaseString() + "]";
 	}
 
-	protected String toAllelesString() {
+	public String toAllelesString() {
 		List<Allele> childAlleles = getAlleles();
 		List<Allele> fatherAlleles = getGenotype("FATHER").getAlleles();
 		List<Allele> motherAlleles = getGenotype("MOTHER").getAlleles();
