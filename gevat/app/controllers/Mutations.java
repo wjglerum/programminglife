@@ -1,5 +1,6 @@
 package controllers;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import models.Mutation;
@@ -15,9 +16,10 @@ public class Mutations extends Controller {
 
   /**
    * Display a mutation of a patient.
+ * @throws SQLException 
    */
   @Security.Authenticated(Secured.class)
-  public static Result show(int p_id, int m_id) {
+  public static Result show(int p_id, int m_id) throws SQLException {
     Patient p = Patient.get(p_id, Authentication.getUser().id);
     List<Mutation> mutations = Mutation.getMutations(p_id);
 
@@ -26,7 +28,7 @@ public class Mutations extends Controller {
     
     // Render the mutation if it's found in the requested patient's mutations
     for (Mutation m : mutations) {
-      if (m.id == m_id)
+      if (m.getId() == m_id)
         return ok(mutation.render(p, m, Authentication.getUser()));
     }
     
@@ -35,9 +37,10 @@ public class Mutations extends Controller {
   
   /**
    * Return to the patient page and display a message the requested mutation isn't found
+ * @throws SQLException 
    */
   @Security.Authenticated(Secured.class)
-  public static Result mutationNotFound(Patient p, List<Mutation> mutations) { 
+  public static Result mutationNotFound(Patient p, List<Mutation> mutations) throws SQLException { 
     flash("mutation-not-found",
         "The requested mutation could not be found or you don't have permissions to view the mutation. Select another one in the overview below.");
 

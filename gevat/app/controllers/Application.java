@@ -1,5 +1,7 @@
 package controllers;
 
+import java.sql.SQLException;
+
 import play.Routes;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -19,23 +21,26 @@ public class Application extends Controller {
 
   /**
    * Secure the dashboard page.
+ * @throws SQLException 
    */
   @Security.Authenticated(Secured.class)
-  public static Result dashboard() {
+  public static Result dashboard() throws SQLException {
     return ok(dashboard.render("Welcome to GEVATT!", Authentication.getUser()));
   }
 
   /**
    * Render the help page (no authentication required).
+ * @throws SQLException 
    */
-  public static Result help() {
+  public static Result help() throws SQLException {
     return ok(help.render(Authentication.getUser()));
   }
 
   /**
    * Render the about page (no authentication required).
+ * @throws SQLException 
    */
-  public static Result about() {
+  public static Result about() throws SQLException {
     return ok(about.render(Authentication.getUser()));
   }    // -- Javascript routing
 

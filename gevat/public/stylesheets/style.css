@@ -2,19 +2,56 @@
  * Base structure
  */
 body {
-	min-width: 768px;
-	padding-top: 50px; /* Move down content because we have a fixed navbar that is 50px tall */
+	min-width: 1024px !important;
+}
+@media (max-width: 1024px) {
+	body {
+		width: 1024px !important;
+	}
+	/* Reset the container */
+	.container-fluid {
+		width: 1024px;
+		max-width: none !important;
+	}
+	.container-fluid .navbar-header {
+		margin-right: 0;
+		margin-left: 0;
+	}
+	.navbar-header {
+		float: left;
+	}
+	.navbar-fixed-top {
+		right: auto;
+		left: auto;
+		width: 1024px;
+	}
+	.navbar-brand {
+		margin-left: -15px;
+	}
+	
+	/* Always apply the floated nav */
+	.navbar-nav {
+		float: left;
+		margin: 0;
+	}
+	.navbar-nav > li {
+		float: left;
+	}
+	.navbar-nav > li > a {
+		padding: 15px;
+	}
+	/* Redeclare since we override the float above */
+	.navbar-nav.navbar-right {
+		float: right;
+	}
 }
 
 /*
  * Sidebar
  */
 .sidebar {
-	position: fixed;
-	top: 51px;
-	bottom: 0;
-	left: 0;
-	z-index: 1000;
+	width: 25%;
+	float: left;
 	display: block;
 	padding: 20px;
 	overflow-x: hidden;
@@ -22,7 +59,6 @@ body {
 	background-color: #f5f5f5;
 	border-right: 1px solid #eee;
 }
-
 /* Sidebar navigation */
 .nav-sidebar {
   margin-right: -21px; /* 20px padding + 1px border */
@@ -39,11 +75,22 @@ body {
 }
 
 /*
+ * Main content
+ */
+.main {
+	margin-left: 25%;
+}
+
+/*
  * Header
  */
 .navbar-text {
 	margin-right: 50px;
 	color: #eee !important;
+}
+.navbar {
+	border-radius: 0 !important;
+	margin-bottom: 0;
 }
 
 /*
@@ -69,11 +116,14 @@ body {
 .form-add-patient p {
 	margin-bottom: 15px;
 }
+.table-mutations tr.highlight {
+	background-color: #f5f5f5;
+}
 
 /*
  * Miscellaneous
  */
-.bg-success, .bg-danger {
+.bg-success, .bg-info, .bg-danger {
   padding: 1em;
 }
 .clickable-rows tbody tr:hover {

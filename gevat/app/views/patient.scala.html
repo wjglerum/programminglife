@@ -8,6 +8,24 @@
 		</p>
 	}
 	
+	<p class="bg-info"><strong>VCF file</strong> used for processing: <em>@patient.vcf_file (@patient.vcf_lengthMB() MB)</em></p>
+	
+	@if(mutations.length > 0){
+	<h3>Browse mutations</h3>
+	
+	<p>[visualization here]</p>
+	
+	<div class="visualization-mutations">
+		<ul>
+		@for(mutation <- mutations) {
+			<li><a class="mutation" data-mutation-id="@mutation.getId()" href="/patients/@patient.id/mutation/@mutation.getId()">@mutation.getRsID()</a></li>
+		}
+		</ul>
+	</div>
+	}
+	
+	<h3>Mutations overview</h3>
+	
 	<table class="table-mutations table table-hover clickable-rows">
 		<thead>
 			<tr>
@@ -22,10 +40,10 @@
 		<tbody>
 		@if(mutations.length > 0){
 			@for(mutation <- mutations) {
-				<tr href="/patients/@patient.id/mutation/@mutation.id">
-					<td>@mutation.sort</td>
-					<td>@mutation.rsID</td>
-					<td>@mutation.chromosome</td>
+				<tr href="/patients/@patient.id/mutation/@mutation.getId()" data-mutation-id="@mutation.getId()">
+					<td>@mutation.getMutationType()</td>
+					<td>@mutation.getRsID()</td>
+					<td>@mutation.getChromosome()</td>
 					<td>@mutation.child()</td>
 					<td>@mutation.father()</td>
 					<td>@mutation.mother()</td>
