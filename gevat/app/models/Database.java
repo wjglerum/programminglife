@@ -10,11 +10,13 @@ import play.db.DB;
 public class Database {
 
 	/**
-	 * Make connection and execute query, does not return results
-	 * @param database
-	 * @param query
+	 * Make connection and execute query, does not return results.
+	 *
+	 * @param database The name of the database
+	 * @param query The query to be executed, in string format
 	 */
-	private static void doQuery(String database, String query) {
+	private static void doQuery(final String database,
+			final String query) {
 		try (Connection con = DB.getConnection(database);) {
 			con.createStatement().execute(query);
 		} catch (SQLException e) {
@@ -24,11 +26,13 @@ public class Database {
 
 	/**
 	 * Returns a ResultSet with the results from the SELECT query.
-	 * @param database
-	 * @param query
-	 * @return ResultSet
+	 *
+	 * @param database The name of the database
+	 * @param query The query to be executed, in string format
+	 * @return ResultSet ResultSet containing the results of the query
 	 */
-	public static ResultSet select(String database, String query) {
+	public static ResultSet select(final String database,
+			final String query) {
 		try (Connection con = DB.getConnection(database);) {
 			return con.createStatement().executeQuery(query);
 		} catch (SQLException e) {
@@ -38,20 +42,24 @@ public class Database {
 	}
 
 	/**
-	 * Execute insert statement
-	 * @param database
-	 * @param query
+	 * Execute insert statement.
+	 *
+	 * @param database The name of the database
+	 * @param query The query to be executed, in string format
 	 */
-	public static void insert(String database, String query) {
+	public static void insert(final String database,
+			final String query) {
 		doQuery(database, query);
 	}
 
 	/**
-	 * Execute delete statement
-	 * @param database
-	 * @param query
+	 * Execute delete statement.
+	 *
+	 * @param database The name of the database
+	 * @param query The query to be executed, in string format
 	 */
-	public static void delete(String database, String query) {
+	public static void delete(final String database,
+			final String query) {
 		doQuery(database, query);
 	}
 
