@@ -4,14 +4,7 @@ import models.User;
 
 import org.junit.*;
 
-import controllers.Authentication;
-import controllers.Authentication.Login;
 import play.mvc.*;
-import play.test.*;
-import play.api.templates.Html;
-import play.libs.F.*;
-import scala.collection.mutable.StringBuilder;
-import static play.data.Form.form;
 import static play.test.Helpers.*;
 import static org.fest.assertions.Assertions.*;
 
