@@ -72,7 +72,10 @@ public class Authentication extends Controller {
 	public static User getUser() throws SQLException {
 		String username = session("username");
 
-		return User.getUser(username);
+		if (username != null)
+		  return User.getUser(username);
+		
+		return null;
 	}
 
 }
