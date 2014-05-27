@@ -83,15 +83,23 @@ public class Patient {
 	 * @param name
 	 * @param surname
 	 */
-	public static Patient add(int u_id, String name, String surname, String vcf_file, Long vcf_length) throws SQLException {
+	public static Patient add(int u_id, String name, String surname,
+			String vcf_file, Long vcf_length) throws SQLException {
 		String query = "INSERT INTO patient VALUES (nextval('p_id_seq'::regclass),"
-				+ u_id + ",'" + name + "', '" + surname + "', '" + vcf_file + "', " + vcf_length + ");";
+				+ u_id
+				+ ",'"
+				+ name
+				+ "', '"
+				+ surname
+				+ "', '"
+				+ vcf_file
+				+ "', " + vcf_length + ");";
 		Database.insert("data", query);
-		
+
 		// TODO get id of added patient efficiently
-		
+
 		List<Patient> patients = getAll(u_id);
-		
+
 		return patients.get(patients.size() - 1);
 	}
 
@@ -109,8 +117,14 @@ public class Patient {
 		Database.delete("data", queryDeletePatient);
 		Database.delete("data", queryDeleteMutations);
 	}
-  
-  public Double vcf_lengthMB() {
-    return ((double) (Math.round(vcf_length.doubleValue()/1024/1024 * 10))) / 10;
-  }
+
+	/**
+	 * Get the length in MB's of the vcf file
+	 * 
+	 * @return
+	 */
+	public Double vcf_lengthMB() {
+		return ((double) (Math
+				.round(vcf_length.doubleValue() / 1024 / 1024 * 10))) / 10;
+	}
 }

@@ -23,5 +23,10 @@ public class AuthenticationTest {
 		assertThat(charset(result)).isEqualTo("utf-8");
 		assertThat(contentAsString(result)).contains("Username");
 	}
+	
+	@Test
+	public void testAuthenticate(){
+		
+	}
 }
 
