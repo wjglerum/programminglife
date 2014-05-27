@@ -44,8 +44,21 @@ public class AuthenticationTest {
 	/**
 	 * Contains data for login form.
 	 */
-	private final Map<String, String> data = new HashMap<String, String>();
+	private final static Map<String, String> data = new HashMap<String, String>();
 
+	/**
+	 * Save the result of the called action to authenticate.
+	 */
+	private static Result result;
+
+	/**
+	 * Save the logged in session in a cookie.
+	 */
+	private static Cookie playSession;
+
+	/**
+	 * Save the http request for the http context
+	 */
 	private final Http.Request request = mock(Http.Request.class);
 
 	/**
@@ -62,6 +75,19 @@ public class AuthenticationTest {
 		start(fakeApplication);
 	}
 
+	/**
+	 * Stop the fakeApplication.
+	 */
+	@AfterClass
+	public static void shutDownFakeApplication() {
+		stop(fakeApplication);
+	}
+
+	/**
+	 * Setup login for each test
+	 * 
+	 * @throws Exception
+	 */
 	@Before
 	public void setUp() throws Exception {
 		Map<String, String> flashData = Collections.emptyMap();
@@ -71,6 +97,15 @@ public class AuthenticationTest {
 		Http.Context context = new Http.Context(id, header, request, flashData,
 				flashData, argData);
 		Http.Context.current.set(context);
+
+		data.put("username", "user");
+		data.put("password", "pass");
+
+		result = callAction(
+				controllers.routes.ref.Authentication.authenticate(),
+				fakeRequest().withFormUrlEncodedBody(data));
+
+		playSession = play.test.Helpers.cookie("PLAY_SESSION", result);
 	}
 
 	/**
@@ -92,12 +127,6 @@ public class AuthenticationTest {
 	@Test
 	public void testAuthenticate() {
 		// test valid user
-		data.put("username", "user");
-		data.put("password", "pass");
-
-		Result result = callAction(
-				controllers.routes.ref.Authentication.authenticate(),
-				fakeRequest().withFormUrlEncodedBody(data));
 		assertThat(status(result)).isEqualTo(SEE_OTHER);
 
 		// test invalid password
@@ -120,16 +149,6 @@ public class AuthenticationTest {
 	 */
 	@Test
 	public void testLogout() {
-		data.put("username", "user");
-		data.put("password", "pass");
-
-		Result result = callAction(
-				controllers.routes.ref.Authentication.authenticate(),
-				fakeRequest().withFormUrlEncodedBody(data));
-
-		final Cookie playSession = play.test.Helpers.cookie("PLAY_SESSION",
-				result);
-
 		result = callAction(controllers.routes.ref.Authentication.logout(),
 				fakeRequest().withCookies(playSession));
 		assertThat(status(result)).isEqualTo(SEE_OTHER);
@@ -140,25 +159,9 @@ public class AuthenticationTest {
 	 * 
 	 * @throws SQLException
 	 */
-	//@Test
+	// @Test
 	public void testGetUser() throws SQLException {
-
-		data.put("username", "user");
-		data.put("password", "pass");
-		Result result = callAction(
-				controllers.routes.ref.Authentication.authenticate(),
-				fakeRequest().withFormUrlEncodedBody(data));
-		final Cookie playSession = play.test.Helpers.cookie("PLAY_SESSION",
-				result);
 		User u = Authentication.getUser();
 
 	}
-	/**
-	 * Stop the fakeApplication.
-	 */
-	@AfterClass
-	public static void shutDownFakeApplication() {
-		stop(fakeApplication);
-	}
-
 }
