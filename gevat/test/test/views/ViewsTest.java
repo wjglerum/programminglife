@@ -29,12 +29,18 @@ public class ViewsTest {
   public static FakeApplication app;
   private final Http.Request request = mock(Http.Request.class);
 
+  /**
+   * Start a fake application
+   */
   @BeforeClass
   public static void startApp() {
       app = Helpers.fakeApplication();
       Helpers.start(app);
   }
 
+  /**
+   * Setup a HTTP Context
+   */
   @Before
   public void setUp() throws Exception {
       Map<String, String> flashData = Collections.emptyMap();
@@ -48,11 +54,17 @@ public class ViewsTest {
       Http.Context.current.set(context);
   }
   
+  /**
+   * Make a fake session
+   */
   @Before
   public void fakeSession() {
     user = new User(1, "Foo", "Bar", "foobar");
   }
 
+  /**
+   * Test the about template
+   */
   @Test
   public void aboutTemplate() {
     Content html = views.html.about.render(user);
@@ -61,6 +73,9 @@ public class ViewsTest {
     assertThat(contentAsString(html)).contains("About");
   }
 
+  /**
+   * Test the help template
+   */
   @Test
   public void helpTemplate() {
     Content html = views.html.help.render(user);
@@ -69,7 +84,10 @@ public class ViewsTest {
     assertThat(contentAsString(html)).contains("Help");
     assertThat(contentAsString(html)).contains("App documentation.");
   }
-
+  
+  /**
+   * Test the dashboard template
+   */
   @Test
   public void dashboardTemplate() {
     Content html = views.html.dashboard.render("Lorem ipsum", user);
@@ -79,6 +97,9 @@ public class ViewsTest {
     assertThat(contentAsString(html)).contains("Lorem ipsum");
   }
 
+  /**
+   * Test the login template
+   */
   @Test
   public void loginTemplate() {
     Content html = views.html.login.render(form(controllers.Authentication.Login.class));
@@ -88,6 +109,9 @@ public class ViewsTest {
     assertThat(contentAsString(html)).contains("Please log in with your credentials.");
   }
 
+  /**
+   * Stop the fake application
+   */
   @AfterClass
   public static void stopApp() {
       Helpers.stop(app);
