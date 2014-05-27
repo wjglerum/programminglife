@@ -1,6 +1,6 @@
 @(patient: Patient, mutation: Mutation, user: User)
 
-@template_app("Mutation " + mutation.getRsID + " of patient " + patient.name + " " + patient.surname, user, "patients") {
+@template_app("Mutation " + mutation.getRsID + " of patient " + patient.getName + " " + patient.getSurname, user, "patients") {
 	
 	<table class="table-mutation table">
 		<thead>

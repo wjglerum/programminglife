@@ -27,12 +27,12 @@
 		</thead>
 		<tbody>
 			@for(patient <- patients) {
-				<tr class="patient" data-patient="@patient.id" href="/patients/@patient.id">
-					<td>@patient.id</td>
-					<td>@patient.name</td>
-					<td>@patient.surname</td>
-					<td>@patient.vcf_file</td>
-					<td>@patient.vcf_lengthMB() MB</td>
+				<tr class="patient" data-patient="@patient.getId" href="/patients/@patient.getId">
+					<td>@patient.getId</td>
+					<td>@patient.getName</td>
+					<td>@patient.getSurname</td>
+					<td>@patient.getVcfFile</td>
+					<td>@patient.getVcfLengthMB() MB</td>
 					<td class="remove"><a class="remove-patient center-block text-danger"><span class="glyphicon glyphicon-remove"></span></a></td>
 				</tr>
 			}
