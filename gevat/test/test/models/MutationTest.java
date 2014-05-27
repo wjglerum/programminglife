@@ -56,6 +56,6 @@ public class MutationTest {
 
 	@Test
 	public void testToAllelesString() {
-		assertEquals("ATTTTT", m.toAllelesString);
+		assertEquals("ATTTTT", m.toAllelesString());
 	}
 }
