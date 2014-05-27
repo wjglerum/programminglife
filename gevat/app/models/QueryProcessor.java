@@ -10,7 +10,14 @@ import java.util.ArrayList;
  * @author rbes
  *
  */
-public class QueryProcessor {
+public final class QueryProcessor {
+
+	/**
+	 * Done because it is a utility-class.
+	 */
+	private QueryProcessor() {
+		//not called
+	}
 
 	/**
 	 * Execute a query on the string database to get the
