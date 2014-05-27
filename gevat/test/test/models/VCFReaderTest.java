@@ -13,7 +13,9 @@ import org.broad.tribble.AbstractFeatureReader;
 import org.broad.tribble.FeatureReader;
 import org.broadinstitute.variant.vcf.VCFCodec;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.Before;
@@ -33,53 +35,48 @@ public class VCFReaderTest {
 	 */
 	private String testFile = "test/testFiles/VCFTest.vcf";
 
-	private VariantContext correct1;
-	private VariantContext correct2;
-	private VariantContext wrong1;
-	private VariantContext wrong2;
-	private VariantContext correct3;
+	private ArrayList<VariantContext> correct;
+	private ArrayList<VariantContext> wrong;
 	
 	@Before
 	public void Before()
 	{
+		correct = new ArrayList<VariantContext>();
+		wrong = new ArrayList<VariantContext>();
 		FeatureReader reader = AbstractFeatureReader
 				.getFeatureReader(testFile, new VCFCodec(),
 						false);
 		try {
 			Iterator<VariantContext> it = reader.iterator();
 			reader.getHeader();
-			correct1 = it.next();
-			correct2 = it.next();
-			wrong1 = it.next();
-			wrong2 = it.next();
-			correct3 = it.next();
+			correct.add(it.next());
+			correct.add(it.next());
+			wrong.add(it.next());
+			wrong.add(it.next());
+			correct.add(it.next());
 			reader.close();
 		} catch (IOException e) {fail("IOException");}
 	}
 	
 	@Test
 	public void testGetMutations() {
-//		VCFReader.getMutations(testFile);
-		fail("TODO");
+		List<Mutation> mutations = VCFReader.getMutations(testFile);
+		assertEquals(mutations.size(),wrong.size());
+		for(int i=0; i<mutations.size(); i++)
+				assertEquals(mutations.get(i).toString(), wrong.get(i).toString());
 	}
 
 	@Test
 	public void testHasMutation() {
-		assertFalse(VCFReader.hasMutation(correct1));
-		assertFalse(VCFReader.hasMutation(correct2));
-		assertFalse(VCFReader.hasMutation(correct3));
-		assertTrue(VCFReader.hasMutation(wrong1));
-		assertTrue(VCFReader.hasMutation(wrong2));
+		for(VariantContext vc: correct)
+			assertFalse(VCFReader.hasMutation(vc));
+		for(VariantContext vc: wrong)
+			assertTrue(VCFReader.hasMutation(vc));
 	}
 
 	@Test
 	public void testToMutation() {
-		Mutation m = VCFReader.toMutation(wrong1, "SNP");
+		Mutation m = VCFReader.toMutation(wrong.get(0), "SNP");
 		assertEquals("SNP", m.getMutationType());
-	}
-
-	@Test
-	public void testPossibleAlleleSet() {
-		fail("TODO");
 	}
 }
