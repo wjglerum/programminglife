@@ -142,7 +142,7 @@ public class Patients extends Controller {
       
       // Add each mutation to the database
       for (Mutation m : mutations) {
-        String query = "INSERT INTO mutations VALUES (nextval('m_id_seq'::regclass)," + p.id + ",'" + m.getMutationType() + "','" + m.getRsID() + "'," + m.getChromosome() + ",'" + m.toAllelesString() + "');";
+        String query = "INSERT INTO mutations VALUES (nextval('m_id_seq'::regclass)," + p.getId() + ",'" + m.getMutationType() + "','" + m.getRsID() + "'," + m.getChromosome() + ",'" + m.toAllelesString() + "');";
         Logger.info(query);
         Database.insert("data", query);
       }
