@@ -6,9 +6,13 @@ import static play.data.Form.form;
 import static play.test.Helpers.contentAsString;
 import static play.test.Helpers.contentType;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
+import models.Mutation;
+import models.Patient;
 import models.User;
 
 import org.junit.AfterClass;
@@ -107,6 +111,67 @@ public class ViewsTest {
     assertThat(contentType(html)).isEqualTo("text/html");
     assertThat(contentAsString(html)).contains("Login");
     assertThat(contentAsString(html)).contains("Please log in with your credentials.");
+  }
+
+  /**
+   * Test the list patients template
+   */
+  @Test
+  public void patientsTemplate() {
+    Patient patient = new Patient(1, "name", "surname", "file", new Long(12345));
+    List<Patient> patients = new ArrayList<Patient>();
+    
+    patients.add(patient);
+    
+    Content html = views.html.patients.render(patients, user);
+    
+    assertThat(contentType(html)).isEqualTo("text/html");
+    assertThat(contentAsString(html)).contains("Patients overview");
+    assertThat(contentAsString(html)).contains("No patients found...");
+  }
+
+  /**
+   * Test the add a patient template
+   */
+  @Test
+  public void patientAddTemplate() {
+    Content html = views.html.patient_add.render(form(controllers.Patients.Add.class), user);
+    
+    assertThat(contentType(html)).isEqualTo("text/html");
+    assertThat(contentAsString(html)).contains("Add new patient");
+    assertThat(contentAsString(html)).contains("Please enter the patients details to add.");
+  }
+
+  /**
+   * Test the single patient template
+   */
+  @Test
+  public void patientTemplate() {
+    Patient patient = new Patient(1, "name", "surname", "file", new Long(12345));
+    Mutation mutation = new Mutation(1, "SNP", "rs12345", 1, "ATATAT".toCharArray());
+    List<Mutation> mutations = new ArrayList<Mutation>();
+    
+    mutations.add(mutation);
+    
+    Content html = views.html.patient.render(patient, mutations, user);
+    
+    assertThat(contentType(html)).isEqualTo("text/html");
+    assertThat(contentAsString(html)).contains("Patient " + patient.getName() + " " + patient.getSurname());
+    assertThat(contentAsString(html)).contains("<strong>VCF file</strong> used for processing: <em>" + patient.getVcfFile() + " (" + patient.getVcfLengthMB() + " MB)</em>");
+  }
+
+  /**
+   * Test the mutation template
+   */
+  @Test
+  public void mutationTemplate() {
+    Patient patient = new Patient(1, "name", "surname", "file", new Long(12345));
+    Mutation mutation = new Mutation(1, "SNP", "rs12345", 1, "ATATAT".toCharArray());
+    
+    Content html = views.html.mutation.render(patient, mutation, user);
+    
+    assertThat(contentType(html)).isEqualTo("text/html");
+    assertThat(contentAsString(html)).contains("Mutation " + mutation.getRsID() + " of patient " + patient.getName() + " " + patient.getSurname());
   }
 
   /**
