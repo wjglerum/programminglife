@@ -49,8 +49,6 @@ public class MutationTest {
 					List<Mutation> list = Mutation.getMutations(1);
 					assertEquals(list.size(), 2);
 					
-					
-					Logger.info("done balblalal");
 				} catch (SQLException e) {
 					Logger.error(e.toString());
 				}
