@@ -38,7 +38,7 @@ public class SecuredTest {
 		play.api.mvc.RequestHeader header = mock(play.api.mvc.RequestHeader.class);
 		Http.Context context = new Http.Context(id, header, request, flashData,
 				flashData, argData);
-		// System.out.println(Secured.getUsername(context));
+		//System.out.println(Secured.getUsername(context));
 	}
 
 	/**
