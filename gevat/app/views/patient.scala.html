@@ -1,6 +1,6 @@
 @(patient: Patient, mutations: List[Mutation], user: User)
 
-@template_app("Patient " + patient.name + " " + patient.surname, user, "patients") {
+@template_app("Patient " + patient.getName + " " + patient.getSurname, user, "patients") {
 		
 	@if(flash.contains("mutation-not-found")) {
 		<p class="bg-danger">
@@ -8,7 +8,7 @@
 		</p>
 	}
 	
-	<p class="bg-info"><strong>VCF file</strong> used for processing: <em>@patient.vcf_file (@patient.vcf_lengthMB() MB)</em></p>
+	<p class="bg-info"><strong>VCF file</strong> used for processing: <em>@patient.getVcfFile (@patient.getVcfLengthMB MB)</em></p>
 	
 	@if(mutations.length > 0){
 	<h3>Browse mutations</h3>
@@ -18,7 +18,7 @@
 	<div class="visualization-mutations">
 		<ul>
 		@for(mutation <- mutations) {
-			<li><a class="mutation" data-mutation-id="@mutation.getId()" href="/patients/@patient.id/mutation/@mutation.getId()">@mutation.getRsID()</a></li>
+			<li><a class="mutation" data-mutation-id="@mutation.getId()" href="/patients/@patient.getId/mutation/@mutation.getId()">@mutation.getRsID()</a></li>
 		}
 		</ul>
 	</div>
@@ -40,7 +40,7 @@
 		<tbody>
 		@if(mutations.length > 0){
 			@for(mutation <- mutations) {
-				<tr href="/patients/@patient.id/mutation/@mutation.getId()" data-mutation-id="@mutation.getId()">
+				<tr href="/patients/@patient.getId/mutation/@mutation.getId()" data-mutation-id="@mutation.getId()">
 					<td>@mutation.getMutationType()</td>
 					<td>@mutation.getRsID()</td>
 					<td>@mutation.getChromosome()</td>
