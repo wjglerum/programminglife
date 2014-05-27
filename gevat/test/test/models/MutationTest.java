@@ -29,17 +29,14 @@ public class MutationTest {
 		assertEquals(m.getMutationType(), "SNP");
 		assertEquals(m.getRsID(), "rsID");
 		assertEquals(m.getChromosome(), 1);
-//		assertArrayEquals(m.alleles,
-//				new char[] { 'A', 'T', 'T', 'T', 'T', 'T' });
 	}
 
 	@Test
 	public void testAlleles() {
-		assertEquals(m.child(), "[A, T]");
-		assertEquals(m.father(), "[T, T]");
-		assertEquals(m.mother(), "[T, T]");
+		assertEquals("[A, T]", m.child());
+		assertEquals("[T, T]", m.father());
+		assertEquals("[T, T]", m.mother());
 	}
-
 
 	@Test
 	public void findById() {
@@ -48,13 +45,17 @@ public class MutationTest {
 				try {
 					List<Mutation> list = Mutation.getMutations(1);
 					assertEquals(list.size(), 2);
-					
-					
+
 					Logger.info("done balblalal");
 				} catch (SQLException e) {
 					Logger.error(e.toString());
 				}
 			}
 		});
+	}
+
+	@Test
+	public void testToAllelesString() {
+		assertEquals("ATTTTT", m.toAllelesString());
 	}
 }
