@@ -1,6 +1,10 @@
 $( document ).ready(function() {
 
-    var chromosomes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+    var chromosomes = [];
+    for (var i = 1; i < 24; i++) {
+        chromosomes.push(i);
+        chromosomes.push(i);
+    }
     var chromosomesWithMutations = [];
     var table = document.getElementById("table-mutations");
 
@@ -18,23 +22,22 @@ $( document ).ready(function() {
         .enter()
         .append("span")
         .append("svg")
-        .attr("width", 40)
+        .attr("width", 25)
         .attr("height", 100)
         .append("rect")
-        .attr("id", function(d){return "chromosome" + d;})
-        .attr("class", "chromosome-visualisation")
+        .attr("class", function(d){return "chromosome-visualisation chromosome" + d;})
         .attr("data-chr-id", function(d){return d;})
-        .style("stroke", "gray")
-        .style("fill", "white")
+        .style("fill", "black")
+        .attr("x", 5)
         .attr("rx", 10)
         .attr("ry", 10)
-        .attr("width", 20)
+        .attr("width", 10)
         .attr("height", 100)
         .on("mouseover", function(){d3.select(this).style("fill", "aliceblue");})
-        .on("mouseout", function(){d3.select(this).style("fill", "white");});
+        .on("mouseout", function(){d3.select(this).style("fill", "black");});
 
     for(var i = 0; i < chromosomesWithMutations.length; i++) {
-        d3.select("#" + chromosomesWithMutations[i]).style("fill", "red")
+        d3.selectAll("." + chromosomesWithMutations[i]).style("fill", "red")
         .on("mouseout", function(){d3.select(this).style("fill", "red");});
     }
 
@@ -43,9 +46,17 @@ $( document ).ready(function() {
         var chrId = $(this).data("chr-id");
         //alert("hoi" + chrId);
         $(".table-mutations tr[data-chr-id=" + chrId + "]").addClass("highlight");
+        //$("chromosome" + chrId).style("fill", "black");
+        d3.selectAll(".chromosome" + chrId).style("fill", "aliceblue");
+        //alert("chromosome" + chrId);
     }, function() {
         var chrId = $(this).data("chr-id");
-
         $(".table-mutations tr[data-chr-id=" + chrId + "]").removeClass("highlight");
+        //TODO: niet zo netjes...
+        var kleur = "black";
+        if(chromosomesWithMutations.indexOf("chromosome" + chrId) != -1)  {
+            kleur = "red";
+        }
+        d3.selectAll(".chromosome" + chrId).style("fill", kleur);
     });
 });
