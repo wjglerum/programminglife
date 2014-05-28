@@ -113,6 +113,9 @@ body {
 /*
  * Patients page
  */
+#patient_visualisation .chromosome-pair-title {
+    padding-top: 5px;
+}
 #patient_visualisation .highlight {
     fill: aliceblue;
 }
@@ -121,6 +124,17 @@ body {
     fill: #ff4846;
 }
 
+#patient_visualisation .chromosome-pair {
+    display: inline;
+    margin-right: 10px;
+
+}
+
+#patient_visualisation td {
+    min-width: 50px;
+    text-align: center;
+
+}
 .form-add-patient p {
 	margin-bottom: 15px;
 }
