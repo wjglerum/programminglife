@@ -2,6 +2,6 @@
 
 @template_app("Dashboard", user, "dashboard") {
 	
-	@content
+	@Html(HtmlFormat.escape(content).toString.replace("\n", "<br />"))
 	
 }
