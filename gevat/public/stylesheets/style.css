@@ -113,6 +113,14 @@ body {
 /*
  * Patients page
  */
+#patient_visualisation .highlight {
+    fill: aliceblue;
+}
+
+#patient_visualisation .mutation {
+    fill: #ff4846;
+}
+
 .form-add-patient p {
 	margin-bottom: 15px;
 }
