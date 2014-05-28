@@ -112,7 +112,7 @@ public final class VCFReader {
 	 *
 	 * @return Returns true if it is a valid set
 	 */
-	public static boolean possibleAlleleSet(final List<Allele> d,
+	private static boolean possibleAlleleSet(final List<Allele> d,
 			final List<Allele> f, final List<Allele> m) {
 		return ((f.contains(d.get(0)) && m.contains(d.get(1)))
 				|| (f.contains(d.get(1))
