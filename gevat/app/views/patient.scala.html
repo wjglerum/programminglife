@@ -31,7 +31,7 @@
 		<tbody>
 		@if(mutations.length > 0){
 			@for(mutation <- mutations) {
-				<tr href="/patients/@patient.getId/mutation/@mutation.getId()" data-mutation-id="@mutation.getId()" data-chr-id="@mutation.getChromosome()">
+				<tr href="/patients/@patient.getId/mutation/@mutation.getId()" class="table-mutation" data-chr-id="@mutation.getChromosome()">
 					<td>@mutation.getMutationType()</td>
 					<td>@mutation.getRsID()</td>
 					<td>@mutation.getChromosome()</td>
