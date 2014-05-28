@@ -13,18 +13,11 @@
 	@if(mutations.length > 0){
 	<h3>Browse mutations</h3>
 	<div id="patient_visualisation"></div>
-	<div class="visualization-mutations">
-		<ul>
-		@for(mutation <- mutations) {
-			<li><a class="mutation" data-mutation-id="@mutation.getId()" href="/patients/@patient.getId/mutation/@mutation.getId()">@mutation.getRsID()</a></li>
-		}
-		</ul>
-	</div>
 	}
 	
 	<h3>Mutations overview</h3>
 	
-	<table class="table-mutations table table-hover clickable-rows">
+	<table class="table-mutations table table-hover clickable-rows" id="table-mutations">
 		<thead>
 			<tr>
 				<th>Type</th>
@@ -38,7 +31,7 @@
 		<tbody>
 		@if(mutations.length > 0){
 			@for(mutation <- mutations) {
-				<tr href="/patients/@patient.getId/mutation/@mutation.getId()" data-mutation-id="@mutation.getId()">
+				<tr href="/patients/@patient.getId/mutation/@mutation.getId()" data-mutation-id="@mutation.getId()" data-chr-id="@mutation.getChromosome()">
 					<td>@mutation.getMutationType()</td>
 					<td>@mutation.getRsID()</td>
 					<td>@mutation.getChromosome()</td>
