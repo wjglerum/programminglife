@@ -20,6 +20,12 @@
 		String\\
 		CADD\\
 		User \& patients database\\\\
+		We use an extra database hosted at the webserver to store extra information for the webapplication. 
+		The credentials of the users, the doctors, are stored in the database, the passwords are hashed and salted.
+		Each user can have multiple patients which are linked through the id of the user.
+		Some basic information is stored per user including the uploaded VCF-file.
+		For every patient the mutations found in the VCF-file are stored as a single mutation, which is linked to each patient with the patient id.
+		\includegraphics[scale=0.5]{erd.png}
 		Old v\\
 		The only data our application handles are VCF-files sent by users. We currently have no plans to fill a database with these files for each user. We might give the user the option to export the data of the visualization so that he or she can view this later. We try to keep the data in the JAVA server as low as possible, to support more users.
 	\subsection{Concurrency }
