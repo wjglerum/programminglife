@@ -4,19 +4,19 @@
 	Our product will focus on:
 	\begin{itemize}
 		\item Availability
-			\subitem We plan to have a working system at all times, with more functionality being added each week. Using this approach, our customer can try the product after each iteration, resulting in feasible feedback which we can use to quickly alter course.
+			\subitem We are building this program using scrum, a development process consisting of sprints of a predetermined length. At the end of each sprint, we plan to have a working system, with more functionality being added each sprint. Using this approach, our customer can try the product after each iteration, resulting in feasible feedback which we can use to quickly alter course.
 		\item Manageability
-			\subitem Doctors will not have to manage anything, as they have no direct access to the databases or any data. They will only be provided visualizations to interact with.
-		\item Ease of use
-			\subitem Since our application runs on a server and a doctor can access our data with a web page, no extra programs are required. The user will log on with his credentials and can select a vcf-file to upload to our server as well as provide some data on the trio.
+			\subitem Doctors will not have to manage anything besides adding or deleting patients, as they have no direct access to the databases or any data. They will only be provided visualizations to interact with. 
+			\subitem As for the software manageability, we are using checkstyle and JavaDoc comments to make sure all the code is in a correct and uniform layout while everything is also well documented.
+			\subitem Since our application runs on a server and a doctor can access our data with a web page, no extra programs are required. The user will log on with his credentials and can select a VCF-file to upload to our server as well as provide some data on the trio.
 		\item Performance
-			\subitem As vcf-files are quite large, the data will be sent to the server while the doctor can still access the website. The data can be analysed quickly by the server and the results will be returned and locally visualized.
+			\subitem As VCF-files are quite large, the data will be sent to the server while the doctor can still access the website. The data can be analyzed quickly by the server and the results will be returned and locally visualized.
 		\item Scalability
 			\subitem Our application will be scalable in a sense that multiple users can upload files. However the databases containing information about the genetic variations (string, dbSNP and CADD) will continue to grow and thus the computational power required to gather the information needed will also grow. This however is not the problem of our server, but of the host of the server.
 		\item Reliability
-			\subitem The application should be very reliable, as servers are generally always on. The user only needs to connect to the web page.
+			\subitem The application should be very reliable, as servers are generally always on. The user only needs to connect to the web page. To make sure the software does not suddenly break, it will be tested thoroughly. In case something does go terribly wrong, we are using GitHub with branches so changes can be reverted easily.
 		\item Secureness
-			\subitem Doctors are required to log onto our system via the web page, thus unauthorized access is prevented. The data sent over will only be saved for a short time, long enough for it to be analyzed. After this it is deleted and the results are submitted.
+			\subitem Doctors are required to log onto our system via the secure web page, thus unauthorized access is prevented. The data sent over will only be saved for a short time, long enough for it to be analyzed. After this it is deleted and the results are submitted to the user and saved into the database for quick access later.
 	\end{itemize}
 	\subsection{Programming languages and programs}
-	The system features a web application which we can separate in a frontend and backend. The Play Framework is used to realise this. The main programming language used in the backend and in Play is Java. For templating the Play framework also uses Scala. The frontend is based on regular web languages: html, css, javascript. We fasten frontend develop moment by using both javascript and css libraries: Bootstrap for visual aspects and jQuery for faster javascript development. Both jQuery and Bootstrap increase cross-browser compatibility.
+	The system features a web application which we can separate in a frontend and backend. The Play Framework is used to realize this. The main programming language used in the backend and in Play is Java. For templating, the Play framework also uses Scala. The frontend is based on regular web languages: HTML, CSS and JavaScript. We fasten frontend develop by using both JavaScript and CSS libraries: Bootstrap for visual aspects and jQuery for faster JavaScript development. Both jQuery and Bootstrap increase cross-browser compatibility.
