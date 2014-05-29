@@ -1,9 +1,10 @@
 package test.controllers;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static play.mvc.Http.Status.BAD_REQUEST;
 import static play.mvc.Http.Status.OK;
 import static play.mvc.Http.Status.SEE_OTHER;
-import static play.mvc.Http.Status.BAD_REQUEST;
 import static play.test.Helpers.callAction;
 import static play.test.Helpers.charset;
 import static play.test.Helpers.contentAsString;
@@ -26,12 +27,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import controllers.Authentication;
 import play.mvc.Http;
 import play.mvc.Http.Cookie;
 import play.mvc.Result;
 import play.test.FakeApplication;
-import static org.mockito.Mockito.*;
+import controllers.Authentication;
 
 /**
  * Test the authentication controller.
@@ -44,7 +44,7 @@ public class AuthenticationTest {
 	/**
 	 * Contains data for login form.
 	 */
-	private final static Map<String, String> data = new HashMap<String, String>();
+	private final Map<String, String> data = new HashMap<String, String>();
 
 	/**
 	 * Save the result of the called action to authenticate.
@@ -57,7 +57,13 @@ public class AuthenticationTest {
 	private static Cookie playSession;
 
 	/**
-	 * Save the http request for the http context
+	 * User of the fake session
+	 */
+	@SuppressWarnings("unused")
+	private User user;
+
+	/**
+	 * Save the http request for the http context.
 	 */
 	private final Http.Request request = mock(Http.Request.class);
 
@@ -84,7 +90,15 @@ public class AuthenticationTest {
 	}
 
 	/**
-	 * Setup login for each test
+	 * Make a fake session
+	 */
+	@Before
+	public void fakeSession() {
+		user = new User(1, "Foo", "Bar", "foobar");
+	}
+
+	/**
+	 * Setup login for each test.
 	 * 
 	 * @throws Exception
 	 */
@@ -125,19 +139,31 @@ public class AuthenticationTest {
 	 * Test if a valid user can authenticate.
 	 */
 	@Test
-	public void testAuthenticate() {
+	public void testAuthenticateValid() {
 		// test valid user
 		assertThat(status(result)).isEqualTo(SEE_OTHER);
+	}
 
-		// test invalid password
-		data.put("password", "wrongpass");
+	/**
+	 * Test if a invalid user cannot authenticate.
+	 */
+	@Test
+	public void testAuthenticateInValidUser() {
+		// test invalid user
+		data.put("username", "wronguser");
 		result = callAction(
 				controllers.routes.ref.Authentication.authenticate(),
 				fakeRequest().withFormUrlEncodedBody(data));
 		assertThat(status(result)).isEqualTo(BAD_REQUEST);
+	}
 
-		// test invalid user
-		data.put("username", "wronguser");
+	/**
+	 * Test if a invalid password cannot authenticate.
+	 */
+	@Test
+	public void testAuthenticateInValidPassword() {
+		// test invalid password
+		data.put("password", "wrongpass");
 		result = callAction(
 				controllers.routes.ref.Authentication.authenticate(),
 				fakeRequest().withFormUrlEncodedBody(data));
@@ -162,6 +188,9 @@ public class AuthenticationTest {
 	// @Test
 	public void testGetUser() throws SQLException {
 		User u = Authentication.getUser();
-
+		assertThat(u.id).isEqualTo(1);
+		assertThat(u.name).isEqualTo("Foo");
+		assertThat(u.surname).isEqualTo("Bar");
+		assertThat(u.username).isEqualTo("foobar");
 	}
 }
