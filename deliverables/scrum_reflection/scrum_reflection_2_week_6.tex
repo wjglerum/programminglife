@@ -1,0 +1,22 @@
+\documentclass[a4paper]{report}
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage{natbib}
+\usepackage{hyperref}
+\usepackage[english]{babel}
+\usepackage{lscape}
+\usepackage{longtable}
+
+\begin{document}
+\input{title.tex}
+
+\begin{landscape}
+\setlength\extrarowheight{5pt}
+\begin{longtable}{p{6cm}|l|l|l|p{2cm}|p{7cm}}
+
+\textbf{Task} & \textbf{Effort} & \textbf{Assignment} & \textbf{Actual effort} & \textbf{Done} & \textbf{Notes}\\
+\hline \hline
+\end{longtable}
+
+\end{landscape}
+\end{document}
