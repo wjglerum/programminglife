@@ -26,13 +26,17 @@
 	</table>
 	
 	<div class="visualisation-proteins-relations">
+		<script>
+		
+		</script>
+		<div id="canvas"></div>
+
 		<ul>
 		@for(proteine <- proteins) {
 			<li>
-				@proteine.getName() { 
-				@for(connection <- proteine.connections) {
+				@proteine.getName() - 
+				@for(connection <- proteine.getConnections()) {
 					@connection.getOtherProteine(proteine).getName()
-				}
 				}
 			</li>
 		}
