@@ -59,10 +59,12 @@ public class Proteine {
 		private static Map<String, Integer> parseConnections(String input)
 		{
 			input = input.substring(1, input.length()-1);
-			String[] list = input.split(",");
+			String[] list = input.split(", ");
 			Map<String, Integer> map = new HashMap<String, Integer>();
-			for(int i=0; i<list.length; i=i+2)
-				map.put(list[i].trim(), Integer.parseInt(list[i+1]));
+			for(int i=0; i<list.length; i++) {
+			  String[] splitted = list[i].split("\t");
+				map.put(splitted[0], Integer.parseInt(splitted[1]));
+			}
 			return map;
 		}
 		
