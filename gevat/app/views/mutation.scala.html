@@ -1,4 +1,4 @@
-@(patient: Patient, mutation: Mutation, user: User)
+@(patient: Patient, mutation: Mutation, user: User, proteins: Collection[Proteine])
 
 @template_app("Mutation " + mutation.getRsID + " of patient " + patient.getName + " " + patient.getSurname, user, "patients") {
 	
@@ -26,8 +26,16 @@
 	</table>
 	
 	<div class="visualisation-proteins-relations">
-	
-		<!-- protein relations visualisation goes here -->
-	
+		<ul>
+		@for(proteine <- proteins) {
+			<li>
+				@proteine.getName() { 
+				@for(connection <- proteine.connections) {
+					@connection.getOtherProteine(proteine).getName()
+				}
+				}
+			</li>
+		}
+		</ul>
 	</div>
 }

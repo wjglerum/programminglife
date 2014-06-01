@@ -1,10 +1,14 @@
 package controllers;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import models.Mutation;
 import models.Patient;
+import models.Proteine;
+import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
@@ -16,7 +20,7 @@ public class Mutations extends Controller {
 
   /**
    * Display a mutation of a patient.
- * @throws SQLException 
+   * @throws SQLException 
    */
   @Security.Authenticated(Secured.class)
   public static Result show(int p_id, int m_id) throws SQLException {
@@ -28,8 +32,16 @@ public class Mutations extends Controller {
     
     // Render the mutation if it's found in the requested patient's mutations
     for (Mutation m : mutations) {
-      if (m.getId() == m_id)
-        return ok(mutation.render(p, m, Authentication.getUser()));
+      if (m.getId() == m_id) {
+        int[] rsID = new int[2];
+        
+        // Remove the 'rs' part of the rsID
+        rsID[0] = Integer.parseInt(m.getRsID().substring(2));
+        
+        Collection<Proteine> proteins = Proteine.getProteinesByID(rsID, 10, 10);
+        
+        return ok(mutation.render(p, m, Authentication.getUser(), proteins));
+      }
     }
     
     return mutationNotFound(p, mutations);
@@ -37,7 +49,7 @@ public class Mutations extends Controller {
   
   /**
    * Return to the patient page and display a message the requested mutation isn't found
- * @throws SQLException 
+   * @throws SQLException 
    */
   @Security.Authenticated(Secured.class)
   public static Result mutationNotFound(Patient p, List<Mutation> mutations) throws SQLException { 
