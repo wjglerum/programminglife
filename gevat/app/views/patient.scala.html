@@ -16,8 +16,8 @@
     <div id="patient_chromosome_information"></div>
 	}
 	
-	<h3>Mutations overview</h3>
-	
+	<h3>All found mutations</h3>
+
 	<table class="table-mutations table table-hover clickable-rows" id="table-mutations">
 		<thead>
 			<tr>
@@ -32,7 +32,7 @@
 		<tbody>
 		@if(mutations.length > 0){
 			@for(mutation <- mutations) {
-				<tr href="/patients/@patient.getId/mutation/@mutation.getId()" class="table-mutation" data-chr-id="@mutation.getChromosome()">
+				<tr href="/patients/@patient.getId/mutation/@mutation.getId()" class="table-mutation" data-chr-id="@mutation.getChromosome()" data-mutation-id="@mutation.getId()">
 					<td>@mutation.getMutationType()</td>
 					<td>@mutation.getRsID()</td>
 					<td>@mutation.getChromosome()</td>
