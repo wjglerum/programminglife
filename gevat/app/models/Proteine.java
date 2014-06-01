@@ -27,10 +27,14 @@ public class Proteine {
 			return this.name.equals((String)that);
 		return false;
 	}
-	
-	public String getName() {
-		return name;
-	}
+  
+  public String getName() {
+    return name;
+  }
+  
+  public Collection<ProteineConnection> getConnections() {
+    return connections;
+  }
 
 	public static Collection<Proteine> getProteinesByID(int[] ids, int limit, int threshold) throws SQLException
 	{
