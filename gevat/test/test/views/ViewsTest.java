@@ -148,7 +148,7 @@ public class ViewsTest {
   @Test
   public void patientTemplate() {
     Patient patient = new Patient(1, "name", "surname", "file", new Long(12345));
-    Mutation mutation = new Mutation(1, "SNP", "rs12345", 1, "ATATAT".toCharArray());
+    Mutation mutation = new Mutation(1, "SNP", "rs12345", 1, "ATATAT".toCharArray(), 1, 2);
     List<Mutation> mutations = new ArrayList<Mutation>();
     
     mutations.add(mutation);
@@ -166,7 +166,7 @@ public class ViewsTest {
   @Test
   public void mutationTemplate() {
     Patient patient = new Patient(1, "name", "surname", "file", new Long(12345));
-    Mutation mutation = new Mutation(1, "SNP", "rs12345", 1, "ATATAT".toCharArray());
+    Mutation mutation = new Mutation(1, "SNP", "rs12345", 1, "ATATAT".toCharArray(), 1, 1);
     
     Content html = views.html.mutation.render(patient, mutation, user);
     
