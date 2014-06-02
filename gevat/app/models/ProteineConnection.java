@@ -21,9 +21,19 @@ public class ProteineConnection {
 			return p1;
 		return null;
 	}
-	
-	public int getCombinedScore()
-	{
-		return combinedScore;
-	}
+  
+  public Proteine getProteineFrom()
+  {
+    return p1;
+  }
+  
+  public Proteine getProteineTo()
+  {
+    return p2;
+  }
+  
+  public int getCombinedScore()
+  {
+    return combinedScore;
+  }
 }
