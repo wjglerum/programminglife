@@ -39,16 +39,19 @@ public class Proteine {
 	public static Collection<Proteine> getProteinesByID(int[] ids, int limit, int threshold) throws SQLException
 	{
 		ArrayList<String> proteineStrings = QueryProcessor.findGenes(ids, limit, threshold);
+		
 		return ProteineParser.parseStringArray(proteineStrings);
 	}
 	
 	private static class ProteineParser
 	{
-		static Map<String, Proteine> proteines = new HashMap<String,Proteine>();
+		static Map<String, Proteine> proteines;
 		
 		public static Collection<Proteine> parseStringArray(ArrayList<String> proteineStrings)
 		{
-			for(int i=0; i<proteineStrings.size(); i+=2)
+		  proteines = new HashMap<String,Proteine>();
+		  
+		  for(int i=0; i<proteineStrings.size(); i+=2)
 			{
 				Proteine curr = getProteine(proteineStrings.get(i));
 				Map<String, Integer> connections = parseConnections(proteineStrings.get(i+1));
