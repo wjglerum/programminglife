@@ -97,7 +97,7 @@ body {
  * Main content
  */
 .main {
-  padding: 20px 40px;
+  padding: 20px;
 }
 .main .page-header {
   margin-top: 0;
@@ -131,10 +131,10 @@ body {
 }
 
 #patient_visualisation td {
-    min-width: 50px;
+    width: 2%;
     text-align: center;
-
 }
+
 .form-add-patient p {
 	margin-bottom: 15px;
 }
