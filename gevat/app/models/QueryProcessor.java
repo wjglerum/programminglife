@@ -137,33 +137,30 @@ public final class QueryProcessor {
 	}
 
 	/**
-	 * Finds genes connected to the supplied snp's.
+	 * Finds genes connected to the supplied SNP.
 	 *
 	 * @param limit
 	 *            The maximum amount of results
 	 * @param threshold
 	 *            The minimum score of two proteins
 	 * @param input
-	 *            The id's retrieved from the VCF-file
+	 *            The id of a SNP (without 'rs')
 	 * @return Returns an ArrayList<String> containing the gene name,
 	 * 		   with the names and scores of connected genes
 	 * @throws SQLException
 	 *             In case SQL goes wrong
 	 */
-	public static ArrayList<String> findGenes(final int[] input,
+	public static ArrayList<String> findGenes(final int id,
 			final int limit, final int threshold)
 					throws SQLException {
 		ArrayList<String> list = new ArrayList<String>();
-
-		for (int id : input) {
-			ArrayList<String> qResult = QueryProcessor.
-					findGenesAssociatedWithSNP(id);
-			if (!qResult.isEmpty()) {
-				list.add(qResult.get(0));
-				list.add(QueryProcessor.executeStringQuery(
-						qResult.get(0),
-						limit, threshold).toString());
-			}
+		ArrayList<String> qResult = QueryProcessor.
+				findGenesAssociatedWithSNP(id);
+		for (String gene: qResult) {
+			list.add(gene);
+			list.add(QueryProcessor.executeStringQuery(
+					gene,
+					limit, threshold).toString());
 		}
 		return list;
 	}
