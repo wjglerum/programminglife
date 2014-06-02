@@ -112,6 +112,31 @@ public final class QueryProcessor {
 	}
 
 	/**
+	 * Gets the annotation of a protein.
+	 *
+	 * @param protein The preferred name of the protein
+	 *
+	 * @return Returns the annotation of the protein
+	 *
+	 * @throws SQLException In case SQL goes wrong
+	 */
+	public static String getAnnotationsOfProtein(final String protein)
+			throws SQLException {
+		String s = "";
+		String q = "SELECT annotation "
+				+ "FROM items.proteins "
+				+ "WHERE preferred_name = '" + protein
+				+ "' AND "
+				+ "species_id = 9606";
+		ResultSet rs = Database.select("string", q);
+		while (rs.next()) {
+			s = rs.getString("annotation");
+			return s;
+		}
+		return s;
+	}
+
+	/**
 	 * Finds genes associated with the given rs_id.
 	 *
 	 * @param id
@@ -143,7 +168,7 @@ public final class QueryProcessor {
 	 *            The maximum amount of results
 	 * @param threshold
 	 *            The minimum score of two proteins
-	 * @param input
+	 * @param id
 	 *            The id of a SNP (without 'rs')
 	 * @return Returns an ArrayList<String> containing the gene name,
 	 * 		   with the names and scores of connected genes
