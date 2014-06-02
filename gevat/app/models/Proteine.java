@@ -28,7 +28,7 @@ public class Proteine {
 		return false;
 	}
 	
-	private String getName() {
+	public String getName() {
 		return name;
 	}
 
