@@ -7,7 +7,7 @@ $(document).ready(function() {
 		var from = relations[i].from;
 		var to = relations[i].to;
 		
-		g.addEdge(from, to, {label: relations[i].score});
+		g.addEdge(from, to, {stroke : "#bfa", fill : "#56f", label: relations[i].score});
 	}
 	
 	var layouter = new Graph.Layout.Spring(g);

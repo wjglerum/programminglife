@@ -37,10 +37,8 @@ public class Mutations extends Controller {
     // Render the mutation if it's found in the requested patient's mutations
     for (Mutation m : mutations) {
       if (m.getId() == m_id) {
-        int[] rsID = new int[2];
-        
         // Remove the 'rs' part of the rsID
-        rsID[0] = Integer.parseInt(m.getRsID().substring(2));
+        int rsID = Integer.parseInt(m.getRsID().substring(2));
         
         Collection<Proteine> proteins;
         

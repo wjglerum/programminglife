@@ -36,9 +36,9 @@ public class Proteine {
     return connections;
   }
 
-	public static Collection<Proteine> getProteinesByID(int[] ids, int limit, int threshold) throws SQLException
+	public static Collection<Proteine> getProteinesByID(int id, int limit, int threshold) throws SQLException
 	{
-		ArrayList<String> proteineStrings = QueryProcessor.findGenes(ids, limit, threshold);
+		ArrayList<String> proteineStrings = QueryProcessor.findGenes(id, limit, threshold);
 		
 		return ProteineParser.parseStringArray(proteineStrings);
 	}
