@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function() { if (typeof proteinsData !== 'undefined') {
 	var g = new Graph();
 
 	var proteins = proteinsData.proteins;
@@ -34,4 +34,4 @@ $(document).ready(function() {
 	 
 	var renderer = new Graph.Renderer.Raphael("canvas", g, 800, 400);
 	renderer.draw();
-});
+}});
