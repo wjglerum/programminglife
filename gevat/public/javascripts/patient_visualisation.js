@@ -119,4 +119,7 @@ $(document).ready(function () {
             });
         }
     }
+
+    // Start the table sorter
+    $("#table-mutations").tablesorter();
 });
