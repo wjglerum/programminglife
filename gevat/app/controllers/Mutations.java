@@ -5,9 +5,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import models.Mutation;
 import models.Patient;
 import models.Proteine;
+import models.ProteineConnection;
 import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -38,9 +42,37 @@ public class Mutations extends Controller {
         // Remove the 'rs' part of the rsID
         rsID[0] = Integer.parseInt(m.getRsID().substring(2));
         
-        Collection<Proteine> proteins = Proteine.getProteinesByID(rsID, 10, 10);
+        Collection<Proteine> proteins;
         
-        return ok(mutation.render(p, m, Authentication.getUser(), proteins));
+        proteins = Proteine.getProteinesByID(rsID, 10, 10);
+         
+        Logger.info(proteins.toString());
+        Logger.info(Integer.toString(proteins.size()));
+        
+        // Setup JSON data
+        JSONObject dataJSON = new JSONObject();
+        
+        JSONArray proteinsJSON = new JSONArray();
+        JSONArray relationsJSON = new JSONArray();
+        
+        for (Proteine proteine : proteins) {
+          proteinsJSON.add(proteine.getName());
+          
+          for (ProteineConnection connection : proteine.getConnections()) {
+            JSONObject connectionJSON = new JSONObject();
+            
+            connectionJSON.put("from", connection.getProteineFrom().getName());
+            connectionJSON.put("to", connection.getProteineTo().getName());
+            connectionJSON.put("score", connection.getCombinedScore());
+            
+            relationsJSON.add(connectionJSON);
+          }
+        }
+        
+        dataJSON.put("proteins", proteinsJSON);
+        dataJSON.put("relations", relationsJSON);
+        
+        return ok(mutation.render(p, m, Authentication.getUser(), proteins, dataJSON.toJSONString()));
       }
     }
     

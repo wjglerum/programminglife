@@ -1,4 +1,4 @@
-@(patient: Patient, mutation: Mutation, user: User, proteins: Collection[Proteine])
+@(patient: Patient, mutation: Mutation, user: User, proteins: Collection[Proteine], proteinsData: String)
 
 @template_app("Mutation " + mutation.getRsID + " of patient " + patient.getName + " " + patient.getSurname, user, "patients") {
 	
@@ -25,21 +25,20 @@
 		</tbody>
 	</table>
 	
+	<script type="text/javascript">
+		var proteinsData = @Html(proteinsData);
+	</script>
+	
 	<div class="visualisation-proteins-relations">
-		<script>
-		
-		</script>
-		<div id="canvas"></div>
+		<div id="canvas" style="display: block; width: 100%";></div>
 
-		<ul>
 		@for(proteine <- proteins) {
-			<li>
-				@proteine.getName() - 
-				@for(connection <- proteine.getConnections()) {
-					@connection.getOtherProteine(proteine).getName()
-				}
-			</li>
+			@proteine.getName() - 
+			@for(connection <- proteine.getConnections()) {
+				@connection.getOtherProteine(proteine).getName()
+			}
 		}
-		</ul>
+		
+		@proteins.size
 	</div>
 }
