@@ -47,9 +47,11 @@ $(document).ready(function () {
     // Add 2 chromosomes per div
     var tablerow = d3.select(".chromosome-pair-table-row");
     for (var chromosomenr = 1; chromosomenr < 24; chromosomenr++) {
-        var tmp = tablerow.append("td")
+        var tmp = tablerow.append("td");
         for (var i = 1; i < 3; i++) {
-            tmp.append("svg")
+            tmp.attr("class", "chromosome-pair-table-cel")
+                .attr("data-chr-id", chromosomenr)
+                .append("svg")
                 .attr("width", 15)
                 .attr("height", 100)
                 .append("rect")
@@ -76,11 +78,12 @@ $(document).ready(function () {
     getChromosomesWithMutations();
     markMutations();
 
-    // Actions when hovering over chromosomes
-    $(".chromosome-visualisation").hover(function () {
+    // Actions when hovering over a table cell containing two chromosomes
+    $(".chromosome-pair-table-cel").hover(function () {
         var chrId = $(this).data("chr-id");
         // Highlight mutations in the table while hovering over a chromosome
         $(".table-mutations tr[data-chr-id=" + chrId + "]").addClass("highlight");
+        // Highlight the chromosomes that you are hovering over
         d3.selectAll(".chromosome" + chrId).attr("class", function (d) {
             return "chromosome-visualisation highlight chromosome" + chrId;
         });
