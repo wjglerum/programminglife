@@ -35,6 +35,14 @@ public class Proteine {
   public Collection<ProteineConnection> getConnections() {
     return connections;
   }
+  
+  public String getAnnotations() {
+    try {
+      return QueryProcessor.getAnnotationsOfProtein(name);
+    } catch (SQLException e) {
+      return null;
+    }
+  }
 
 	public static Collection<Proteine> getProteinesByID(int id, int limit, int threshold) throws SQLException
 	{
