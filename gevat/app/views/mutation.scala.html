@@ -25,20 +25,36 @@
 		</tbody>
 	</table>
 	
+	<h3>Protein relationships</h3>
+	
 	<script type="text/javascript">
 		var proteinsData = @Html(proteinsData);
 	</script>
 	
 	<div class="visualisation-proteins-relations">
 		<div id="canvas"></div>
-
-		@for(proteine <- proteins) {
-			@proteine.getName() - 
-			@for(connection <- proteine.getConnections()) {
-				@connection.getOtherProteine(proteine).getName()
-			}
-		}
-		
-		@proteins.size
 	</div>
+	
+	<h3>Proteins overview</h3>
+
+	<table class="table-proteins table table-hover" id="table-proteins">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Annotations</th>
+			</tr>
+		</thead>
+		<tbody>
+		@if(proteins.size > 0){
+			@for(protein <- proteins) {
+				<tr class="table-mutation" data-mutation-id="@protein">
+					<td>@protein.getName()</td>
+					<td>@protein.getAnnotations()</td>
+				</tr>
+			}
+		} else {
+			<tr class="not-clickable"><td colspan="6">No related proteins found...</td></tr>
+		}
+		</tbody>
+	</table>
 }
