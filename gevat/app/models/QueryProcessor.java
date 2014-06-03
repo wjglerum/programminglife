@@ -73,6 +73,63 @@ public final class QueryProcessor {
 	}
 
 	/**
+	 * Gets the connections and scores between all proteins in
+	 * the ArrayList<String>.
+	 *
+	 * @param proteins The ArraList<String> containing the protein names
+	 *
+	 * @return Returns the list of connections that look like this:
+	 * proteinA -> proteinB = score
+	 *
+	 * @throws SQLException In case SQL goes wrong
+	 */
+	public static ArrayList<String> getConnectedProteinScore(
+			final ArrayList<String> proteins) throws SQLException {
+		String formatted = formatForIN(proteins);
+		ArrayList<String> list = new ArrayList<String>();
+		String q = "SELECT combined_score, "
+				+ "protein_a.preferred_name AS name_a, "
+				+ "protein_b.preferred_name AS name_b "
+				+ "FROM network.node_node_links, "
+				+ "items.proteins AS protein_a, "
+				+ "items.proteins AS protein_b "
+				+ "WHERE "
+				+ "protein_a.preferred_name IN ("
+				+ formatted + ") AND "
+				+ "protein_a.species_id = 9606 AND "
+				+ "protein_b.preferred_name IN ("
+				+ formatted + ") AND "
+				+ "protein_b.species_id = 9606 AND "
+				+ "node_id_a = protein_a.protein_id AND "
+				+ "node_id_b = protein_b.protein_id "
+				+ "ORDER BY combined_score DESC;";
+
+		ResultSet rs = Database.select("string", q);
+		while (rs.next()) {
+			 int score = rs.getInt("combined_score");
+			 String nameA = rs.getString("name_a");
+			 String nameB = rs.getString("name_b");
+			 list.add(nameA + " -> " + nameB + " = " + score);
+		}
+		return list;
+	}
+
+	/**
+	 * Formats the stringList to be  used in a 'IN' query.
+	 *
+	 * @param stringList The list of strings to be formatted
+	 *
+	 * @return Returns the formatted String
+	 */
+	public static String formatForIN(final ArrayList<String> stringList) {
+		String toReturn = "";
+		for (String s: stringList) {
+			toReturn += "'" + s + "', ";
+		}
+		return toReturn.substring(0, toReturn.length() - 2);
+	}
+
+	/**
 	 * Finds the score. Not needed at the moment.
 	 *
 	 * @param chrom
@@ -93,7 +150,7 @@ public final class QueryProcessor {
 		list.add("chrom \t position \t ref"
 				+ "\t alt" + " \t rawscore \t phred");
 		String q = "SELECT * " + "FROM " + "score "
-		+ "WHERE " + "chrom = '"
+				+ "WHERE " + "chrom = '"
 				+ chrom + "' AND position >= " + positionLow
 				+ " AND position <= " + positionHigh + ";";
 
