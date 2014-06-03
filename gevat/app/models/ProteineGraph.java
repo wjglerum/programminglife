@@ -27,17 +27,17 @@ public class ProteineGraph {
 	 * Creates and ProteineGraph using the proteine the location of the snp.
 	 * @param snp the rsid of the location
 	 */
-	public ProteineGraph(int snp) {
-		addConnectionsOfSnp(snp);
+	public ProteineGraph(int snp, int limit, int threshold) {
+		addConnectionsOfSnp(snp, limit, threshold);
 	}
 
 	/**
 	 * Looks up the proteine at the location of the snp and adds this proteine and it's possible connected proteines to ProteineGraph
 	 * @param snp the rsid of the location
 	 */
-	public void addConnectionsOfSnp(int snp) {
+	public void addConnectionsOfSnp(int snp, int limit, int threshold) {
 		try {
-			QueryProcessor.findGeneConnections(snp, 10, 700, this);
+			QueryProcessor.findGeneConnections(snp, limit, threshold, this);
 		} catch (SQLException e) {
 			Logger.info(e.toString());
 		}

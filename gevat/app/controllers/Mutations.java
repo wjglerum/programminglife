@@ -53,7 +53,7 @@ public class Mutations extends Controller {
     
     //Collection<Proteine> proteins = Proteine.getProteinesByID(rsID, limit, threshold);
     
-    ProteineGraph proteinGraph = new ProteineGraph(rsID);
+    ProteineGraph proteinGraph = new ProteineGraph(rsID, limit, threshold);
     
     Collection<Proteine> proteins = proteinGraph.getProteines();
     Collection<ProteineConnection> relations = proteinGraph.getConnections();
