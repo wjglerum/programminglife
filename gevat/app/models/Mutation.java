@@ -21,6 +21,7 @@ import org.broadinstitute.variant.variantcontext.VariantContext;
 public class Mutation extends VariantContext {
 
 	public String mutationType;
+	public int id;
 
 	/**
 	 * Stores information about a mutation.
@@ -43,6 +44,7 @@ public class Mutation extends VariantContext {
 				genotypes, 0, null, null, false, EnumSet
 						.noneOf(Validation.class));
 		this.mutationType = mutationType;
+		this.id = id;
 	}
 
 	/**
@@ -65,6 +67,7 @@ public class Mutation extends VariantContext {
 				null, null, false,
 				EnumSet.noneOf(Validation.class));
 		this.mutationType = mutationType;
+		this.id = id;
 	}
 
 	/**
@@ -102,7 +105,8 @@ public class Mutation extends VariantContext {
 	 * @return The id
 	 */
 	public final long getId() {
-		return this.start;
+		//return this.start;
+		return this.id;
 	}
 
 	/**
