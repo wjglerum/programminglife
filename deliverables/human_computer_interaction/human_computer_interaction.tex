@@ -1,0 +1,26 @@
+\documentclass[a4paper]{article}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{hyperref}
+\usepackage[english]{babel}
+
+\begin{document}
+	\input{title.tex}
+	
+	\input{abstract.tex}
+	\clearpage
+	
+	\tableofcontents
+	\clearpage
+	
+	\input{introduction.tex}
+	\input{user.tex}
+	\input{situation_tasks.tex}
+	\input{context_inquiry.tex}
+	\input{product_design.tex}
+	\input{usability_evaluation.tex}
+	
+	\clearpage
+	\bibliography{bibtex}{}
+	\bibliographystyle{unsrt}
+\end{document}
