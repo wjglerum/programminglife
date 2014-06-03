@@ -89,7 +89,7 @@ Raphael.fn.connection = function (obj1, obj2, style) {
             var move = "attr";
             /* applying path(s) */
             edge.fg && edge.fg[move]({path:path}) 
-                || (edge.fg = selfRef.path(path).attr({stroke: style && style.stroke || "#000", fill: "none"}).toBack());
+                || (edge.fg = selfRef.path(path).attr({stroke: style && style.stroke || "#000", fill: "none", "stroke-width": style && style.width || 1}).toBack());
             edge.bg && edge.bg[move]({path:path})
                 || style && style.fill && (edge.bg = style.fill.split && selfRef.path(path).attr({stroke: style.fill.split("|")[0], fill: "none", "stroke-width": style.fill.split("|")[1] || 3}).toBack());
             /* setting label */
