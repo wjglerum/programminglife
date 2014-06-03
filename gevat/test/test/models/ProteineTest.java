@@ -27,10 +27,4 @@ public class ProteineTest {
 		assertFalse(p.equals("othername"));
 		assertFalse(p.equals(0));
 	}
-	
-	@Test
-	public void testGetProteinesByID()
-	{
-		
-	}
 }
