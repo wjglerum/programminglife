@@ -45,8 +45,6 @@ $(document).ready(function() { if (typeof proteinsData !== 'undefined') {
 	var layouter = new Graph.Layout.Spring(g);
 	layouter.layout();
 	
-	console.log($("#canvas").width());
-	
 	var renderer = new Graph.Renderer.Raphael("canvas", g, $("#canvas").width(), 400);
 	renderer.draw();
 	
