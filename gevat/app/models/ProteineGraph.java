@@ -2,8 +2,6 @@ package models;
 
 import java.sql.SQLException;
 import java.util.*;
-import java.util.HashMap;
-import java.util.Map;
 
 import play.Logger;
 
@@ -29,6 +27,7 @@ public class ProteineGraph {
 	 */
 	public ProteineGraph(int snp, int limit, int threshold) {
 		addConnectionsOfSnp(snp, limit, threshold);
+		connectAllProteines();
 	}
 
 	/**
@@ -63,7 +62,7 @@ public class ProteineGraph {
 	public void add(String p1, String connections) {
 		for (String s : connections.substring(1, connections.length() - 1)
 				.split(",")) {
-			add(p1,s.split("\t")[0], Integer.parseInt(s.split("\t")[1]));
+			add(p1,s.split("\t")[0].trim(), Integer.parseInt(s.split("\t")[1].trim()));
 		}
 	}
 
@@ -104,4 +103,31 @@ public class ProteineGraph {
 	public Collection<ProteineConnection> getConnections() {
 		return connections;
 	}
+	
+	public Collection<String> getProteinesAsString() {
+    return proteines.keySet();
+  }
+  
+  private void connectAllProteines()
+  {
+    try {
+      ArrayList<String> connectedProteinScores = QueryProcessor.getConnectedProteinScore(getProteinesAsString());
+      
+      Logger.info(connectedProteinScores.toString());
+      
+      for (String connectedProteinScore : connectedProteinScores) {
+        String[] proteinsAndScore = connectedProteinScore.split("=");
+        
+        String[] proteins = proteinsAndScore[0].split("->");
+        int score = Integer.parseInt(proteinsAndScore[1].trim());
+        
+        String proteinA = proteins[0].trim();
+        String proteinB = proteins[1].trim();
+        
+        add(proteinA, proteinB, score);
+      }
+    } catch (SQLException e) {
+      Logger.info(e.toString());
+    }
+  }
 }
