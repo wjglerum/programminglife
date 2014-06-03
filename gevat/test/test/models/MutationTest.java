@@ -21,7 +21,7 @@ import scalaz.std.list;
 public class MutationTest {
 
 	private Mutation m = new Mutation(1, "SNP", "rsID", 1, new char[] { 'A',
-			'T', 'T', 'T', 'T', 'T' });
+			'T', 'T', 'T', 'T', 'T' }, 1, 2);
 
 	@Test
 	public void testConstructor() {
