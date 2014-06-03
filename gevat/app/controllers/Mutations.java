@@ -51,18 +51,16 @@ public class Mutations extends Controller {
     // Remove the 'rs' part of the rsID
     int rsID = Integer.parseInt(mutation.getRsID().substring(2));
     
-    //Collection<Proteine> proteins = Proteine.getProteinesByID(rsID, limit, threshold);
-    
     ProteineGraph proteinGraph = new ProteineGraph(rsID, limit, threshold);
     
     Collection<Proteine> proteins = proteinGraph.getProteines();
-    Collection<ProteineConnection> relations = proteinGraph.getConnections();
+    Collection<ProteineConnection> connections = proteinGraph.getConnections();
     
     // Setup JSON data
     JSONObject dataJSON = new JSONObject();
     
     JSONArray proteinsJSON = new JSONArray();
-    JSONArray relationsJSON = new JSONArray();
+    JSONArray connectionsJSON = new JSONArray();
     
     for (Proteine proteine : proteins) {
       JSONObject proteinJSON = new JSONObject();
@@ -71,20 +69,20 @@ public class Mutations extends Controller {
       proteinJSON.put("annotations", proteine.getAnnotations());
       
       proteinsJSON.add(proteinJSON);
+    }
+    
+    for (ProteineConnection connection : connections) {
+      JSONObject connectionJSON = new JSONObject();
       
-      for (ProteineConnection connection : proteine.getConnections()) {
-        JSONObject connectionJSON = new JSONObject();
-        
-        connectionJSON.put("from", connection.getProteineFrom().getName());
-        connectionJSON.put("to", connection.getProteineTo().getName());
-        connectionJSON.put("score", connection.getCombinedScore());
-        
-        relationsJSON.add(connectionJSON);
-      }
+      connectionJSON.put("from", connection.getProteineFrom().getName());
+      connectionJSON.put("to", connection.getProteineTo().getName());
+      connectionJSON.put("score", connection.getCombinedScore());
+      
+      connectionsJSON.add(connectionJSON);
     }
     
     dataJSON.put("proteins", proteinsJSON);
-    dataJSON.put("relations", relationsJSON);
+    dataJSON.put("relations", connectionsJSON);
     dataJSON.put("limit", limit);
     dataJSON.put("threshold", threshold);
     
