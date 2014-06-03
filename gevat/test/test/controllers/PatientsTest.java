@@ -41,7 +41,7 @@ public class PatientsTest {
 	 * Helper to start a fakeApplication to test.
 	 */
 	private static FakeApplication fakeApplication;
-	
+
 	private static Cookie playSession;
 	private static Result result;
 
@@ -58,13 +58,12 @@ public class PatientsTest {
 				controllers.routes.ref.Authentication.authenticate(),
 				fakeRequest().withFormUrlEncodedBody(data));
 		// Recover cookie from login result
-		playSession = play.test.Helpers.cookie(
-				"PLAY_SESSION", result);
+		playSession = play.test.Helpers.cookie("PLAY_SESSION", result);
 	}
 
 	@Before
 	public void setUp() throws Exception {
-		
+
 	}
 
 	/**
@@ -82,11 +81,10 @@ public class PatientsTest {
 	 */
 	@Test
 	public void testPatientsControllerShowAll() {
-				result = callAction(controllers.routes.ref.Patients.showAll(),
-						fakeRequest().withCookies(playSession));
-				assertThat(status(result)).isEqualTo(OK);
-				assertThat(contentAsString(result)).contains(
-						"Patients overview");
+		result = callAction(controllers.routes.ref.Patients.showAll(),
+				fakeRequest().withCookies(playSession));
+		assertThat(status(result)).isEqualTo(OK);
+		assertThat(contentAsString(result)).contains("Patients overview");
 	}
 
 	/**
@@ -95,11 +93,11 @@ public class PatientsTest {
 	 */
 	@Test
 	public void testPatientsControllerPatientNotFound() {
-				int nonExistingPatientID = Integer.MAX_VALUE;
-				result = callAction(controllers.routes.ref.Patients
-						.show(nonExistingPatientID),
-						fakeRequest().withCookies(playSession));
-				assertThat(status(result)).isEqualTo(NOT_FOUND);
+		int nonExistingPatientID = Integer.MAX_VALUE;
+		result = callAction(
+				controllers.routes.ref.Patients.show(nonExistingPatientID),
+				fakeRequest().withCookies(playSession));
+		assertThat(status(result)).isEqualTo(NOT_FOUND);
 	}
 
 	/**
@@ -108,11 +106,11 @@ public class PatientsTest {
 	 */
 	@Test
 	public void testPatientsControllerAddPatient() {
-				// Request the add page
-				result = callAction(controllers.routes.ref.Patients.add(),
-						fakeRequest().withCookies(playSession));
-				assertThat(status(result)).isEqualTo(OK);
-				assertThat(contentAsString(result)).contains("Add new patient");
+		// Request the add page
+		result = callAction(controllers.routes.ref.Patients.add(),
+				fakeRequest().withCookies(playSession));
+		assertThat(status(result)).isEqualTo(OK);
+		assertThat(contentAsString(result)).contains("Add new patient");
 	}
 
 	/**
@@ -121,10 +119,10 @@ public class PatientsTest {
 	 */
 	@Test
 	public void testPatientsControllerAddInvalidPatient() {
-				// Request the add page
-				result = callAction(controllers.routes.ref.Patients.insert(),
-						fakeRequest().withCookies(playSession));
-				assertThat(status(result)).isEqualTo(BAD_REQUEST);
+		// Request the add page
+		result = callAction(controllers.routes.ref.Patients.insert(),
+				fakeRequest().withCookies(playSession));
+		assertThat(status(result)).isEqualTo(BAD_REQUEST);
 	}
 
 	/**
@@ -133,12 +131,12 @@ public class PatientsTest {
 	 */
 	@Test
 	public void testPatientsControllerRemoveInvalidPatient() {
-				int nonExistingPatientID = Integer.MAX_VALUE;
-				// Request the add page
-				result = callAction(controllers.routes.ref.Patients
-						.remove(nonExistingPatientID), fakeRequest()
-						.withCookies(playSession));
-				assertThat(status(result)).isEqualTo(BAD_REQUEST);
+		int nonExistingPatientID = Integer.MAX_VALUE;
+		// Request the add page
+		result = callAction(
+				controllers.routes.ref.Patients.remove(nonExistingPatientID),
+				fakeRequest().withCookies(playSession));
+		assertThat(status(result)).isEqualTo(BAD_REQUEST);
 	}
 
 	/**

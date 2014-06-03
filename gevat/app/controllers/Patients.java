@@ -91,7 +91,7 @@ public class Patients extends Controller {
             return "The uploaded file hasn't the .vcf extension";
           
           // Check content type
-          if (!contentType.equals("text/directory"))
+          if (!contentType.equals("text/directory") && !contentType.equals("text/vcard"))
             return "File has wrong content type";
         } else {
           return "No VCF file provided";   
@@ -142,7 +142,7 @@ public class Patients extends Controller {
       
       // Add each mutation to the database
       for (Mutation m : mutations) {
-        String query = "INSERT INTO mutations VALUES (nextval('m_id_seq'::regclass)," + p.getId() + ",'" + m.getMutationType() + "','" + m.getRsID() + "'," + m.getChromosome() + ",'" + m.toAllelesString() + "');";
+        String query = "INSERT INTO mutations VALUES (nextval('m_id_seq'::regclass)," + p.getId() + ",'" + m.getMutationType() + "','" + m.getRsID() + "'," + m.getChromosome() + ",'" + m.toAllelesString() + "'," + m.getStart() + "," + m.getEnd() + ");";
         Logger.info(query);
         Database.insert("data", query);
       }

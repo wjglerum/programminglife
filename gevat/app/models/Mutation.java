@@ -21,6 +21,7 @@ import org.broadinstitute.variant.variantcontext.VariantContext;
 public class Mutation extends VariantContext {
 
 	public String mutationType;
+	public int id;
 
 	/**
 	 * Stores information about a mutation.
@@ -30,16 +31,20 @@ public class Mutation extends VariantContext {
 	 * @param rsID The id of the SNP
 	 * @param chromosome The chromosome the SNP is on
 	 * @param alleles The basepair of the child
+	 * @param startPoint The startpoint of the mutation
+	 * @param endPoint The endpoint of the mutation
 	 * @param genotypes The genotype of the parents
 	 */
 	public Mutation(final int id, final String mutationType,
 			final String rsID, final int chromosome,
-			final Collection<Allele> alleles,
+			final Collection<Allele> alleles, final int startPoint, 
+			final int endPoint,
 			final GenotypesContext genotypes) {
-		super(null, rsID, Integer.toString(chromosome), id, id, alleles,
+		super(null, rsID, Integer.toString(chromosome), startPoint, endPoint, alleles,
 				genotypes, 0, null, null, false, EnumSet
 						.noneOf(Validation.class));
 		this.mutationType = mutationType;
+		this.id = id;
 	}
 
 	/**
@@ -50,16 +55,19 @@ public class Mutation extends VariantContext {
 	 * @param rsID The id of the SN
 	 * @param chromosome The chromosome the SNP is on
 	 * @param alleles The basepairs which need to be converted
+	 * @param startPoint The startpoint of the mutation
+	 * @param endPoint The endpoint of the mutation
 	 */
 	public Mutation(final int id, final String mutationType,
 			final String rsID, final int chromosome,
-			final char[] alleles) {
+			final char[] alleles, final int startPoint, final int endPoint) {
 		super(null, rsID, Integer.toString(chromosome), id, id,
 				toAlleleCollection(new String(alleles)),
 				toGenotypesContext(new String(alleles)), 0,
 				null, null, false,
 				EnumSet.noneOf(Validation.class));
 		this.mutationType = mutationType;
+		this.id = id;
 	}
 
 	/**
@@ -97,7 +105,8 @@ public class Mutation extends VariantContext {
 	 * @return The id
 	 */
 	public final long getId() {
-		return this.start;
+		//return this.start;
+		return this.id;
 	}
 
 	/**
@@ -107,6 +116,24 @@ public class Mutation extends VariantContext {
 	 */
 	public final int getChromosome() {
 		return Integer.parseInt(this.contig);
+	}
+	
+	/**
+	 * Gets the startpoint of the mutation.
+	 * 
+	 * @return Returns the startpoint of a mutation
+	 */
+	public final int getStartPoint() {
+		return this.getStart();
+	}
+	
+	/**
+	 * Gets the endpoint of the mutation.
+	 * 
+	 * @return Returns the endpoint of a mutation
+	 */
+	public final int getEndPoint() {
+		return this.getEnd();
 	}
 
 	/**
@@ -196,9 +223,11 @@ public class Mutation extends VariantContext {
 			GenotypesContext genotypescontext =
 					toGenotypesContext(rs
 					.getString("alleles"));
+			int startPoint = rs.getInt("startpoint");
+			int endPoint = rs.getInt("endpoint");
 			mutations.add(new Mutation(id, sort,
-					rsID, chromosome, alleles,
-					genotypescontext));
+					rsID, chromosome, alleles, startPoint, 
+					endPoint, genotypescontext));
 		}
 		return mutations;
 	}
