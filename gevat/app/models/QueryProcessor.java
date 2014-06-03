@@ -142,30 +142,24 @@ public final class QueryProcessor {
 	 * @throws SQLException
 	 *             In case SQL goes wrong
 	 */
-	public static ArrayList<String> executeScoreQuery(final String chrom,
-			final int positionLow, final int positionHigh)
+	public static float executeScoreQuery(final String chrom,
+			final int positionLow, final int positionHigh, final String uniqueBase)
 					throws SQLException {
-		ArrayList<String> list =
-				new ArrayList<String>();
-		list.add("chrom \t position \t ref"
-				+ "\t alt" + " \t rawscore \t phred");
-		String q = "SELECT * " + "FROM " + "score "
-				+ "WHERE " + "chrom = '"
-				+ chrom + "' AND position >= " + positionLow
-				+ " AND position <= " + positionHigh + ";";
-
+		String q = "SELECT * " + "FROM " + "score " + "WHERE " + "chrom = '" + chrom + 
+				"' AND position >= " + positionLow + " AND position <= " + positionHigh + ";";
+		// Get all the records from database score that have mutations on the same position as our position
 		ResultSet rs = Database.select("score", q);
+		String afwijking = uniqueBase;
+
+		// If the mutation is the same value as the reference, return 0		
 		while (rs.next()) {
-			int position = rs.getInt("position");
-			String ref = rs.getString("ref");
 			String alt = rs.getString("alt");
-			float rawscore = rs.getFloat("rawscore");
 			float phred = rs.getFloat("phred");
-			list.add(chrom + "\t" + position + "\t" + ref
-					+ "\t" + alt + "\t"
-					+ rawscore + "\t" + phred);
+			if (alt.equals(afwijking)) {
+				return phred;
+			}
 		}
-		return list;
+		return 0;
 	}
 
 	/**

@@ -121,5 +121,8 @@ $(document).ready(function () {
     }
 
     // Start the table sorter
-    $("#table-mutations").tablesorter();
+    $("#table-mutations").tablesorter({
+        // Automatically sort on the phred quality score
+       sortList:  [[3,1]]
+    });
 });
