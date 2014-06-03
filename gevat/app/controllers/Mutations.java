@@ -42,7 +42,7 @@ public class Mutations extends Controller {
         
         Collection<Proteine> proteins;
         
-        proteins = Proteine.getProteinesByID(rsID, 10, 10);
+        proteins = Proteine.getProteinesByID(rsID, 10, 700);
          
         Logger.info(proteins.toString());
         Logger.info(Integer.toString(proteins.size()));
