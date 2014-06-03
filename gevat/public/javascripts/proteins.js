@@ -1,4 +1,5 @@
-var load, redraw;
+var load, draw;
+var limit, threshold;
 var proteins;
 var relations;
 
@@ -42,15 +43,17 @@ function proteinsGraph(proteins, relations) {
 	}
 	
 	var layouter = new Graph.Layout.Spring(g);
-	layouter.layout();
-	
 	var renderer = new Graph.Renderer.Raphael("canvas", g, $("#canvas").width(), 400);
-	renderer.draw();
 	
-	redraw = function() {
+	draw = function() {
         layouter.layout();
     	renderer.draw();
+    	
+		$("input#limit").val(limit);
+		$("input#threshold").val(threshold);
     };
+    
+    draw();
 }
 
 function proteinsTable(proteins) {
@@ -79,15 +82,19 @@ $(document).ready(function() { if (typeof proteinsData !== 'undefined') {
 	proteins = proteinsData.proteins;
 	relations = proteinsData.relations;
 	
+	limit = 10;
+	threshold = 700;
+	
 	load(proteins, relations);
 	
 	$(".visualisation-proteins-relations .redraw").click(function() {;
-		if (typeof redraw == 'function')
-			redraw();
+		if (typeof draw == 'function')
+			draw();
 	});
 	
 	$(".visualisation-proteins-relations .reload").click(function() {
 		var newProteins, newRelations;
+		var newLimit, newThreshold;
 		
 		if (true) {
 			newProteins = proteins;

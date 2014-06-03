@@ -32,8 +32,17 @@
 	</script>
 	
 	<div class="visualisation-proteins-relations">
-		<a class="btn btn-default redraw">Redraw</a>
-		<a class="btn btn-default reload">Reload</a>
+		<form class="form-inline" role="form">
+			<a class="btn btn-default redraw">Redraw</a>
+			<div class="form-group">
+				<input type="text" class="form-control" id="limit" placeholder="Limit">
+			</div>
+			<div class="form-group">
+				<input type="text" class="form-control" id="threshold" placeholder="Threshold">
+			</div>
+			<a class="btn btn-default reload">Reload</a>
+		</form>
+		
 		
 		<div id="canvas"></div>
 	</div>
