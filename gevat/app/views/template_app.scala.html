@@ -1,8 +1,7 @@
-@(title: String, user: User, nav: String)(content: Html)
+@(title: String, user: User, nav: String, scripts: Html = Html(""))(content: Html)
 
 @import scala.collection.immutable.Map
-
-@template(title, user) {	
+@template(title, user, scripts) {
 
 		<div class="template-app container-fluid">
 			<div class="row">
