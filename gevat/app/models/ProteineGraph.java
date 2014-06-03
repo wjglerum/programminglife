@@ -1,6 +1,7 @@
 package models;
 
 import java.sql.SQLException;
+import java.util.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,6 +9,7 @@ import play.Logger;
 
 public class ProteineGraph {
 	private Map<String, Proteine> proteines = new HashMap<String,Proteine>();
+	private Collection<ProteineConnection> connections = new HashSet<ProteineConnection>();
 
 	public ProteineGraph()
 	{
@@ -40,7 +42,11 @@ public class ProteineGraph {
 	{
 		for(String s : connections.substring(1,connections.length()-1).split(","))
 		{
-			new ProteineConnection(getProteine(p1), getProteine(s.split("\t")[0]), Integer.parseInt(s.split("\t")[1]));
+			ProteineConnection pc = new ProteineConnection(getProteine(p1), getProteine(s.split("\t")[0]), Integer.parseInt(s.split("\t")[1]));
+			if(!this.connections.contains(pc))
+			{
+				this.connections.add(pc);
+			}
 		}
 	}
 	
@@ -54,5 +60,15 @@ public class ProteineGraph {
 	public String toString()
 	{
 		return "<ProteineGraph: " + proteines.toString() + ">";
+	}
+	
+	public Collection<Proteine> getProteines()
+	{
+		return proteines.values();
+	}
+	
+	public Collection<ProteineConnection> getConnections()
+	{
+		return connections;
 	}
 }

@@ -1,10 +1,7 @@
 package models;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
-import java.util.HashMap;
 
 public class Proteine {
 	private Collection<ProteineConnection> connections = new ArrayList<ProteineConnection>();
@@ -30,5 +27,10 @@ public class Proteine {
 	
 	public String getName() {
 		return name;
+	}
+	
+	public boolean hasConnection(ProteineConnection pc)
+	{
+		return connections.contains(pc);
 	}
 }
