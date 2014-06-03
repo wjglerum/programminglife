@@ -240,4 +240,21 @@ public final class QueryProcessor {
 		}
 		return list;
 	}
+
+	public static void findGeneConnections(final int id,
+			final int limit, final int threshold, ProteineGraph pg)
+					throws SQLException {
+		ArrayList<String> qResult = QueryProcessor.
+				findGenesAssociatedWithSNP(id);
+		if (!qResult.isEmpty()) {
+			findGeneConnections(qResult.get(0), limit, threshold, pg);
+		}
+	}
+
+	public static void findGeneConnections(final String p1,
+			final int limit, final int threshold, ProteineGraph pg)
+					throws SQLException {
+			pg.add(p1, QueryProcessor.executeStringQuery(
+					p1, limit, threshold).toString());
+	}
 }

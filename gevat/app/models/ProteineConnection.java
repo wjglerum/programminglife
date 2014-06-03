@@ -9,8 +9,11 @@ public class ProteineConnection {
 		this.p1 = p1;
 		this.p2 = p2;
 		combinedScore = score;
-		p1.addConnection(this);
-		p2.addConnection(this);
+		if(!p1.hasConnection(this))
+		{
+			p1.addConnection(this);
+			p2.addConnection(this);
+		}
 	}
 	
 	public Proteine getOtherProteine(Proteine p)
@@ -31,9 +34,20 @@ public class ProteineConnection {
   {
     return p2;
   }
-  
-  public int getCombinedScore()
-  {
-    return combinedScore;
-  }
+	
+	public int getCombinedScore()
+	{
+		return combinedScore;
+	}
+	
+	public boolean equals(ProteineConnection that)
+	{
+		if(this.p1 == that.p1)
+		{
+			return this.p2 == that.p2;
+		}
+		else
+			return this.p1 == that.p2 && this.p2 == that.p1;
+	}
+
 }

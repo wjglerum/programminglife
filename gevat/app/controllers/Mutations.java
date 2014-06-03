@@ -12,6 +12,7 @@ import models.Mutation;
 import models.Patient;
 import models.Proteine;
 import models.ProteineConnection;
+import models.ProteineGraph;
 import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -50,7 +51,12 @@ public class Mutations extends Controller {
     // Remove the 'rs' part of the rsID
     int rsID = Integer.parseInt(mutation.getRsID().substring(2));
     
-    Collection<Proteine> proteins = Proteine.getProteinesByID(rsID, limit, threshold);
+    //Collection<Proteine> proteins = Proteine.getProteinesByID(rsID, limit, threshold);
+    
+    ProteineGraph proteinGraph = new ProteineGraph(rsID);
+    
+    Collection<Proteine> proteins = proteinGraph.getProteines();
+    Collection<ProteineConnection> relations = proteinGraph.getConnections();
     
     // Setup JSON data
     JSONObject dataJSON = new JSONObject();
