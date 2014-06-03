@@ -37,44 +37,45 @@ public class Mutations extends Controller {
     // Render the mutation if it's found in the requested patient's mutations
     for (Mutation m : mutations) {
       if (m.getId() == m_id) {
-        // Remove the 'rs' part of the rsID
-        int rsID = Integer.parseInt(m.getRsID().substring(2));
+        String JSON = mutationJSON(m, 10, 700);
         
-        Collection<Proteine> proteins;
-        
-        proteins = Proteine.getProteinesByID(rsID, 10, 700);
-         
-        Logger.info(proteins.toString());
-        Logger.info(Integer.toString(proteins.size()));
-        
-        // Setup JSON data
-        JSONObject dataJSON = new JSONObject();
-        
-        JSONArray proteinsJSON = new JSONArray();
-        JSONArray relationsJSON = new JSONArray();
-        
-        for (Proteine proteine : proteins) {
-          proteinsJSON.add(proteine.getName());
-          
-          for (ProteineConnection connection : proteine.getConnections()) {
-            JSONObject connectionJSON = new JSONObject();
-            
-            connectionJSON.put("from", connection.getProteineFrom().getName());
-            connectionJSON.put("to", connection.getProteineTo().getName());
-            connectionJSON.put("score", connection.getCombinedScore());
-            
-            relationsJSON.add(connectionJSON);
-          }
-        }
-        
-        dataJSON.put("proteins", proteinsJSON);
-        dataJSON.put("relations", relationsJSON);
-        
-        return ok(mutation.render(p, m, Authentication.getUser(), proteins, dataJSON.toJSONString()));
+        return ok(mutation.render(p, m, Authentication.getUser(), JSON));
       }
     }
     
     return mutationNotFound(p, mutations);
+  }
+  
+  private static String mutationJSON(Mutation mutation, int limit, int threshold) throws SQLException {
+    // Remove the 'rs' part of the rsID
+    int rsID = Integer.parseInt(mutation.getRsID().substring(2));
+    
+    Collection<Proteine> proteins = Proteine.getProteinesByID(rsID, limit, threshold);
+    
+    // Setup JSON data
+    JSONObject dataJSON = new JSONObject();
+    
+    JSONArray proteinsJSON = new JSONArray();
+    JSONArray relationsJSON = new JSONArray();
+    
+    for (Proteine proteine : proteins) {
+      proteinsJSON.add(proteine.getName());
+      
+      for (ProteineConnection connection : proteine.getConnections()) {
+        JSONObject connectionJSON = new JSONObject();
+        
+        connectionJSON.put("from", connection.getProteineFrom().getName());
+        connectionJSON.put("to", connection.getProteineTo().getName());
+        connectionJSON.put("score", connection.getCombinedScore());
+        
+        relationsJSON.add(connectionJSON);
+      }
+    }
+    
+    dataJSON.put("proteins", proteinsJSON);
+    dataJSON.put("relations", relationsJSON);
+    
+    return dataJSON.toJSONString();
   }
   
   /**
