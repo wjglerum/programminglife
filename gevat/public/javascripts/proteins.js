@@ -81,9 +81,8 @@ $(document).ready(function() { if (typeof proteinsData !== 'undefined') {
 	
 	proteins = proteinsData.proteins;
 	relations = proteinsData.relations;
-	
-	limit = 10;
-	threshold = 700;
+	limit = proteinsData.limit;
+	threshold = proteinsData.threshold;
 	
 	load(proteins, relations);
 	

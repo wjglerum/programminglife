@@ -79,6 +79,8 @@ public class Mutations extends Controller {
     
     dataJSON.put("proteins", proteinsJSON);
     dataJSON.put("relations", relationsJSON);
+    dataJSON.put("limit", limit);
+    dataJSON.put("threshold", threshold);
     
     return dataJSON.toJSONString();
   }
