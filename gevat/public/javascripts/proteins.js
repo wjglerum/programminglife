@@ -91,6 +91,7 @@ $(document).ready(function() { if (typeof proteinsData !== 'undefined') {
 			draw();
 	});
 	
+	// Reload does the same as redraw if the limit/threshold aren't changed
 	$(".visualisation-proteins-relations .reload").click(function() {
 		var newProteins, newRelations;
 		var newLimit, newThreshold;
@@ -103,12 +104,26 @@ $(document).ready(function() { if (typeof proteinsData !== 'undefined') {
 			// Just use the old values if not changed
 			newProteins = proteins;
 			newRelations = relations;
+			
+			load(newProteins, newRelations);
 		} else {
-			// TODO Get new values via ajax if changed
-			newProteins = proteins;
-			newRelations = relations;
+			// Get new values via ajax if changed
+			var p_id = $(this).data("patient");
+			var m_id = $(this).data("mutation");
+
+			jsRoutes.controllers.Mutations.proteinsJSON(p_id, m_id, newLimit, newThreshold).ajax({
+				success: function(data) {
+					console.log(data);
+					
+					newProteins = data.proteins;
+					newRelations = data.relations;
+					
+					limit = newLimit;
+					threshold = newThreshold;
+					
+					load(newProteins, newRelations);
+				}
+			});
 		}
-		
-		load(newProteins, newRelations);
 	});
 }});
