@@ -92,6 +92,18 @@ Raphael.fn.connection = function (obj1, obj2, style) {
                 || (edge.fg = selfRef.path(path).attr({stroke: style && style.stroke || "#000", fill: "none", "stroke-width": style && style.width || 1}).toBack());
             edge.bg && edge.bg[move]({path:path})
                 || style && style.fill && (edge.bg = style.fill.split && selfRef.path(path).attr({stroke: style.fill.split("|")[0], fill: "none", "stroke-width": style.fill.split("|")[1] || 3}).toBack());
+
+            /* setting label background */
+            var labelBgWidth = 26;
+            var labelBgHeight = 16;
+            
+            var labelBgX = (x1+x4)/2 - labelBgWidth/2;
+            var labelBgY = (y1+y4)/2 - labelBgHeight/2;
+            
+            style && style.background 
+                && (edge.background && edge.background.attr({x:labelBgX, y:labelBgY}) 
+                    || (edge.background = selfRef.rect(labelBgX, labelBgY, labelBgWidth, labelBgHeight, 3).attr({fill: style.background, stroke: "none"})));
+            
             /* setting label */
             style && style.label 
                 && (edge.label && edge.label.attr({x:(x1+x4)/2, y:(y1+y4)/2}) 
