@@ -96,10 +96,16 @@ $(document).ready(function() { if (typeof proteinsData !== 'undefined') {
 		var newProteins, newRelations;
 		var newLimit, newThreshold;
 		
-		if (true) {
+		newLimit = $("input#limit").val();
+		newThreshold = $("input#threshold").val();
+		
+		// Check if limit and threshold has changed
+		if (newLimit == limit && newThreshold == threshold) {
+			// Just use the old values if not changed
 			newProteins = proteins;
 			newRelations = relations;
 		} else {
+			// TODO Get new values via ajax if changed
 			newProteins = proteins;
 			newRelations = relations;
 		}
