@@ -1,10 +1,7 @@
 var redraw;
 
-$(document).ready(function() { if (typeof proteinsData !== 'undefined') {
+function proteinsGraph(proteins, relations) {
 	var g = new Graph();
-
-	var proteins = proteinsData.proteins;
-	var relations = proteinsData.relations;
 
 	var render = function(r, node) {
         var ellipse = r.ellipse(0, 0, 30, 20).attr({fill: "#7af", stroke: "#7af", "stroke-width": 5});
@@ -52,4 +49,11 @@ $(document).ready(function() { if (typeof proteinsData !== 'undefined') {
         layouter.layout();
     	renderer.draw();
     };
+}
+
+$(document).ready(function() { if (typeof proteinsData !== 'undefined') {
+	var proteins = proteinsData.proteins;
+	var relations = proteinsData.relations;
+	
+	proteinsGraph(proteins, relations);
 }});
