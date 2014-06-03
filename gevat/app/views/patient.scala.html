@@ -24,6 +24,7 @@
 				<th>Type</th>
 				<th>rsID</th>
 				<th>Chromosome</th>
+                <th>Phred quality score</th>
 				<th>Child</th>
 				<th>Father</th>
 				<th>Mother</th>
@@ -36,6 +37,7 @@
 					<td>@mutation.getMutationType()</td>
 					<td>@mutation.getRsID()</td>
 					<td>@mutation.getChromosome()</td>
+                    <td>@mutation.getScore()</td>
 					<td>@mutation.child()</td>
 					<td>@mutation.father()</td>
 					<td>@mutation.mother()</td>
