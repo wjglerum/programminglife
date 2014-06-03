@@ -290,4 +290,11 @@ public class Mutation extends VariantContext {
 	protected static Allele toAllele(final String s, final boolean isref) {
 		return Allele.create(s, isref);
 	}
+	
+	public ArrayList<Integer> getPositions() {
+		ArrayList<Integer> list = new ArrayList<Integer>();
+		list.add(103843421);
+		list.add(186633831);
+		return list;
+	}
 }
