@@ -75,6 +75,8 @@ function proteinsTable(proteins) {
 
 $(document).ready(function() { if (typeof proteinsData !== 'undefined') {
 	load = function(proteins, relations) {
+		$("#canvas").empty();
+		
 		proteinsGraph(proteins, relations);
 		proteinsTable(proteins);
 	}
@@ -101,11 +103,8 @@ $(document).ready(function() { if (typeof proteinsData !== 'undefined') {
 		
 		// Check if limit and threshold has changed
 		if (newLimit == limit && newThreshold == threshold) {
-			// Just use the old values if not changed
-			newProteins = proteins;
-			newRelations = relations;
-			
-			load(newProteins, newRelations);
+			// Just redraw is data hasn't changed
+			draw();
 		} else {
 			// Get new values via ajax if changed
 			var p_id = $(this).data("patient");
