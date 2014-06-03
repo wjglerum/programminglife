@@ -35,9 +35,9 @@ $(document).ready(function() { if (typeof proteinsData !== 'undefined') {
 		var from = relations[i].from;
 		var to = relations[i].to;
 		
-		var strokeWidth = Math.round(2 * Math.pow((relations[i].score / relationsScoreAvg), 2));
+		var strokeWidth = Math.round(2.5 * Math.pow((relations[i].score / relationsScoreAvg), 2));
 		
-		g.addEdge(from, to, {label: relations[i].score, 'width': strokeWidth});
+		g.addEdge(from, to, {label: relations[i].score, "width": strokeWidth, "background": "#eee"});
 	}
 	
 	var layouter = new Graph.Layout.Spring(g);
