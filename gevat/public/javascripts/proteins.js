@@ -93,14 +93,8 @@ $(document).ready(function() { if (typeof initProteinsData !== 'undefined') {
 	// Save and visualise initial data
 	Proteins.load(initProteinsData);
 	
-	// Redraw button handler
-	$(".visualisation-proteins-relations .redraw").click(function() {;
-		if (typeof Proteins.draw == 'function')
-			Proteins.draw();
-	});
-	
-	// Reload does the same as redraw if the limit/threshold aren't changed
-	$(".visualisation-proteins-relations .reload").click(function() {
+	// Revisualise the graph, only reload data via Ajax if the limit/threshold are changed
+	$(".visualisation-proteins-relations .revisualise").click(function() {
 		if (typeof Proteins.draw == 'function') {
 			var limit = $("input#limit").val();
 			var threshold = $("input#threshold").val();
