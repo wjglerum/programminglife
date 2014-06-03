@@ -59,7 +59,12 @@ public class Mutations extends Controller {
     JSONArray relationsJSON = new JSONArray();
     
     for (Proteine proteine : proteins) {
-      proteinsJSON.add(proteine.getName());
+      JSONObject proteinJSON = new JSONObject();
+      
+      proteinJSON.put("name", proteine.getName());
+      proteinJSON.put("annotations", proteine.getAnnotations());
+      
+      proteinsJSON.add(proteinJSON);
       
       for (ProteineConnection connection : proteine.getConnections()) {
         JSONObject connectionJSON = new JSONObject();
