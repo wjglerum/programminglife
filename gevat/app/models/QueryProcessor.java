@@ -73,6 +73,63 @@ public final class QueryProcessor {
 	}
 
 	/**
+	 * Gets the connections and scores between all proteins in
+	 * the ArrayList<String>.
+	 *
+	 * @param proteins The ArraList<String> containing the protein names
+	 *
+	 * @return Returns the list of connections that look like this:
+	 * proteinA -> proteinB = score
+	 *
+	 * @throws SQLException In case SQL goes wrong
+	 */
+	public static ArrayList<String> getConnectedProteinScore(
+			final ArrayList<String> proteins) throws SQLException {
+		String formatted = formatForIN(proteins);
+		ArrayList<String> list = new ArrayList<String>();
+		String q = "SELECT combined_score, "
+				+ "protein_a.preferred_name AS name_a, "
+				+ "protein_b.preferred_name AS name_b "
+				+ "FROM network.node_node_links, "
+				+ "items.proteins AS protein_a, "
+				+ "items.proteins AS protein_b "
+				+ "WHERE "
+				+ "protein_a.preferred_name IN ("
+				+ formatted + ") AND "
+				+ "protein_a.species_id = 9606 AND "
+				+ "protein_b.preferred_name IN ("
+				+ formatted + ") AND "
+				+ "protein_b.species_id = 9606 AND "
+				+ "node_id_a = protein_a.protein_id AND "
+				+ "node_id_b = protein_b.protein_id "
+				+ "ORDER BY combined_score DESC;";
+
+		ResultSet rs = Database.select("string", q);
+		while (rs.next()) {
+			 int score = rs.getInt("combined_score");
+			 String nameA = rs.getString("name_a");
+			 String nameB = rs.getString("name_b");
+			 list.add(nameA + " -> " + nameB + " = " + score);
+		}
+		return list;
+	}
+
+	/**
+	 * Formats the stringList to be  used in a 'IN' query.
+	 *
+	 * @param stringList The list of strings to be formatted
+	 *
+	 * @return Returns the formatted String
+	 */
+	public static String formatForIN(final ArrayList<String> stringList) {
+		String toReturn = "";
+		for (String s: stringList) {
+			toReturn += "'" + s + "', ";
+		}
+		return toReturn.substring(0, toReturn.length() - 2);
+	}
+
+	/**
 	 * Finds the score. Not needed at the moment.
 	 *
 	 * @param chrom
@@ -93,7 +150,7 @@ public final class QueryProcessor {
 		list.add("chrom \t position \t ref"
 				+ "\t alt" + " \t rawscore \t phred");
 		String q = "SELECT * " + "FROM " + "score "
-		+ "WHERE " + "chrom = '"
+				+ "WHERE " + "chrom = '"
 				+ chrom + "' AND position >= " + positionLow
 				+ " AND position <= " + positionHigh + ";";
 
@@ -109,6 +166,31 @@ public final class QueryProcessor {
 					+ rawscore + "\t" + phred);
 		}
 		return list;
+	}
+
+	/**
+	 * Gets the annotation of a protein.
+	 *
+	 * @param protein The preferred name of the protein
+	 *
+	 * @return Returns the annotation of the protein
+	 *
+	 * @throws SQLException In case SQL goes wrong
+	 */
+	public static String getAnnotationsOfProtein(final String protein)
+			throws SQLException {
+		String s = "";
+		String q = "SELECT annotation "
+				+ "FROM items.proteins "
+				+ "WHERE preferred_name = '" + protein
+				+ "' AND "
+				+ "species_id = 9606";
+		ResultSet rs = Database.select("string", q);
+		while (rs.next()) {
+			s = rs.getString("annotation");
+			return s;
+		}
+		return s;
 	}
 
 	/**
@@ -137,33 +219,30 @@ public final class QueryProcessor {
 	}
 
 	/**
-	 * Finds genes connected to the supplied snp's.
+	 * Finds genes connected to the supplied SNP.
 	 *
 	 * @param limit
 	 *            The maximum amount of results
 	 * @param threshold
 	 *            The minimum score of two proteins
-	 * @param input
-	 *            The id's retrieved from the VCF-file
+	 * @param id
+	 *            The id of a SNP (without 'rs')
 	 * @return Returns an ArrayList<String> containing the gene name,
 	 * 		   with the names and scores of connected genes
 	 * @throws SQLException
 	 *             In case SQL goes wrong
 	 */
-	public static ArrayList<String> findGenes(final int[] input,
+	public static ArrayList<String> findGenes(final int id,
 			final int limit, final int threshold)
 					throws SQLException {
 		ArrayList<String> list = new ArrayList<String>();
-
-		for (int id : input) {
-			ArrayList<String> qResult = QueryProcessor.
-					findGenesAssociatedWithSNP(id);
-			if (!qResult.isEmpty()) {
-				list.add(qResult.get(0));
-				list.add(QueryProcessor.executeStringQuery(
-						qResult.get(0),
-						limit, threshold).toString());
-			}
+		ArrayList<String> qResult = QueryProcessor.
+				findGenesAssociatedWithSNP(id);
+		for (String gene: qResult) {
+			list.add(gene);
+			list.add(QueryProcessor.executeStringQuery(
+					gene,
+					limit, threshold).toString());
 		}
 		return list;
 	}
