@@ -84,6 +84,31 @@ public class Mutations extends Controller {
     
     return dataJSON.toJSONString();
   }
+
+  /**
+   * Handle the ajax request for removing patients
+ * @throws SQLException 
+   */
+  public static Result proteinsJSON(int p_id, int m_id, int limit, int threshold) throws SQLException {
+    Patient p = Patient.get(p_id, Authentication.getUser().id);
+    List<Mutation> mutations = Mutation.getMutations(p_id);
+
+    if (p == null)
+      return badRequest();
+    
+    // Render the mutation if it's found in the requested patient's mutations
+    for (Mutation m : mutations) {
+      if (m.getId() == m_id) {
+        String JSON = mutationJSON(m, limit, threshold);
+        
+        response().setContentType("application/json");
+        
+        return ok(JSON);
+      }
+    }
+    
+    return badRequest();
+  }
   
   /**
    * Return to the patient page and display a message the requested mutation isn't found
