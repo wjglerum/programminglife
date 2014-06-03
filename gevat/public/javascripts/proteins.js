@@ -1,3 +1,5 @@
+var redraw;
+
 $(document).ready(function() { if (typeof proteinsData !== 'undefined') {
 	var g = new Graph();
 
@@ -45,4 +47,9 @@ $(document).ready(function() { if (typeof proteinsData !== 'undefined') {
 	 
 	var renderer = new Graph.Renderer.Raphael("canvas", g, 800, 400);
 	renderer.draw();
+	
+	redraw = function() {
+        layouter.layout();
+        renderer.draw();
+    };
 }});
