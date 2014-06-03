@@ -113,8 +113,6 @@ public class ProteineGraph {
     try {
       ArrayList<String> connectedProteinScores = QueryProcessor.getConnectedProteinScore(getProteinesAsString());
       
-      Logger.info(connectedProteinScores.toString());
-      
       for (String connectedProteinScore : connectedProteinScores) {
         String[] proteinsAndScore = connectedProteinScore.split("=");
         
