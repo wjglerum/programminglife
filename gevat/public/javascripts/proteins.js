@@ -22,11 +22,24 @@ $(document).ready(function() { if (typeof proteinsData !== 'undefined') {
 		g.addNode(protein, {render: render});
 	}
 	
+	// Determine the sum of all relations to get an average
+	var relationsScoreSum = 0;
+	
+	for (i = 0; i < relations.length; i++) {
+		relationsScoreSum += relations[i].score;
+	}
+	
+	relationsScoreAvg = relationsScoreSum / relations.length;
+	
 	for (i = 0; i < relations.length; i++) {
 		var from = relations[i].from;
 		var to = relations[i].to;
 		
-		g.addEdge(from, to, {label: relations[i].score});
+		var strokeWidth = Math.round(3 * (relations[i].score / relationsScoreAvg));
+		
+		console.log(strokeWidth);
+		
+		g.addEdge(from, to, {label: relations[i].score, 'width': strokeWidth});
 	}
 	
 	var layouter = new Graph.Layout.Spring(g);
