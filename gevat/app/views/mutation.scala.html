@@ -1,4 +1,4 @@
-@(patient: Patient, mutation: Mutation, user: User, proteins: Collection[Proteine], proteinsData: String)
+@(patient: Patient, mutation: Mutation, user: User, proteinsData: String)
 
 @template_app("Mutation " + mutation.getRsID + " of patient " + patient.getName + " " + patient.getSurname, user, "patients") {
 	
@@ -32,7 +32,8 @@
 	</script>
 	
 	<div class="visualisation-proteins-relations">
-		<button class="btn btn-default" onclick="redraw();">Redraw</button>
+		<a class="btn btn-default redraw">Redraw</a>
+		<a class="btn btn-default reload">Reload</a>
 		
 		<div id="canvas"></div>
 	</div>
@@ -47,16 +48,7 @@
 			</tr>
 		</thead>
 		<tbody>
-		@if(proteins.size > 0){
-			@for(protein <- proteins) {
-				<tr class="table-mutation" data-mutation-id="@protein">
-					<td>@protein.getName()</td>
-					<td>@protein.getAnnotations()</td>
-				</tr>
-			}
-		} else {
-			<tr class="not-clickable"><td colspan="6">No related proteins found...</td></tr>
-		}
+			<tr class="no-proteins not-clickable" style="display:none"><td colspan="6">No related proteins found...</td></tr>
 		</tbody>
 	</table>
 }

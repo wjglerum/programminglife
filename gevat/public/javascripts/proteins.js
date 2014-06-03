@@ -1,4 +1,6 @@
-var redraw;
+var load, redraw;
+var proteins;
+var relations;
 
 function proteinsGraph(proteins, relations) {
 	var g = new Graph();
@@ -18,7 +20,7 @@ function proteinsGraph(proteins, relations) {
 	for (i = 0; i < proteins.length; i++) {
 		var protein = proteins[i];
 		
-		g.addNode(protein, {render: render});
+		g.addNode(protein.name, {render: render});
 	}
 	
 	// Determine the sum of all relations to get an average
@@ -51,9 +53,50 @@ function proteinsGraph(proteins, relations) {
     };
 }
 
-$(document).ready(function() { if (typeof proteinsData !== 'undefined') {
-	var proteins = proteinsData.proteins;
-	var relations = proteinsData.relations;
+function proteinsTable(proteins) {
+	// First remove old rows
+	$(".table-proteins tr.protein").remove();
 	
-	proteinsGraph(proteins, relations);
+	// Add the new proteins
+	for (i = 0; i < proteins.length; i++) {
+		var protein = proteins[i];
+		
+		$(".table-proteins tbody").append("<tr class=\"protein\"><td>" + protein.name + "</td><td>" + protein.annotations + "</td></tr>");
+	}
+	
+	// Display the 'no proteins found' message if there are no proteins
+	if ($(".table-proteins tr.protein").length == 0) {
+		$(".table-proteins tr.no-proteins").show();
+	}
+}
+
+$(document).ready(function() { if (typeof proteinsData !== 'undefined') {
+	load = function(proteins, relations) {
+		proteinsGraph(proteins, relations);
+		proteinsTable(proteins);
+	}
+	
+	proteins = proteinsData.proteins;
+	relations = proteinsData.relations;
+	
+	load(proteins, relations);
+	
+	$(".visualisation-proteins-relations .redraw").click(function() {;
+		if (typeof redraw == 'function')
+			redraw();
+	});
+	
+	$(".visualisation-proteins-relations .reload").click(function() {
+		var newProteins, newRelations;
+		
+		if (true) {
+			newProteins = proteins;
+			newRelations = relations;
+		} else {
+			newProteins = proteins;
+			newRelations = relations;
+		}
+		
+		load(newProteins, newRelations);
+	});
 }});
