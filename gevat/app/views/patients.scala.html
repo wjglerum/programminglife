@@ -1,6 +1,8 @@
 @(patients: List[Patient], user: User)
-
-@template_app("Patients overview", user, "patients") {
+@scripts = {
+<script src="@routes.Assets.at("javascripts/patients.js")" type="text/javascript"></script>
+        }
+@template_app("Patients overview", user, "patients", scripts) {
 		
 	@if(flash.contains("patient-not-found")) {
 		<p class="bg-danger">
