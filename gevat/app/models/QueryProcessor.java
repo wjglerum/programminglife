@@ -3,6 +3,7 @@ package models;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * This class processes queries.
@@ -84,7 +85,7 @@ public final class QueryProcessor {
 	 * @throws SQLException In case SQL goes wrong
 	 */
 	public static ArrayList<String> getConnectedProteinScore(
-			final ArrayList<String> proteins) throws SQLException {
+			final Collection<String> proteins) throws SQLException {
 		String formatted = formatForIN(proteins);
 		ArrayList<String> list = new ArrayList<String>();
 		String q = "SELECT combined_score, "
@@ -121,7 +122,7 @@ public final class QueryProcessor {
 	 *
 	 * @return Returns the formatted String
 	 */
-	public static String formatForIN(final ArrayList<String> stringList) {
+	public static String formatForIN(final Collection<String> stringList) {
 		String toReturn = "";
 		for (String s: stringList) {
 			toReturn += "'" + s + "', ";

@@ -29,6 +29,7 @@ public class ProteineGraph {
 	 */
 	public ProteineGraph(int snp) {
 		addConnectionsOfSnp(snp);
+		connectAllProteines();
 	}
 
 	/**
@@ -103,5 +104,18 @@ public class ProteineGraph {
 
 	public Collection<ProteineConnection> getConnections() {
 		return connections;
+	}
+	
+	public Collection<String> getProteinesAsString() {
+		return proteines.keySet();
+	}
+	
+	private void connectAllProteines()
+	{
+		try {
+			QueryProcessor.getConnectedProteinScore(getProteinesAsString());
+		} catch (SQLException e) {
+			Logger.info(e.toString());
+		}
 	}
 }
