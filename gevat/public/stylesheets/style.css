@@ -163,9 +163,16 @@ th.headerSortDown {
 }
 
 /*
+ * Mutatation page
+ */
+.visualisation-proteins-relations p {
+	margin: 1em 0;
+}
+
+/*
  * Miscellaneous
  */
-.bg-success, .bg-info, .bg-danger {
+.bg-success, .bg-info, .bg-danger, .bg-warning {
   padding: 1em;
 }
 .clickable-rows tbody tr:hover {

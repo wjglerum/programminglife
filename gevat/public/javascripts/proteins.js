@@ -84,10 +84,20 @@ $(document).ready(function() { if (typeof initProteinsData !== 'undefined') {
 		
 		// Clear the canvas, might include an old graph
 		$("#canvas").empty();
-		
-		// Setup both the graph and table with info about the proteins
-		Proteins.graph(proteins, relations);
-		Proteins.table(proteins);
+
+		// Show/hide right stuff
+		if (proteins.length > 0) {
+			$(".visualisation-proteins-relations .no-proteins").hide();
+			
+			// Setup both the graph and table with info about the proteins
+			Proteins.graph(proteins, relations);
+			Proteins.table(proteins);
+
+			$(".visualisation-proteins-relations #canvas").show();
+		} else {
+			$(".visualisation-proteins-relations #canvas").hide();
+			$(".visualisation-proteins-relations .no-proteins").show();
+		}
 	}
 	
 	// Save and visualise initial data
