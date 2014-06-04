@@ -106,12 +106,16 @@ public final class QueryProcessor {
 				+ "ORDER BY combined_score DESC;";
 
 		ResultSet rs = Database.select("string", q);
-		while (rs.next()) {
-			 int score = rs.getInt("combined_score");
-			 String nameA = rs.getString("name_a");
-			 String nameB = rs.getString("name_b");
-			 list.add(nameA + " -> " + nameB + " = " + score);
+		
+		if (rs != null) {
+  		while (rs.next()) {
+  			 int score = rs.getInt("combined_score");
+  			 String nameA = rs.getString("name_a");
+  			 String nameB = rs.getString("name_b");
+  			 list.add(nameA + " -> " + nameB + " = " + score);
+  		}
 		}
+		
 		return list;
 	}
 
