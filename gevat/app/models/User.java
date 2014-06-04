@@ -30,19 +30,22 @@ public class User {
 	/**
 	 * Returns a new user with data from the database, based on the username.
 	 * 
-	 * @param username adsfad
+	 * @param username
+	 *            adsfad
 	 * @return User adfasd
-	 * @throws SQLException asdfa
+	 * @throws SQLException
+	 *             asdfa
 	 */
 	public static User getUser(String username) throws SQLException {
 		String query = "SELECT u_id, name, surname FROM users WHERE username = '"
 				+ username + "';";
-		ResultSet rs = Database.select("data", query);
-		if (rs.next()) {
-			int u_id = rs.getInt("u_id");
-			String name = rs.getString("name");
-			String surname = rs.getString("surname");
-			return new User(u_id, name, surname, username);
+		try (ResultSet rs = Database.select("data", query);) {
+			if (rs.next()) {
+				int u_id = rs.getInt("u_id");
+				String name = rs.getString("name");
+				String surname = rs.getString("surname");
+				return new User(u_id, name, surname, username);
+			}
 		}
 		return null;
 	}
@@ -59,17 +62,18 @@ public class User {
 			throws SQLException {
 		String query = "SELECT * FROM users WHERE username = '" + username
 				+ "';";
-		ResultSet rs = Database.select("data", query);
-		if (rs.next()) {
-			int u_id = rs.getInt("u_id");
-			String name = rs.getString("name");
-			String surname = rs.getString("surname");
-			String pw = rs.getString("password");
-			Logger.info(name + " " + surname + " logged in!");
+		try (ResultSet rs = Database.select("data", query);) {
+			if (rs.next()) {
+				int u_id = rs.getInt("u_id");
+				String name = rs.getString("name");
+				String surname = rs.getString("surname");
+				String pw = rs.getString("password");
+				Logger.info(name + " " + surname + " logged in!");
 
-			// check with BCrypt if hashed pw matches password
-			if (BCrypt.checkpw(password, pw)) {
-				return new User(u_id, name, surname, username);
+				// check with BCrypt if hashed pw matches password
+				if (BCrypt.checkpw(password, pw)) {
+					return new User(u_id, name, surname, username);
+				}
 			}
 		}
 		return null;
