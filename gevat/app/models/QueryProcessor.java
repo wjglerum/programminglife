@@ -123,11 +123,17 @@ public final class QueryProcessor {
 	 * @return Returns the formatted String
 	 */
 	public static String formatForIN(final Collection<String> proteins) {
-		String toReturn = "";
-		for (String s: proteins) {
-			toReturn += "'" + s + "', ";
+	  String formatted = "";
+		int i = 0;
+		
+	  for (String protein: proteins) {
+	    if (i > 0)
+	      formatted += ",";
+	    
+		  formatted += "'" + protein + "'";
 		}
-		return toReturn.substring(0, toReturn.length() - 2);
+		
+		return formatted;
 	}
 
 	/**
