@@ -106,12 +106,16 @@ public final class QueryProcessor {
 				+ "ORDER BY combined_score DESC;";
 
 		ResultSet rs = Database.select("string", q);
-		while (rs.next()) {
-			 int score = rs.getInt("combined_score");
-			 String nameA = rs.getString("name_a");
-			 String nameB = rs.getString("name_b");
-			 list.add(nameA + " -> " + nameB + " = " + score);
+		
+		if (rs != null) {
+  		while (rs.next()) {
+  			 int score = rs.getInt("combined_score");
+  			 String nameA = rs.getString("name_a");
+  			 String nameB = rs.getString("name_b");
+  			 list.add(nameA + " -> " + nameB + " = " + score);
+  		}
 		}
+		
 		return list;
 	}
 
@@ -123,11 +127,17 @@ public final class QueryProcessor {
 	 * @return Returns the formatted String
 	 */
 	public static String formatForIN(final Collection<String> proteins) {
-		String toReturn = "";
-		for (String s: proteins) {
-			toReturn += "'" + s + "', ";
+	  String formatted = "";
+		int i = 0;
+		
+	  for (String protein: proteins) {
+	    if (i > 0)
+	      formatted += ",";
+	    
+		  formatted += "'" + protein + "'";
 		}
-		return toReturn.substring(0, toReturn.length() - 2);
+		
+		return formatted;
 	}
 
 	/**
