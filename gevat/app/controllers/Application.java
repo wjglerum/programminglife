@@ -56,7 +56,9 @@ public class Application extends Controller {
 
 		// Routes for Projects
 		return ok(Routes.javascriptRouter("jsRoutes",
-				controllers.routes.javascript.Patients.remove()));
+        controllers.routes.javascript.Patients.remove(),
+        controllers.routes.javascript.Mutations.proteinsJSON()
+		));
 	}
 
 }
