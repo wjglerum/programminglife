@@ -5,7 +5,7 @@ Proteins.graph = function (proteins, relations) {
 
 	// Function to render the ellipses representing proteins
 	var render = function(r, node) {
-        var ellipse = r.ellipse(0, 0, 30, 20).attr({fill: "#7af", stroke: "#7af", "stroke-width": 5});
+        var ellipse = r.ellipse(0, 0, 30, 20).attr({fill: "#67B3DD", stroke: "#4D9CC7", "stroke-width": 5});
         
         ellipse.node.id = node.label || node.id;
         
@@ -63,12 +63,24 @@ Proteins.graph = function (proteins, relations) {
 			   $(".table-proteins tr[data-protein-id='" + this[0].id + "']").removeClass("highlight");
 		   });
 		   g.nodes[id].shape.mousedown(function() {
+			   // Remove selected class in graph
 			   for (var id2 in Proteins.g.nodes) {
-				   console.log($("ellipse#" + id2));//.attr("class", "");
 				   $("ellipse#" + id2).attr("class", "");
 			   }
 			   
+			   // Give the svg protein the selected class
 			   $("ellipse#" + this[0].id).attr("class", "selected");
+			   
+			   // Remove selected class in table
+			   $(".table-proteins tr").removeClass("selected");
+			   
+			   // Remove the protein row in table...
+			   var row = $(".table-proteins tr[data-protein-id='" + this[0].id + "']").remove();
+			   
+			   row = $(row).addClass("selected");
+			   
+			   // ...and add it to the top with the selected class
+			   $('.table-proteins tbody tr:first').before(row);
 		   });
 		}
     };
