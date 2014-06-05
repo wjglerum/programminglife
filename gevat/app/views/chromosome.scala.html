@@ -1,0 +1,10 @@
+@(patient: Patient, chromosome: Chromosome, user: User)
+@scripts = {
+<script src="@routes.Assets.at("javascripts/chromosome.js")" type="text/javascript"></script>
+}
+
+@template_app("Mutations of patient " + patient.getName + " " + patient.getSurname + " in chromosome " + chromosome.getID(), user, "patients", scripts) {
+
+<h1>Relations between mutations</h1>
+
+}
