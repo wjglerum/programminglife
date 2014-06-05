@@ -1,0 +1,7 @@
+@(content: String, user: User)
+
+@template_app("Dashboard", user, "dashboard") {
+	
+	@Html(HtmlFormat.escape(content).toString.replace("\n", "<br />"))
+	
+}

@@ -1,0 +1,49 @@
+@(title: String, user: User, scripts: Html = Html(""))(content: Html)
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>@title - GEVATT</title>
+		<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/jquery.svg.css")">
+		<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap-3.1.1.min.css")">
+		<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap-theme-3.1.1.min.css")">
+		<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/style.css")">
+	</head>
+	<body>
+		<div class="navbar navbar-inverse" role="navigation">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="/about">GEVATT</a>
+				</div>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="/dashboard">Dashboard</a></li>
+					<li><a href="/help">Help</a></li>
+					<li><a href="/about">About</a></li>
+					@if(user == null) {
+						<li><a href="/login">Log in</a></li>
+					} else {
+						<li><a href="/logout">Log out</a></li>
+					}
+				</ul>
+				@if(user != null) {
+					<p class="navbar-text pull-right">Welcome @user.name!</p>
+				}
+			</div>
+		</div>
+		
+		@content
+        
+		<!-- Placed at the end of the document so the pages load faster -->
+        <script src="@routes.Application.javascriptRoutes" type="text/javascript"></script>
+        
+		<script src="@routes.Assets.at("javascripts/jquery-2.1.1.min.js")" type="text/javascript"></script>
+		<script src="@routes.Assets.at("javascripts/jquery.tablesorter.js")" type="text/javascript"></script>
+		<script src="@routes.Assets.at("javascripts/jquery.svg.min.js")" type="text/javascript"></script>
+		<script src="@routes.Assets.at("javascripts/bootstrap-3.1.1.min.js")" type="text/javascript"></script>
+		<script src="@routes.Assets.at("javascripts/raphael-2.1.2.min.js")" type="text/javascript"></script>
+		<script src="@routes.Assets.at("javascripts/d3.min.js")" type="text/javascript"></script>
+		<script src="@routes.Assets.at("javascripts/dracula-graffle.js")" type="text/javascript"></script>
+		<script src="@routes.Assets.at("javascripts/dracula-graph.js")" type="text/javascript"></script>
+		<script src="@routes.Assets.at("javascripts/main.js")" type="text/javascript"></script>
+        @scripts
+	</body>
+</html>

@@ -1,0 +1,47 @@
+@(patients: List[Patient], user: User)
+@scripts = {
+<script src="@routes.Assets.at("javascripts/patients.js")" type="text/javascript"></script>
+        }
+@template_app("Patients overview", user, "patients", scripts) {
+		
+	@if(flash.contains("patient-not-found")) {
+		<p class="bg-danger">
+			@flash.get("patient-not-found")
+		</p>
+	}
+		
+	@if(flash.contains("patient-added")) {
+		<p class="bg-success">
+			@flash.get("patient-added")
+		</p>
+	}
+	
+	<table class="table-patients table table-hover clickable-rows">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Name</th>
+				<th>Surname</th>
+				<th>VCF File</th>
+				<th>Size</th>
+				<th>Delete</th>
+			</tr>
+		</thead>
+		<tbody>
+			@for(patient <- patients) {
+				<tr class="patient" data-patient="@patient.getId" href="/patients/@patient.getId">
+					<td>@patient.getId</td>
+					<td>@patient.getName</td>
+					<td>@patient.getSurname</td>
+					<td>@patient.getVcfFile</td>
+					<td>@patient.getVcfLengthMB() MB</td>
+					<td class="remove"><a class="remove-patient center-block text-danger"><span class="glyphicon glyphicon-remove"></span></a></td>
+				</tr>
+			}
+			<tr class="no-patients not-clickable" @if(patients.length > 0){ style="display:none" }><td colspan="6">No patients found...</td></tr>
+		</tbody>
+	</table>
+	
+	<p><a href="/patients/add" class="btn btn-primary" role="button">Add new patient</a></p>
+	
+}

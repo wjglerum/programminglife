@@ -1,0 +1,27 @@
+@(title: String, user: User, nav: String, scripts: Html = Html(""))(content: Html)
+
+@import scala.collection.immutable.Map
+@template(title, user, scripts) {
+
+		<div class="template-app container-fluid">
+			<div class="row">
+				<div class="sidebar">
+					<ul class="nav nav-sidebar">
+						@for((url,item) <- Map(
+								"dashboard" -> "Overview",
+								"patients" -> "Patients"
+							)) {
+							<li @if(url.equals(nav)){class="active"}><a href="/@url">@item</a></li>
+						}
+					</ul>
+				</div>
+				<div class="main">
+					<h1 class="page-header">@title</h1>
+					<div class="page-content">
+						@content
+					</div>
+				</div>
+			</div>
+		</div>
+	
+}
