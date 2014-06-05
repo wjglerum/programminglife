@@ -31,8 +31,13 @@ public class Chromosomes extends Controller {
   @Security.Authenticated(Secured.class)
   public static Result show(int p_id, int c_id) throws SQLException {
 	  Patient p = Patient.get(p_id, Authentication.getUser().id);
-	  models.Chromosome c = new models.Chromosome(1);
-	  return ok(chromosome.render(p, c, Authentication.getUser()));
-	  //        return ok(mutation.render(p, m, Authentication.getUser(), JSON));
+	  List<Mutation> mutations = Mutation.getMutations(p_id, c_id);
+	  models.Chromosome c = new models.Chromosome(c_id);
+	  
+	  if (p == null)
+	      return Patients.patientNotFound();
+	  
+	  // Render the chromosome view if there are mutations in the view
+	  return ok(chromosome.render(p, c, mutations, Authentication.getUser()));
   }
 }
