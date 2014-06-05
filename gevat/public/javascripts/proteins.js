@@ -45,6 +45,7 @@ Proteins.graph = function (proteins, relations) {
 	var layouter = new Graph.Layout.Spring(g);
 	var renderer = new Graph.Renderer.Raphael("canvas", g, $("#canvas").width(), 400);
 	
+	Proteins.g = g;
 	Proteins.draw = function() {
         layouter.layout();
     	renderer.draw();
@@ -54,12 +55,20 @@ Proteins.graph = function (proteins, relations) {
 		$("input#threshold").val(Proteins.data.threshold);
 		
 		// Set mouse handlers
-		for(var id in g.nodes){
+		for (var id in g.nodes) {
 		   g.nodes[id].shape.mouseover(function() {
 			   $(".table-proteins tr[data-protein-id='" + this[0].id + "']").addClass("highlight");
 		   });
 		   g.nodes[id].shape.mouseout(function() {
 			   $(".table-proteins tr[data-protein-id='" + this[0].id + "']").removeClass("highlight");
+		   });
+		   g.nodes[id].shape.mousedown(function() {
+			   for (var id2 in Proteins.g.nodes) {
+				   console.log($("ellipse#" + id2));//.attr("class", "");
+				   $("ellipse#" + id2).attr("class", "");
+			   }
+			   
+			   $("ellipse#" + this[0].id).attr("class", "selected");
 		   });
 		}
     };

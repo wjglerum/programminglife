@@ -168,6 +168,9 @@ th.headerSortDown {
 .visualisation-proteins-relations p {
 	margin: 1em 0;
 }
+.visualisation-proteins-relations svg ellipse.selected {
+	fill: red;
+}
 .table-proteins tr.highlight {
 	background-color: #ebebeb;
 }
