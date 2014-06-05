@@ -9,21 +9,24 @@ var markerBar;
 
 
 //check where the marker is, on the left, right or middle
-if (marker < left) {
+if(marker < left) {
 	markerBar = "10%";
 	leftBar = Math.floor((left - marker) / (right - marker) * 100);
 	leftBar += "%";
-	rightBar = "90%";
-} else if (marker > right) {
-	markerBar = "90%";
+} else {
 	leftBar = "10%";
+	markerBar = Math.floor((marker - left) / (right - left) * 100);
+	markerBar += "%";
+}
+
+if(marker > right) {
+	markerBar = "90%";
 	rightBar = Math.floor((right - left) / (marker - left) * 100);
 	rightBar += "%";
 } else {
+	rightBar = "90%";
 	markerBar = Math.floor((marker - left) / (right - left) * 100);
 	markerBar += "%";
-	leftBar = "10%";
-	rightBar = "90%";
 }
 
 //make a container for svg
@@ -47,14 +50,13 @@ var bar = svgContainer.append("rect")
 
 
 //draw the red mutation
-
-
-var mutation = svgContainer.append("svg:image")
-	.attr('x', markerBar)
-	.attr('y', 50)
-	.attr('width', 50)
-	.attr('height', 50)
-	.attr("xlink:href","/assets/images/marker.png")
+var mutation = svgContainer.append("line")
+	.attr("x1", markerBar)
+	.attr("y1", 100)
+	.attr("x2", markerBar)
+	.attr("y2", 125)
+	.attr("stroke-width", 10)
+	.attr("stroke", "red");
 	
 //draw the left edge of gene
 var edge1 = svgContainer.append("line")

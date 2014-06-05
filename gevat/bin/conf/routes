@@ -2,8 +2,28 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# Home page
-GET     /                           controllers.Application.index()
+# General pages
+GET     /                                 controllers.Application.index()
+GET     /help                             controllers.Application.help()
+GET     /about                            controllers.Application.about()
+
+# Authentication
+GET     /login                            controllers.Authentication.login()
+POST	/login					      	  controllers.Authentication.authenticate()
+GET     /logout                           controllers.Authentication.logout()
+
+# App
+GET     /dashboard                        controllers.Application.dashboard()
+GET     /patients                         controllers.Patients.showAll()
+GET     /patients/add                     controllers.Patients.add()
+POST    /patients/add                     controllers.Patients.insert()
+GET     /patients/:p                      controllers.Patients.show(p: Int)
+DELETE  /patients                         controllers.Patients.remove(p: Int)
+GET     /patients/:p/mutation/:m          controllers.Mutations.show(p: Int, m: Int)
+POST    /patients/mutation/ajax           controllers.Mutations.proteinsJSON(p: Int, m: Int, limit: Int, threshold: Int)
+
+# Javascript routing
+GET     /assets/javascripts/routes        controllers.Application.javascriptRoutes()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

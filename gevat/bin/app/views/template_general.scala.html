@@ -1,0 +1,16 @@
+@(title: String, user: User)(content: Html)
+
+@template(title, user) {
+	
+		<div class="template-general container-fluid">
+			<div class="row">
+				<div class="main col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+					<h1 class="page-header">@title</h1>
+					<div class="page-content">
+						@content
+					</div>
+				</div>
+			</div>
+		</div>
+		
+}

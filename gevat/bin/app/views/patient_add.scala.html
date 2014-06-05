@@ -1,0 +1,42 @@
+@(form: Form[Patients.Add], user: User)
+
+@template_app("Add new patient", user, "patients") {
+	
+	@helper.form(routes.Patients.insert, 'enctype -> "multipart/form-data", 'role -> "form", 'class -> "form-add-patient form-horizontal") {
+	
+		@if(form.hasGlobalErrors) {
+			<p class="bg-danger">
+				@form.globalError.message
+			</p>
+		}
+	
+		<p>Please enter the patients details to add.</p>
+		
+  		<div class="form-group">
+    		<label for="name" class="col-sm-2 control-label">Name</label>
+    		<div class="col-sm-10">
+				<input type="text" class="form-control" id="name" name="name" placeholder="name" value="@form("name").value">
+			</div>
+		</div>
+  		<div class="form-group">
+    		<label for="surname" class="col-sm-2 control-label">Surname</label>
+    		<div class="col-sm-10">
+				<input type="text" class="form-control" id="surname" name="surname" placeholder="surname" value="@form("surname").value">
+			</div>
+		</div>
+  		<div class="form-group">
+    		<label for="vcf" class="col-sm-2 control-label">VCF File</label>
+    		<div class="col-sm-10">
+				<input type="file" id="vcf" name="vcf">
+			</div>
+		</div>
+		
+  		<div class="form-group">
+  			<div class="col-sm-offset-2 col-sm-10">
+				<button type="submit" class="btn btn-default">Add patient</button>
+			</div>
+		</div>
+		
+	}
+	
+}
