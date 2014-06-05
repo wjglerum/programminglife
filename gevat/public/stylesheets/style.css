@@ -168,6 +168,9 @@ th.headerSortDown {
 .visualisation-proteins-relations p {
 	margin: 1em 0;
 }
+.table-proteins tr.highlight {
+	background-color: #ebebeb;
+}
 
 /*
  * Miscellaneous

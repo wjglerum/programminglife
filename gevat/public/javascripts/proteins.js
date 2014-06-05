@@ -52,6 +52,16 @@ Proteins.graph = function (proteins, relations) {
     	// Update the input fields matching to the recently drawn graph 
 		$("input#limit").val(Proteins.data.limit);
 		$("input#threshold").val(Proteins.data.threshold);
+		
+		// Set mouse handlers
+		for(var id in g.nodes){
+		   g.nodes[id].shape.mouseover(function() {
+			   $(".table-proteins tr[data-protein-id='" + this[0].id + "']").addClass("highlight");
+		   });
+		   g.nodes[id].shape.mouseout(function() {
+			   $(".table-proteins tr[data-protein-id='" + this[0].id + "']").removeClass("highlight");
+		   });
+		}
     };
     
     // Doe initial drawing
@@ -66,7 +76,7 @@ Proteins.table = function (proteins) {
 	for (i = 0; i < proteins.length; i++) {
 		var protein = proteins[i];
 		
-		$(".table-proteins tbody").append("<tr class=\"protein\"><td>" + protein.name + "</td><td>" + protein.annotations + "</td></tr>");
+		$(".table-proteins tbody").append("<tr data-protein-id=\"" + protein.name + "\" class=\"protein\"><td>" + protein.name + "</td><td>" + protein.annotations + "</td></tr>");
 	}
 	
 	// Display the 'no proteins found' message if there are no proteins
