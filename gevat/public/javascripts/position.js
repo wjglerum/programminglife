@@ -2,6 +2,7 @@
 var left = $(".position").data("left");
 var right = $(".position").data("right");
 var marker = $(".position").data("marker");	
+var id = $(".position").data("id");
 
 var leftBar;
 var rightBar;
@@ -54,7 +55,12 @@ var mutation = svgContainer.append("svg:image")
 	.attr('y', 50)
 	.attr('width', 50)
 	.attr('height', 50)
-	.attr("xlink:href","/assets/images/marker.png")
+	.attr("xlink:href","/assets/images/marker.png");
+
+var text = svgContainer.append("svg:text") 
+	.attr("x", markerBar) 
+	.attr("y", 50) 
+	.text(id); 
 	
 //draw the left edge of gene
 var edge1 = svgContainer.append("line")

@@ -7,7 +7,7 @@
 @template_app("Mutation " + mutation.getRsID + " of patient " + patient.getName + " " + patient.getSurname, user, "patients", scripts) {
 	
 	<h2>Position</h2>
-	<div class="position" data-left="@mutation.getPositions().get(0)" data-right="@mutation.getPositions().get(1)" data-marker="@mutation.getStartPoint()"></div>
+	<div class="position" data-left="@mutation.getPositions().get(0)" data-right="@mutation.getPositions().get(1)" data-marker="@mutation.getStartPoint()" data-id="@mutation.getRsID()"></div>
 	
 	<table class="table-mutation table">
 		<thead>
