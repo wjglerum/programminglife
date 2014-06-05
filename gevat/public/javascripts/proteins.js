@@ -109,23 +109,29 @@ $(document).ready(function() { if (typeof initProteinsData !== 'undefined') {
 			var limit = $("input#limit").val();
 			var threshold = $("input#threshold").val();
 			
-			// Check if limit and threshold has changed
-			if (Proteins.limit == limit && Proteins.threshold == threshold) {
-				// Just redraw if data hasn't changed
-				Proteins.draw();
+			if (isNaN(limit) || isNaN(threshold)) {
+				alert("Please enter limit and threshold as numeric values");
+			} else if (limit < 1 || limit > 50 || threshold < 1 || threshold > 10000) {
+				alert("Please enter limit in range [1, 50] and threshold in range [1, 10000].");
 			} else {
-				Proteins.limit = limit;
-				Proteins.threshold = threshold;			
-				
-				// Get new values via ajax if changed, save data and reload/revisualise
-				var p_id = $(this).data("patient");
-				var m_id = $(this).data("mutation");
-	
-				jsRoutes.controllers.Mutations.proteinsJSON(p_id, m_id, limit, threshold).ajax({
-					success: function(data) {
-						Proteins.load(data);
-					}
-				});
+				// Check if limit and threshold has changed
+				if (Proteins.limit == limit && Proteins.threshold == threshold) {
+					// Just redraw if data hasn't changed
+					Proteins.draw();
+				} else {
+					Proteins.limit = limit;
+					Proteins.threshold = threshold;			
+					
+					// Get new values via ajax if changed, save data and reload/revisualise
+					var p_id = $(this).data("patient");
+					var m_id = $(this).data("mutation");
+		
+					jsRoutes.controllers.Mutations.proteinsJSON(p_id, m_id, limit, threshold).ajax({
+						success: function(data) {
+							Proteins.load(data);
+						}
+					});
+				}
 			}
 		}
 	});
