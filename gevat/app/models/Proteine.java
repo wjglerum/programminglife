@@ -16,7 +16,8 @@ public class Proteine {
   	{
   		connections.add(pc);
   	}
-  	
+  
+  	@Override
   	public boolean equals(Object that)
   	{
   		if(that instanceof Proteine)
