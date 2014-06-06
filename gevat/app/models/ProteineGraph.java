@@ -13,7 +13,7 @@ import play.Logger;
 
 public class ProteineGraph {
 	private Map<String, Proteine> proteines = new HashMap<String, Proteine>();
-	private Collection<ProteineConnection> connections = new HashSet<ProteineConnection>();
+	private Collection<ProteineConnection> connections = new ArrayList<ProteineConnection>();
 
 	/**
 	 * Creates an empty ProteineGraph
