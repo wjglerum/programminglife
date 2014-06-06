@@ -140,6 +140,8 @@ public final class QueryProcessor {
 	      formatted += ",";
 	    
 		  formatted += "'" + protein + "'";
+		  
+		  i++;
 		}
 		
 		return formatted;
