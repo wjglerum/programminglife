@@ -1,8 +1,8 @@
 package models;
 
 public class ProteineConnection {
-	private Proteine p1;
-	private Proteine p2;
+	protected Proteine p1;
+	protected Proteine p2;
 	private int combinedScore;
 	
 	public ProteineConnection(Proteine p1, Proteine p2, int score) {
@@ -39,15 +39,20 @@ public class ProteineConnection {
 	{
 		return combinedScore;
 	}
-	
-	public boolean equals(ProteineConnection that)
-	{
-		if(this.p1 == that.p1)
-		{
-			return this.p2 == that.p2;
-		}
-		else
-			return this.p1 == that.p2 && this.p2 == that.p1;
-	}
 
+	@Override
+	public boolean equals(Object that) {
+	if (that instanceof ProteineConnection){
+		ProteineConnection pc = (ProteineConnection) that;
+		{
+			if(this.p1.equals(pc.p1))
+			{
+				return this.p2.equals(pc.p2);
+			}
+			else
+				return this.p1.equals(pc.p2) && this.p2.equals(pc.p1);
+			}
+		}
+	return false;
+	}
 }
