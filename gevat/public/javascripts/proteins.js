@@ -37,9 +37,20 @@ Proteins.graph = function (proteins, relations) {
 		var from = relations[i].from;
 		var to = relations[i].to;
 		
-		var strokeWidth = Math.round(2.5 * Math.pow((relations[i].score / relationsScoreAvg), 2));
+		var x = Math.pow((relations[i].score / relationsScoreAvg), 2);
 		
-		g.addEdge(from, to, {label: relations[i].score, "width": strokeWidth, "background": "#eee"});
+		var strokeWidth = Math.round(2.5 * x);
+		
+		var intensity = Math.round(Math.min(255, Math.max(0, 255 - 128 * x)));
+		
+		console.log(intensity);
+		
+		intensity = intensity.toString(16);
+		
+		console.log(intensity);
+		console.log("#" + intensity + intensity + intensity);
+		
+		g.addEdge(from, to, {label: relations[i].score, "stroke": "#" + intensity + intensity + intensity, "width": strokeWidth, "background": "#eee"});
 	}
 	
 	var layouter = new Graph.Layout.Spring(g);
