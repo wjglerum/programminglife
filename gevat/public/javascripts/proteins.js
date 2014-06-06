@@ -41,14 +41,12 @@ Proteins.graph = function (proteins, relations) {
 		
 		var strokeWidth = Math.round(2.5 * x);
 		
-		var intensity = Math.round(Math.min(255, Math.max(0, 255 - 128 * x)));
+		var intensity = Math.round(Math.min(230, Math.max(0, 255 - 128 * x)));
 		
 		console.log(intensity);
 		
+		// Convert intensity to hex
 		intensity = intensity.toString(16);
-		
-		console.log(intensity);
-		console.log("#" + intensity + intensity + intensity);
 		
 		g.addEdge(from, to, {label: relations[i].score, "stroke": "#" + intensity + intensity + intensity, "width": strokeWidth, "background": "#eee"});
 	}
