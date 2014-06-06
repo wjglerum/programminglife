@@ -87,7 +87,7 @@ public class Patients extends Controller {
           String contentType = vcf.getContentType();
           
           // Check file extension
-          if (checkFileExtension(fileName)) { 
+          if (!checkFileExtension(fileName)) { 
             /*        ^^^^^^^^^^^
              *      {  ||     ||  }
              *             X
