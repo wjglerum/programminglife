@@ -350,4 +350,12 @@ public class Mutation extends VariantContext {
 		list.add(186633831);
 		return list;
 	}
+	
+	public String getBlaat() throws SQLException {
+		String query = "SELECT source FROM items.proteins_names WHERE protein_name = 'GI:169162130' LIMIT 100;";
+		ResultSet rs = Database.select("string", query);
+		rs.next();
+		return rs.getString("source");
+		
+	}
 }

@@ -19,10 +19,9 @@ public class Database {
 	 *            The query to be executed, in string format
 	 */
 	private static void doQuery(final String database, final String query) {
-		try (Connection connection = DB.getConnection(database);) {
-			try (Statement statement = connection.createStatement();) {
-				statement.execute(query);
-			}
+		try (Connection connection = DB.getConnection(database);
+				Statement statement = connection.createStatement();) {
+			statement.execute(query);
 		} catch (SQLException e) {
 			Logger.error((e.toString()));
 		}
