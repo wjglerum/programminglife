@@ -87,8 +87,16 @@ public class Patients extends Controller {
           String contentType = vcf.getContentType();
           
           // Check file extension
-          if (fileName.length() < 4 || ! fileName.substring(fileName.length() - 4).equals(".vcf"))
+          if (checkFileExtension(fileName)) { 
+            /*        ^^^^^^^^^^^
+             *      {  ||     ||  }
+             *             X
+             *         \_______/
+             * 
+             *   YEAH SIG WE FIXED THIS !!!
+             */
             return "The uploaded file hasn't the .vcf extension";
+          }
           
           // Check content type
           if (!contentType.equals("text/directory") && !contentType.equals("text/vcard"))
@@ -99,6 +107,16 @@ public class Patients extends Controller {
       }
       
       return null;
+		}
+		
+		/*
+		 * Whoohoo seperate method !!!
+		 */
+		private boolean checkFileExtension(String fileName) {
+		  if (fileName.length() < 4)
+		    return false;
+		  
+		  return fileName.substring(fileName.length() - 4).equals(".vcf");
 		}
 
 	}
