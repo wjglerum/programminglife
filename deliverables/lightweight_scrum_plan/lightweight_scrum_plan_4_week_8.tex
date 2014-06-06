@@ -1,0 +1,55 @@
+\documentclass[a4paper]{report}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{array}
+\usepackage{hyperref}
+\usepackage[english]{babel}
+
+\begin{document}
+\input{title.tex}
+
+\section*{Lightweight SCRUM plan 4 week 8}
+
+\setlength\extrarowheight{5pt}
+\begin{table}[ht]
+\begin{tabular}{p{5cm}|p{5cm}|p{1cm}|p{2cm}}
+
+\textbf{Story} & \textbf{Task} & \textbf{Effort} & \textbf{Assignment}\\
+\hline \hline
+
+A user want to have an overview of mutations per patient & Look for homozygoot mutations & 4 & Mathijs\\
+& Look up the exact definition of CADD score and look if the score of 0 can be avoided & 4 &\\
+& Implement the XY/XX chromosome & 10 &\\
+\hline
+
+A user want to view links between genes and proteins related to a mutation & Protein visualization per node in the mutation view & 4 & Jasper\\
+& Link deseases to genes & 4 & Ruben\\
+& Show multiple mutations per graph & 6 & \\
+& Extend the the proteine graph & 6 & Robert\\
+& And make them clickable & 2 &\\
+\hline
+
+A user looks at an overview of the location of a mutation & Link Ensemble ID to String database & 4 & Willem Jan\\
+& Store GTF information in database & 4 & \\
+& Look if other genes are near the starting point of a mutation & 6 &\\
+& Show neighbouring mutations & 6 &\\
+\hline
+
+Database testing & Test database, mocking doesn't work, use a test database & 8 &\\
+& Give proper errors when database fails & 4 &\\
+\hline
+
+A user logs in and views basic information & Optimize dashboard information & 2 & \\
+& Make breadcrumbs on each page & 2 & \\
+\hline
+
+Deliverables & Scrum plan 4 week 7 & 1 & Willem Jan\\
+& Scrum reflection 4 week 7 & 2 &\\
+& Final Report Draft & 8 &\\
+& Architecture Design Draft & 4 &\\
+\hline
+\end{tabular}
+\end{table}
+
+We each pick a new task after we finish the current task.
+\end{document} 
