@@ -1,0 +1,38 @@
+@(patient: Patient, chromosome: Chromosome, mutations: List[Mutation], user: User)
+@scripts = {
+<script src="@routes.Assets.at("javascripts/chromosome.js")" type="text/javascript"></script>
+}
+
+@template_app("Mutations of patient " + patient.getName + " " + patient.getSurname + " in chromosome " + chromosome.getID(), user, "patients", scripts) {
+
+
+<table class="table-mutations table table-hover clickable-rows" id="table-mutations">
+            <thead>
+            <tr>
+            <th>Type</th>
+    <th>rsID</th>
+    <th>Chromosome</th>
+    <th>CADD score</th>
+    <th>Child</th>
+    <th>Father</th>
+    <th>Mother</th>
+    </tr>
+    </thead>
+    <tbody>
+		@if(mutations.length > 0){
+    @for(mutation <- mutations) {
+        <tr href="/patients/@patient.getId/mutation/@mutation.getId()" class="table-mutation" data-chr-id="@mutation.getChromosome()" data-mutation-id="@mutation.getId()">
+                    <td>@mutation.getMutationType()</td>
+            <td>@mutation.getRsID()</td>
+            <td>@mutation.getChromosome()</td>
+            <td>@mutation.getScore()</td>
+            <td>@mutation.child()</td>
+            <td>@mutation.father()</td>
+            <td>@mutation.mother()</td>
+            </tr>
+        }
+    } else {
+    <tr class="not-clickable"><td colspan="6">No mutations found...</td></tr>
+    }
+
+}

@@ -1,0 +1,20 @@
+##fileformat=VCFv4.0
+##INFO=<ID=AA,Number=1,Type=String,Description="Ancestral Allele, ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/pilot_data/technical/reference/ancestral_alignments/README">
+##INFO=<ID=DP,Number=1,Type=Integer,Description="Total Depth">
+##INFO=<ID=HM2,Number=0,Type=Flag,Description="HapMap2 membership">
+##INFO=<ID=HM3,Number=0,Type=Flag,Description="HapMap3 membership">
+##reference=human_b36_both.fasta
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+##FORMAT=<ID=GQ,Number=1,Type=Integer,Description="Genotype Quality">
+##FORMAT=<ID=DP,Number=1,Type=Integer,Description="Read Depth">
+##INFO=<ID=GP,Number=1,Type=String,Description="GRCh37 position(s)">
+##INFO=<ID=BN,Number=1,Type=Integer,Description="First dbSNP build #">
+##INFO=<ID=NR,Number=0,Type=Flag,Description="No dbSNP 132 map weight=1 rs number assigned to position">
+##INFO=<ID=OR,Number=1,Type=String,Description="Previous rs number">
+##INFO=<ID=MP,Number=0,Type=Flag,Description="Maps to multiple positions on GRCh37">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	FATHER	MOTHER	DAUGHTER
+1	52066	rs28402963	T	C	.	PASS	AA=C;DP=84;GP=1:62203;BN=125	GT:GQ:DP	1/0:44:23	1/0:43:20	1/0:70:36
+1	695745	rs72631875	G	A	.	PASS	AA=.;DP=124;GP=1:705882;BN=130	GT:GQ:DP	1|0:100:34	0|0:62:20	1|0:100:56
+1	742429	rs3094315	G	A	.	PASS	AA=g;DP=132;HM2;GP=1:752566;BN=103	GT:GQ:DP	1|1:100:38	1|1:59:30	0|1:100:44
+1	742584	rs3131972	A	G	.	PASS	AA=a;DP=160;HM3;GP=1:752721;BN=103	GT:GQ:DP	1|1:100:50	1|1:100:33	1|0:100:60
+1	744366	rs3115859	G	A	.	PASS	AA=g;DP=127;GP=1:754503;BN=103	GT:GQ:DP	1|1:80:31	1|1:100:34	1|1:100:45

@@ -88,6 +88,11 @@ public final class QueryProcessor {
 			final Collection<String> proteins) throws SQLException {
 		String formatted = formatForIN(proteins);
 		ArrayList<String> list = new ArrayList<String>();
+		
+		if(formatted.length() == 0){
+			return list;
+		}
+		
 		String q = "SELECT combined_score, "
 				+ "protein_a.preferred_name AS name_a, "
 				+ "protein_b.preferred_name AS name_b "

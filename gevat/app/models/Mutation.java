@@ -280,6 +280,41 @@ public class Mutation extends VariantContext {
 	}
 
 	/**
+	 * Retrieve a list of all the mutations of a patient in a certain chromosome.
+	 * 
+	 * @param pId
+	 *            The id
+	 * @param cId
+	 *            The chromosome number
+	 * 
+	 * @return Returns List<Mutation>, a list of all mutations in the chromosome.
+	 * 
+	 * @throws SQLException
+	 *             In case SQL goes wrong
+	 */
+	public static List<Mutation> getMutations(final int pId, final int cId)
+			throws SQLException {
+		String query = "SELECT * FROM mutations WHERE p_id = '" + pId + "' and chromosome = '" + cId + "';";
+		ResultSet rs = Database.select("data", query);
+		List<Mutation> mutations = new ArrayList<Mutation>();
+
+		while (rs.next()) {
+			int id = rs.getInt("m_id");
+			String sort = rs.getString("sort");
+			String rsID = rs.getString("rsID");
+			int chromosome = rs.getInt("chromosome");
+			Collection<Allele> alleles = toAlleleCollection(rs
+					.getString("alleles"));
+			GenotypesContext genotypescontext = toGenotypesContext(rs
+					.getString("alleles"));
+			int startPoint = rs.getInt("startpoint");
+			int endPoint = rs.getInt("endpoint");
+			mutations.add(new Mutation(id, sort, rsID, chromosome, alleles,
+					startPoint, endPoint, genotypescontext));
+		}
+		return mutations;
+	}
+	/**
 	 * Makes an allele collection of the alleles of the child (the first two
 	 * alleles in the string).
 	 * 

@@ -1,0 +1,53 @@
+@(patient: Patient, mutations: List[Mutation], user: User)
+@scripts = {
+<script src="@routes.Assets.at("javascripts/patient_visualisation.js")" type="text/javascript"></script>
+}
+@template_app("Patient " + patient.getName + " " + patient.getSurname, user, "patients", scripts) {
+		
+	@if(flash.contains("mutation-not-found")) {
+		<p class="bg-danger">
+			@flash.get("mutation-not-found")
+		</p>
+	}
+	
+	<p class="bg-info"><strong>VCF file</strong> used for processing: <em>@patient.getVcfFile (@patient.getVcfLengthMB MB)</em></p>
+	
+	@if(mutations.length > 0){
+	<h3>Browse mutations</h3>
+	<div id="patient_visualisation"></div>
+    <div id="patient_chromosome_information"></div>
+	}
+	
+	<h3>All found mutations</h3>
+
+	<table class="table-mutations table table-hover clickable-rows" id="table-mutations">
+		<thead>
+			<tr>
+				<th>Type</th>
+				<th>rsID</th>
+				<th>Chromosome</th>
+                <th>CADD score</th>
+				<th>Child</th>
+				<th>Father</th>
+				<th>Mother</th>
+			</tr>
+		</thead>
+		<tbody>
+		@if(mutations.length > 0){
+			@for(mutation <- mutations) {
+				<tr href="/patients/@patient.getId/mutation/@mutation.getId()" class="table-mutation" data-chr-id="@mutation.getChromosome()" data-mutation-id="@mutation.getId()">
+					<td>@mutation.getMutationType()</td>
+					<td>@mutation.getRsID()</td>
+					<td>@mutation.getChromosome()</td>
+                    <td>@mutation.getScore()</td>
+					<td>@mutation.child()</td>
+					<td>@mutation.father()</td>
+					<td>@mutation.mother()</td>
+				</tr>
+			}
+		} else {
+			<tr class="not-clickable"><td colspan="6">No mutations found...</td></tr>
+		}
+		</tbody>
+	</table>
+}

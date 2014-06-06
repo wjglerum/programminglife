@@ -1,6 +1,10 @@
 @(patient: Patient, mutation: Mutation, user: User, proteinsData: String)
+@scripts = {
+<script src="@routes.Assets.at("javascripts/proteins.js")" type="text/javascript"></script>
+<script src="@routes.Assets.at("javascripts/position.js")" type="text/javascript"></script>
+}
 
-@template_app("Mutation " + mutation.getRsID + " of patient " + patient.getName + " " + patient.getSurname, user, "patients") {
+@template_app("Mutation " + mutation.getRsID + " of patient " + patient.getName + " " + patient.getSurname, user, "patients", scripts) {
 	
 	<h2>Position</h2>
 	<div class="position" data-left="@mutation.getPositions().get(0)" data-right="@mutation.getPositions().get(1)" data-marker="@mutation.getStartPoint()"></div>

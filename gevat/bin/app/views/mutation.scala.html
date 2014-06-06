@@ -1,0 +1,79 @@
+@(patient: Patient, mutation: Mutation, user: User, proteinsData: String)
+@scripts = {
+<script src="@routes.Assets.at("javascripts/proteins.js")" type="text/javascript"></script>
+<script src="@routes.Assets.at("javascripts/position.js")" type="text/javascript"></script>
+}
+
+@template_app("Mutation " + mutation.getRsID + " of patient " + patient.getName + " " + patient.getSurname, user, "patients", scripts) {
+	
+	<h2>Position</h2>
+	<div class="position" data-left="@mutation.getPositions().get(0)" data-right="@mutation.getPositions().get(1)" data-marker="@mutation.getStartPoint()"></div>
+	
+	<table class="table-mutation table">
+		<thead>
+			<tr>
+				<th>Type</th>
+				<th>rsID</th>
+				<th>Chromosome</th>
+				<th>Child</th>
+				<th>Father</th>
+				<th>Mother</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>@mutation.getMutationType()</td>
+				<td>@mutation.getRsID()</td>
+				<td>@mutation.getChromosome()</td>
+				<td>@mutation.child()</td>
+				<td>@mutation.father()</td>
+				<td>@mutation.mother()</td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<h3>Protein relationships</h3>
+	
+	<script type="text/javascript">
+		var initProteinsData = @Html(proteinsData);
+	</script>
+	
+	<div class="visualisation-proteins-relations">
+		<form class="form-inline" role="form">
+			<div class="row">
+  				<div class="col-lg-2">
+					<div class="input-group">
+						<span class="input-group-addon">Limit</span>
+						<input type="text" class="form-control" id="limit" placeholder="Limit">
+					</div>
+				</div>
+  				<div class="col-lg-3">
+					<div class="input-group">
+						<span class="input-group-addon">Threshold</span>
+						<input type="text" class="form-control" id="threshold" placeholder="Threshold">
+					</div>
+				</div>
+  				<div class="col-lg-7">
+					<a class="btn btn-default revisualise" data-patient="@patient.getId()" data-mutation="@mutation.getId()">Revisualise</a>
+				</div>
+			</div>
+		</form>
+		
+		
+		<div id="canvas"></div>
+	</div>
+	
+	<h3>Proteins overview</h3>
+
+	<table class="table-proteins table table-hover" id="table-proteins">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Annotations</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="no-proteins not-clickable" style="display:none"><td colspan="6">No related proteins found...</td></tr>
+		</tbody>
+	</table>
+}
