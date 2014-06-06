@@ -35,8 +35,27 @@ public class ProteineGraph {
 	 * @param snp the rsid of the location
 	 */
 	public void addConnectionsOfSnp(int snp, int limit, int threshold) {
+		addDistantConnectionsOfSnp(snp, limit, threshold, 1);
+	}
+	
+	/**
+	 * Looks up the proteine at the location of the snp and adds this proteine and it's possible connected (direct or indirect) proteines to ProteineGraph
+	 * @param snp the rsid of the location
+	 */
+	public void addDistantConnectionsOfSnp(int snp, int limit, int threshold,
+			int distance) {
 		try {
-			QueryProcessor.findGeneConnections(snp, limit, threshold, this);
+			Collection<Proteine> currProteines = new HashSet<Proteine>();
+			for (String s : QueryProcessor.findGenes(snp, limit, threshold))
+				currProteines.add(getProteine(s));
+			while (distance-- > 0) {
+				Collection<Proteine> newProteines = new HashSet<Proteine>();
+				for(Proteine p : currProteines)
+				{
+					newProteines.addAll(findGeneConnections(p.getName(), limit, threshold, this));
+				}
+				currProteines = newProteines;
+			}
 		} catch (SQLException e) {
 			Logger.info(e.toString());
 		}
@@ -48,7 +67,7 @@ public class ProteineGraph {
 	 */
 	public void addConnectionsOfProteine(String proteine) {
 		try {
-			QueryProcessor.findGeneConnections(proteine, 10, 700, this);
+			findGeneConnections(proteine, 10, 700, this);
 		} catch (SQLException e) {
 			Logger.info(e.toString());
 		}
@@ -58,12 +77,21 @@ public class ProteineGraph {
 	 * Add proteine p1 and it's connections with proteines in connections to ProteineGraph
 	 * @param p1 a proteine
 	 * @param connections a string in the format of "[proteine1\tcombinedscore1,...proteineN\tcombinedscoreN]"
+	 * @return 
 	 */
-	public void add(String p1, String connections) {
+	public Collection<Proteine> add(String p1, String connections) {
+		Collection<Proteine> newProteines= new ArrayList<Proteine>(); 
 		for (String s : connections.substring(1, connections.length() - 1)
 				.split(",")) {
-			add(p1,s.split("\t")[0].trim(), Integer.parseInt(s.split("\t")[1].trim()));
+			if(s.length()==0)
+				continue;
+			String p2 = s.split("\t")[0].trim();
+			if(!hasProteine(p2))
+				newProteines.add(getProteine(p2));
+			Logger.info(s);
+			add(p1,p2, Integer.parseInt(s.split("\t")[1].trim()));
 		}
+		return newProteines;
 	}
 
 	/**
@@ -87,9 +115,13 @@ public class ProteineGraph {
 	 * @return the proteine with this name
 	 */
 	public Proteine getProteine(String name) {
-		if (!proteines.containsKey(name))
+		if (!hasProteine(name))
 			proteines.put(name, new Proteine(name));
 		return proteines.get(name);
+	}
+	
+	public boolean hasProteine(String name) {
+		return proteines.containsKey(name);
 	}
 
 	public String toString() {
@@ -128,4 +160,22 @@ public class ProteineGraph {
       Logger.info(e.toString());
     }
   }
+
+	public static Collection<Proteine> findGeneConnections(final int id,
+			final int limit, final int threshold, ProteineGraph pg)
+					throws SQLException {
+		ArrayList<String> qResult = QueryProcessor.
+				findGenesAssociatedWithSNP(id);
+		if (!qResult.isEmpty()) {
+			return findGeneConnections(qResult.get(0), limit, threshold, pg);
+		}
+		return new ArrayList<Proteine>();
+	}
+
+	public static Collection<Proteine> findGeneConnections(final String p1,
+			final int limit, final int threshold, ProteineGraph pg)
+					throws SQLException {
+			return pg.add(p1, QueryProcessor.executeStringQuery(
+					p1, limit, threshold).toString());
+	}
 }

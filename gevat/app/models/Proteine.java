@@ -46,4 +46,9 @@ public class Proteine {
     {
   		return connections.contains(pc);
   	}
+    
+    public boolean equals(Proteine that)
+    {
+    	return this.getName().equals(that.getName());
+    }
 }
