@@ -43,8 +43,6 @@ Proteins.graph = function (proteins, relations) {
 		
 		var intensity = Math.round(Math.min(230, Math.max(0, 255 - 128 * x)));
 		
-		console.log(intensity);
-		
 		// Convert intensity to hex
 		intensity = intensity.toString(16);
 		
