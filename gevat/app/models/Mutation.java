@@ -148,9 +148,7 @@ public class Mutation extends VariantContext {
 	 * @throws SQLException
 	 */
 	public float getScore() throws SQLException {
-		float test = QueryProcessor.executeScoreQuery(this.contig,
-				this.getStart(), this.getEnd(), this.getUniqueBase());
-		return test;
+		return QueryProcessor.executeScoreQuery(this);
 	}
 
 	/**
