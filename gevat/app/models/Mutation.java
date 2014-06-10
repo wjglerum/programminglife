@@ -280,21 +280,24 @@ public class Mutation extends VariantContext {
 	}
 
 	/**
-	 * Retrieve a list of all the mutations of a patient in a certain chromosome.
+	 * Retrieve a list of all the mutations of a patient in a certain
+	 * chromosome.
 	 * 
 	 * @param pId
 	 *            The id
 	 * @param cId
 	 *            The chromosome number
 	 * 
-	 * @return Returns List<Mutation>, a list of all mutations in the chromosome.
+	 * @return Returns List<Mutation>, a list of all mutations in the
+	 *         chromosome.
 	 * 
 	 * @throws SQLException
 	 *             In case SQL goes wrong
 	 */
 	public static List<Mutation> getMutations(final int pId, final int cId)
 			throws SQLException {
-		String query = "SELECT * FROM mutations WHERE p_id = '" + pId + "' and chromosome = '" + cId + "';";
+		String query = "SELECT * FROM mutations WHERE p_id = '" + pId
+				+ "' and chromosome = '" + cId + "';";
 		ResultSet rs = Database.select("data", query);
 		List<Mutation> mutations = new ArrayList<Mutation>();
 
@@ -314,6 +317,7 @@ public class Mutation extends VariantContext {
 		}
 		return mutations;
 	}
+
 	/**
 	 * Makes an allele collection of the alleles of the child (the first two
 	 * alleles in the string).
@@ -378,11 +382,17 @@ public class Mutation extends VariantContext {
 	protected static Allele toAllele(final String s, final boolean isref) {
 		return Allele.create(s, isref);
 	}
-	
-	public ArrayList<Integer> getPositions() {
+
+	public ArrayList<Integer> getPositions() throws SQLException {
 		ArrayList<Integer> list = new ArrayList<Integer>();
-		list.add(103843421);
-		list.add(186633831);
+		String query = "SELECT * FROM genes ORDER BY ABS(endpoint - "
+				+ this.start + ") ASC LIMIT 1";
+		ResultSet rs = Database.select("data", query);
+		while (rs.next()) {
+			list.add(rs.getInt("startpoint"));
+			list.add(rs.getInt("endpoint"));
+		}
+
 		return list;
 	}
 }

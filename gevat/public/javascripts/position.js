@@ -60,7 +60,7 @@ var mutation = svgContainer.append("svg:image")
 var text = svgContainer.append("svg:text") 
 	.attr("x", markerBar) 
 	.attr("y", 50) 
-	.text(id); 
+	.text(marker); 
 	
 //draw the left edge of gene
 var edge1 = svgContainer.append("line")
