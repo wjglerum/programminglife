@@ -1,5 +1,6 @@
 package models;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -88,7 +89,12 @@ public class ProteineGraph {
 	 */
 	public Proteine getProteine(String name) {
 		if (!proteines.containsKey(name))
-			proteines.put(name, new Proteine(name));
+			try {
+				proteines.put(name, new Proteine(name, GeneDiseaseLinkReader.findGeneDiseaseAssociation(name)));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		return proteines.get(name);
 	}
 
