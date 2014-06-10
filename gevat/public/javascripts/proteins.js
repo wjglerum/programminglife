@@ -129,13 +129,14 @@ $(document).ready(function() { if (typeof initProteinsData !== 'undefined') {
 			
 			// Setup both the graph and table with info about the proteins
 			Proteins.graph(proteins, relations);
-			Proteins.table(proteins);
 
 			$(".visualisation-proteins-relations #canvas").show();
 		} else {
 			$(".visualisation-proteins-relations #canvas").hide();
 			$(".visualisation-proteins-relations .no-proteins").show();
 		}
+		
+		Proteins.table(proteins);
 	}
 	
 	// Save and visualise initial data
