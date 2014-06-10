@@ -99,6 +99,9 @@ body {
 .main {
   padding: 20px;
 }
+.main nav.breadcrumbs {
+  margin: 0 0 1em;
+}
 .main .page-header {
   margin-top: 0;
 }
