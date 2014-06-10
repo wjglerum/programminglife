@@ -104,7 +104,7 @@ Proteins.table = function (proteins) {
 	for (i = 0; i < proteins.length; i++) {
 		var protein = proteins[i];
 		
-		$(".table-proteins tbody").append("<tr data-protein-id=\"" + protein.name + "\" class=\"protein\"><td>" + protein.name + "</td><td>" + protein.annotations + "</td></tr>");
+		$(".table-proteins tbody").append("<tr data-protein-id=\"" + protein.name + "\" class=\"protein\"><td>" + protein.name + "</td><td>" + protein.annotations + "</td><td>" + protein.disease + "</td></tr>");
 	}
 	
 	// Display the 'no proteins found' message if there are no proteins
