@@ -13,6 +13,8 @@ import org.broadinstitute.variant.variantcontext.Genotype;
 import org.broadinstitute.variant.variantcontext.GenotypeBuilder;
 import org.broadinstitute.variant.variantcontext.VariantContext;
 
+import play.Logger;
+
 /**
  * 
  * @author rhvanstaveren
@@ -148,9 +150,7 @@ public class Mutation extends VariantContext {
 	 * @throws SQLException
 	 */
 	public float getScore() throws SQLException {
-		float test = QueryProcessor.executeScoreQuery(this.contig,
-				this.getStart(), this.getEnd(), this.getUniqueBase());
-		return test;
+		return QueryProcessor.executeScoreQuery(this);
 	}
 
 	/**
@@ -168,7 +168,7 @@ public class Mutation extends VariantContext {
 	 * @return String with alleles of the child
 	 */
 	public final String child() {
-		return this.toBaseString(this.getAlleles());
+		return this.toBaseString(this.getGenotype("DAUGHTER").getAlleles());
 	}
 
 	/**
@@ -233,7 +233,7 @@ public class Mutation extends VariantContext {
 	 * @return Returns the String representation of the basepair
 	 */
 	public final String toAllelesString() {
-		List<Allele> childAlleles = this.getAlleles();
+		List<Allele> childAlleles = this.getGenotype("DAUGHTER").getAlleles();
 		List<Allele> fatherAlleles = this.getGenotype("FATHER").getAlleles();
 		List<Allele> motherAlleles = this.getGenotype("MOTHER").getAlleles();
 
@@ -327,7 +327,13 @@ public class Mutation extends VariantContext {
 			final String allelesString) {
 		Collection<Allele> alleles = new ArrayList<Allele>();
 		alleles.add(toAllele(allelesString.substring(0, 1), true));
-		alleles.add(toAllele(allelesString.substring(1, 2), false));
+		for(int i=1; i<6; i++)
+		{
+			if(!allelesString.substring(0,i).contains(allelesString.substring(i, i+1)))
+			{
+				alleles.add(toAllele(allelesString.substring(i, i+1), false));
+			}
+		}
 		return alleles;
 	}
 
@@ -342,6 +348,7 @@ public class Mutation extends VariantContext {
 	 */
 	protected static GenotypesContext toGenotypesContext(final String s) {
 		GenotypesContext gc = GenotypesContext.create();
+		gc.add(toGenotype(s.substring(0, 2), "DAUGHTER"));
 		gc.add(toGenotype(s.substring(2, 4), "FATHER"));
 		gc.add(toGenotype(s.substring(4, 6), "MOTHER"));
 		return gc;

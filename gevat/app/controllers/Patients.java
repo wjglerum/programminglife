@@ -159,12 +159,26 @@ public class Patients extends Controller {
       List<Mutation> mutations = VCFReader.getMutations(filePath);
       
       // Add each mutation to the database
+      int counter = 0;
+      String query = "INSERT INTO mutations VALUES";
       for (Mutation m : mutations) {
-        String query = "INSERT INTO mutations VALUES (nextval('m_id_seq'::regclass)," + p.getId() + ",'" + m.getMutationType() + "','" + m.getRsID() + "'," + m.getChromosome() + ",'" + m.toAllelesString() + "'," + m.getStart() + "," + m.getEnd() + ");";
-        Logger.info(query);
-        Database.insert("data", query);
+    	counter++;
+        query += "(nextval('m_id_seq'::regclass)," + p.getId() + ",'" + m.getMutationType() + "','" + m.getRsID() + "'," + m.getChromosome() + ",'" + m.toAllelesString() + "'," + m.getStart() + "," + m.getEnd() + "),";
+        // 1000 mutations per query, to speed up the inserting
+        if (counter % 1000 == 0) {
+        	query = query.substring(0, query.length()-1);
+        	query += ";";
+        	Database.insert("data", query);
+        	Logger.info("We hebben " + counter + " mutations aan de database toegevoegd.");
+        	query = "INSERT INTO mutations VALUES";
+        }
       }
       
+      // Add the last values
+  	query = query.substring(0, query.length()-1);
+  	query += ";";
+  	Database.insert("data", query);
+  	
       // Make user happy
       flash("patient-added", "The patient " + name + " " + surname
           + " is successfully added to the database.");

@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * This class processes queries.
@@ -160,14 +161,13 @@ public final class QueryProcessor {
 	 * @throws SQLException
 	 *             In case SQL goes wrong
 	 */
-	public static float executeScoreQuery(final String chrom,
-			final int positionLow, final int positionHigh, final String uniqueBase)
+	public static float executeScoreQuery(Mutation input)
 					throws SQLException {
-		String q = "SELECT * " + "FROM " + "score " + "WHERE " + "chrom = '" + chrom + 
-				"' AND position >= " + positionLow + " AND position <= " + positionHigh + ";";
+		String q = "SELECT * " + "FROM " + "score " + "WHERE " + "chrom = '" + input.getChr() + 
+				"' AND position >= " + input.getStartPoint() + " AND position <= " + input.getEndPoint() + ";";
 		// Get all the records from database score that have mutations on the same position as our position
 		ResultSet rs = Database.select("score", q);
-		String afwijking = uniqueBase;
+		String afwijking = input.getUniqueBase();
 
 		// If the mutation is the same value as the reference, return 0		
 		while (rs.next()) {
