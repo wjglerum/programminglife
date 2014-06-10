@@ -21,6 +21,7 @@ GET     /patients/:p                      controllers.Patients.show(p: Int)
 DELETE  /patients                         controllers.Patients.remove(p: Int)
 GET     /patients/:p/mutation/:m          controllers.Mutations.show(p: Int, m: Int)
 POST    /patients/mutation/ajax           controllers.Mutations.proteinsJSON(p: Int, m: Int, limit: Int, threshold: Int)
+GET		/patients/:p/chromosome/:c		  controllers.Chromosomes.show(p: Int, c: Int)
 
 # Javascript routing
 GET     /assets/javascripts/routes        controllers.Application.javascriptRoutes()

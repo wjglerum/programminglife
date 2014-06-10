@@ -1,6 +1,8 @@
 @(form: Form[Patients.Add], user: User)
 
-@template_app("Add new patient", user, "patients") {
+@import scala.collection.immutable.Map
+
+@template_app("Add new patient", user, "patients", Map("/patients" -> "Patients", "/patients/add" -> "Add New Patient")) {
 	
 	@helper.form(routes.Patients.insert, 'enctype -> "multipart/form-data", 'role -> "form", 'class -> "form-add-patient form-horizontal") {
 	

@@ -147,9 +147,8 @@ public class Patient {
 		String queryDeleteMutations = "DELETE FROM mutations"
 				+ " WHERE p_id = "
 				+ patient.id;
-
-		Database.delete("data", queryDeletePatient);
 		Database.delete("data", queryDeleteMutations);
+		Database.delete("data", queryDeletePatient);
 	}
 
 	/**

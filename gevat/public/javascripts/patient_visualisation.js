@@ -44,6 +44,9 @@ $(document).ready(function () {
             .html(n);
     }
 
+    function redirectToChromosome() {
+        alert("Dit werkt.");
+    }
     getChromosomesWithMutations();
     markMutations();
     
@@ -125,4 +128,11 @@ $(document).ready(function () {
         // Automatically sort on the phred quality score
        sortList:  [[3,1]]
     });
+
+    // Make the chromosomes clickable, redirect the page to the chromosome view
+    $(".chromosome-pair-table").on("click", "td", function() {
+        var chrId = $(this).data("chr-id");
+        window.document.location = "/patients/" + patient + "/chromosome/" + chrId;
+    });
+
 });

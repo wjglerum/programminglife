@@ -1,8 +1,11 @@
 @(patients: List[Patient], user: User)
+
+@import scala.collection.immutable.Map
+
 @scripts = {
 <script src="@routes.Assets.at("javascripts/patients.js")" type="text/javascript"></script>
         }
-@template_app("Patients overview", user, "patients", scripts) {
+@template_app("Patients overview", user, "patients", Map("/patients" -> "Patients"), scripts) {
 		
 	@if(flash.contains("patient-not-found")) {
 		<p class="bg-danger">
