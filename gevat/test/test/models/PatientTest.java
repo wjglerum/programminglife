@@ -6,8 +6,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.sql.SQLException;
 
-import models.Database;
-import models.Patient;
+import models.application.Patient;
+import models.database.Database;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;

@@ -1,4 +1,4 @@
-package models;
+package models.dna;
 
 public class Chromosome{
 
@@ -10,10 +10,4 @@ public class Chromosome{
 	public final int getID() {
 		return this.id;
 	}
-//	 * 
-//	 * @return The id
-//	 */
-//	public final long getId() {
-//		return this.id;
-//	}
 }

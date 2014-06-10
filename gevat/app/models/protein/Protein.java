@@ -1,8 +1,11 @@
-package models;
+package models.protein;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+
+import models.application.GeneDiseaseLinkReader;
+import models.database.QueryProcessor;
 
 /**
  * The proteine class contains the name,
@@ -11,12 +14,12 @@ import java.util.Collection;
  * @author rhvanstaveren
  *
  */
-public class Proteine {
+public class Protein {
 	/**
 	 * The connections it has to other other proteins.
 	 */
-	private Collection<ProteineConnection> connections =
-			new ArrayList<ProteineConnection>();
+	private Collection<ProteinConnection> connections =
+			new ArrayList<ProteinConnection>();
 
 	/**
 	 * The name of the protein.
@@ -34,7 +37,7 @@ public class Proteine {
 	 * @param name The name of the proteine
 	 * @param disease The disease(s) associated with it
 	 */
-	public Proteine(final String name,
+	public Protein(final String name,
 			final ArrayList<String> disease) {
 		this.name = name;
 		this.disease = disease.toString().substring(
@@ -46,14 +49,14 @@ public class Proteine {
 	 *
 	 * @param pc The connection
 	 */
-	public final void addConnection(final ProteineConnection pc) {
+	public final void addConnection(final ProteinConnection pc) {
 		connections.add(pc);
 	}
 
 	@Override
 	public final boolean equals(final Object that) {
-		if (that instanceof Proteine) {
-			return this.name.equals(((Proteine) that).getName());
+		if (that instanceof Protein) {
+			return this.name.equals(((Protein) that).getName());
 		}
 		else if (that instanceof String) {
 			return this.name.equals((String) that);
@@ -65,7 +68,7 @@ public class Proteine {
 	 * Gets the connections.
 	 * @return Returns the connections of this proteine
 	 */
-	public final Collection<ProteineConnection> getConnections() {
+	public final Collection<ProteinConnection> getConnections() {
 		return this.connections;
 	}
 
@@ -82,12 +85,12 @@ public class Proteine {
 		}
 	}
 
-	public final boolean hasConnection(final ProteineConnection pc) {
+	public final boolean hasConnection(final ProteinConnection pc) {
 		return connections.contains(pc);
 	}
 
 	public final void setConnections(
-			final Collection<ProteineConnection> connections) {
+			final Collection<ProteinConnection> connections) {
 		this.connections = connections;
 	}
 

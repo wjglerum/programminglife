@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import models.User;
+import models.application.User;
 
 import org.junit.AfterClass;
 import org.junit.Before;

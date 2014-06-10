@@ -1,9 +1,12 @@
-package models;
+package models.database;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+
+import models.dna.Mutation;
+import models.protein.ProteinGraph;
 
 /**
  * This class processes queries.
@@ -259,7 +262,7 @@ public final class QueryProcessor {
 	}
 
 	public static void findGeneConnections(final int id,
-			final int limit, final int threshold, ProteineGraph pg)
+			final int limit, final int threshold, ProteinGraph pg)
 					throws SQLException {
 		ArrayList<String> qResult = QueryProcessor.
 				findGenesAssociatedWithSNP(id);
@@ -269,7 +272,7 @@ public final class QueryProcessor {
 	}
 
 	public static void findGeneConnections(final String p1,
-			final int limit, final int threshold, ProteineGraph pg)
+			final int limit, final int threshold, ProteinGraph pg)
 					throws SQLException {
 			pg.add(p1, QueryProcessor.executeStringQuery(
 					p1, limit, threshold).toString());

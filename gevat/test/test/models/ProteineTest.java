@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
-import models.Proteine;
+import models.protein.Protein;
 
 import org.junit.Test;
 
@@ -19,7 +19,7 @@ public class ProteineTest {
 	public void testConstructor() {
 		ArrayList<String> list = new ArrayList<String>();
 		String listAsString = list.toString().substring(1, list.toString().length()-1);
-		Proteine p = new Proteine("name", list);
+		Protein p = new Protein("name", list);
 		assertEquals("name", p.getName());
 		assertEquals(listAsString, p.getDisease());
 	}
@@ -30,9 +30,9 @@ public class ProteineTest {
 	@Test
 	public void testEquals() {
 		ArrayList<String> list = new ArrayList<String>();
-		Proteine p = new Proteine("name", list);
-		Proteine p2 = new Proteine("name", list);
-		Proteine q = new Proteine("othername", list);
+		Protein p = new Protein("name", list);
+		Protein p2 = new Protein("name", list);
+		Protein q = new Protein("othername", list);
 		assertTrue(p.equals(p));
 		assertTrue(p.equals(p2));
 		assertFalse(p.equals(q));

@@ -1,8 +1,10 @@
-package models;
+package models.application;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import models.database.Database;
+import models.security.BCrypt;
 import play.Logger;
 
 public class User {

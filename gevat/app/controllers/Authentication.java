@@ -4,7 +4,7 @@ import static play.data.Form.form;
 
 import java.sql.SQLException;
 
-import models.User;
+import models.application.User;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;

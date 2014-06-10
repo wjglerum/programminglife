@@ -8,10 +8,10 @@ import java.util.List;
 
 import org.broadinstitute.variant.variantcontext.Allele;
 
-import models.Database;
-import models.Mutation;
-import models.Patient;
-import models.VCFReader;
+import models.application.Patient;
+import models.application.VCFReader;
+import models.database.Database;
+import models.dna.Mutation;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
