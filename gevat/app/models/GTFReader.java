@@ -7,11 +7,12 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class GTFReader {
 
 	/**
-	 * Open connection to database and read file
+	 * Open connection to database and read file.
 	 * 
 	 * @param args
 	 * @throws FileNotFoundException
@@ -21,25 +22,20 @@ public class GTFReader {
 	 */
 	public static void main(String[] args) throws FileNotFoundException,
 			IOException, SQLException, ClassNotFoundException {
-
-		Class.forName("org.postgresql.Driver");
-		Connection connection = DriverManager.getConnection(
-				"jdbc:postgresql://web398.webfaction.com/programminglife",
-				"programminglife", "ikgaorasstemmen");
-
 		readFile("homo_sapiens.gtf");
-		connection.close();
 	}
 
 	/**
-	 * Read file per line and add to db
+	 * Read file per line and build query and send to DB in batches.
 	 * 
 	 * @param filename
 	 * @throws FileNotFoundException
 	 * @throws IOException
+	 * @throws SQLException
+	 * @throws ClassNotFoundException
 	 */
 	public static void readFile(String filename) throws FileNotFoundException,
-			IOException {
+			IOException, ClassNotFoundException, SQLException {
 		try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
 
 			// Omit the beginning of the file
@@ -49,14 +45,35 @@ public class GTFReader {
 
 			// Read file and add to DB
 			String line;
+			String query = "INSERT INTO genes VALUES ";
+			int counter = 0;
+			int total = 0;
 			while ((line = br.readLine()) != null) {
-				formatString(line);
+				String s = formatString(line);
+				if (s != null) {
+					query += s;
+					query += ", ";
+					counter++;
+				}
+				if (counter == 10000) {
+					query = query.substring(0, query.length() - 2);
+					query += ";";
+					doQuery(query);
+					total += 10000;
+					System.out.println("Added " + total
+							+ " records to database!");
+					query = "INSERT INTO genes VALUES ";
+					counter = 0;
+				}
 			}
+			query = query.substring(0, query.length() - 2);
+			query += ";";
+			doQuery(query);
 		}
 	}
 
 	/**
-	 * Add each line as a gene to the db in correct format
+	 * Add each line as a gene to the query string in correct format.
 	 * 
 	 * @param line
 	 */
@@ -69,18 +86,37 @@ public class GTFReader {
 			String geneName = null;
 			for (String attribute : attributes) {
 				if (attribute.contains("gene_id")) {
-					geneId = attribute.split(" ")[1].replace("\"", "").replace(
-							"ENSG", "");
+					geneId = attribute.split(" ")[1].replace("\"", "");
 				}
 				if (attribute.contains("gene_name")) {
 					geneName = attribute.trim().split(" ")[1].replace("\"", "");
 				}
 			}
 
-			return "(" + geneId + ", '" + geneName + "', " + list[3] + ", "
-					+ list[4] + ")";
+			return "('" + geneId + "', '" + geneName + "', " + list[3] + ", "
+					+ list[4] + ", '" + list[0] + "')";
 		}
 		return null;
 	}
 
+	/**
+	 * Open connection and execute query.
+	 * 
+	 * @param query
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
+	public static void doQuery(String query) throws ClassNotFoundException,
+			SQLException {
+		Class.forName("org.postgresql.Driver");
+
+		try (Connection connection = DriverManager.getConnection(
+				"jdbc:postgresql://web398.webfaction.com/programminglife",
+				"programminglife", "ikgaorasstemmen");
+				Statement statement = connection.createStatement();) {
+			statement.execute(query);
+		} catch (SQLException e) {
+			System.out.println((e.toString()));
+		}
+	}
 }
