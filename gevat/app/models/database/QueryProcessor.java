@@ -166,16 +166,15 @@ public final class QueryProcessor {
 	public static float executeScoreQuery(final Mutation mutation)
 					throws SQLException {
 		String q = "SELECT * " + "FROM " + "score " + "WHERE " + "chrom = '" + mutation.getChr() + 
-				"' AND position >= " + mutation.getStartPoint() + " AND position <= " + mutation.getEndPoint() + ";";
+				"' AND position = " + mutation.getPositionGRCH37() + ";";
 		// Get all the records from database score that have mutations on the same position as our position
 		ResultSet rs = Database.select("score", q);
-		String afwijking = mutation.getUniqueBase();
 
 		// If the mutation is the same value as the reference, return 0		
 		while (rs.next()) {
 			String alt = rs.getString("alt");
 			float phred = rs.getFloat("phred");
-			if (alt.equals(afwijking)) {
+			if (alt.equals(mutation.getAlleles().get(0).getBaseString()) || alt.equals(mutation.getAlleles().get(1).getBaseString())) {
 				return phred;
 			}
 		}
