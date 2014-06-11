@@ -3,8 +3,10 @@ package models.protein;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import models.application.GeneDiseaseLinkReader;
+import models.application.Patient;
 import models.database.QueryProcessor;
 import models.dna.Mutation;
 
@@ -111,12 +113,24 @@ public class Protein {
 		return this.disease;
 	}
 	
-	public ArrayList<Mutation> getRelatedMutations() {
-	  ArrayList<Mutation> mutations = new ArrayList<Mutation>();
+	public ArrayList<Mutation> getRelatedMutations(Patient p, Mutation m) throws SQLException {
+	  List<Mutation> mutations = Mutation.getMutations(p.getId());
+	  ArrayList<Mutation> related = new ArrayList<Mutation>();
 	  
-	  mutations.add(new Mutation(1, "SNP", "rs123", 1, new char[] {'A', 'T', 'A', 'T', 'A', 'T'}, 1, 2));
+	  for (Mutation mutation : mutations) {
+      if (mutation.getId() != m.getId()) {
+	      int rsId = Integer.parseInt(mutation.getRsID().substring(2));
+	      
+	      ProteinGraph pg = new ProteinGraph(rsId,10,300);
+	      
+	      for (Protein protein : pg.getProteines()) {
+	        if (protein.getName().equals(this.getName()))
+	          related.add(mutation);
+	      }
+	    }
+	  }
 	  
-    return mutations;
+    return related;
 	}
 	
 }

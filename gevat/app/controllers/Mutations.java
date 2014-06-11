@@ -47,7 +47,7 @@ public class Mutations extends Controller {
     return mutationNotFound(p, mutations);
   }
   
-  private static String mutationJSON(Patient p, Mutation mutation, int limit, int threshold) throws SQLException {
+  private static String mutationJSON(Patient patient, Mutation mutation, int limit, int threshold) throws SQLException {
     // Remove the 'rs' part of the rsID
     int rsID = Integer.parseInt(mutation.getRsID().substring(2));
     
@@ -71,12 +71,12 @@ public class Mutations extends Controller {
 
       JSONArray mutationsJSON = new JSONArray();
       
-      for (Mutation m : proteine.getRelatedMutations()) {
+      for (Mutation m : proteine.getRelatedMutations(patient, mutation)) {
         JSONObject mutationJSON = new JSONObject();
 
         mutationJSON.put("rsid", m.getRsID());
         mutationJSON.put("id", m.getId());
-        mutationJSON.put("patient", p.getId());
+        mutationJSON.put("patient", patient.getId());
         
         mutationsJSON.add(mutationJSON);
       }
