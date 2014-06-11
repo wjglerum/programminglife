@@ -2,21 +2,18 @@ package models.application;
 
 import java.sql.SQLException;
 
-import play.Logger;
-
 public class UserService {
-	private static UserRepository userRepository;
+	private final UserRepository userRepository;
 
 	public UserService(final UserRepository userRepository) {
-		UserService.userRepository = userRepository;
+		this.userRepository = userRepository;
 	}
 
-	public static User getUser(String username) throws SQLException {
-		Logger.info("Username " + username);
+	public User getUser(String username) throws SQLException {
 		return userRepository.getUser(username);
 	}
 	
-	public static User authenticate(String username, String password) throws SQLException {
+	public User authenticate(String username, String password) throws SQLException {
 		return userRepository.authenticate(username, password);
 	}
 }

@@ -3,6 +3,8 @@ package models.application;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import models.database.Database;
+import models.security.BCrypt;
 import play.Logger;
 
 public class UserRepositoryDB implements UserRepository {
@@ -15,7 +17,6 @@ public class UserRepositoryDB implements UserRepository {
 	 * @return User adfasd
 	 * @throws SQLException
 	 */
-	@Override
 	public User getUser(String username) throws SQLException {
 		String query = "SELECT u_id, name, surname FROM users WHERE username = '"
 				+ username + "';";
@@ -27,7 +28,6 @@ public class UserRepositoryDB implements UserRepository {
 				return new User(u_id, name, surname, username);
 			}
 		}
-		Logger.info("asdfasdfad");
 		return null;
 	}
 
