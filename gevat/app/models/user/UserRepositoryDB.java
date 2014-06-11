@@ -1,42 +1,29 @@
-package models;
+package models.user;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import models.database.Database;
+import models.security.BCrypt;
 import play.Logger;
 
-public class User {
-
-	public int id;
-	public String name;
-	public String surname;
-	public String username;
-
-	/**
-	 * User for access control in the application.
-	 * 
-	 * @param id
-	 * @param name
-	 * @param surname
-	 * @param username
-	 */
-	public User(int id, String name, String surname, String username) {
-		this.id = id;
-		this.name = name;
-		this.surname = surname;
-		this.username = username;
-	}
+/**
+ * Repository that accesses the DB for Users.
+ * 
+ * @author willem
+ * 
+ */
+public class UserRepositoryDB implements UserRepository {
 
 	/**
 	 * Returns a new user with data from the database, based on the username.
 	 * 
 	 * @param username
-	 *            adsfad
-	 * @return User adfasd
+	 * @return User
 	 * @throws SQLException
-	 *             asdfa
 	 */
-	public static User getUser(String username) throws SQLException {
+	@Override
+	public User getUser(String username) throws SQLException {
 		String query = "SELECT u_id, name, surname FROM users WHERE username = '"
 				+ username + "';";
 		try (ResultSet rs = Database.select("data", query);) {
@@ -50,6 +37,7 @@ public class User {
 		return null;
 	}
 
+	@Override
 	/**
 	 * Authenticate user by checking username and password.
 	 * 
@@ -58,7 +46,7 @@ public class User {
 	 * @return User
 	 * @throws SQLException
 	 */
-	public static User authenticate(String username, String password)
+	public User authenticate(String username, String password)
 			throws SQLException {
 		String query = "SELECT * FROM users WHERE username = '" + username
 				+ "';";

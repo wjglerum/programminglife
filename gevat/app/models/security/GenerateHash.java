@@ -1,4 +1,5 @@
-package models;
+package models.security;
+
 
 public class GenerateHash {
 

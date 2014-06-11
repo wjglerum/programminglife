@@ -1,10 +1,13 @@
-package models;
+package models.database;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import models.dna.Mutation;
+import models.protein.ProteinGraph;
 
 /**
  * This class processes queries.
@@ -161,19 +164,18 @@ public final class QueryProcessor {
 	 * @throws SQLException
 	 *             In case SQL goes wrong
 	 */
-	public static float executeScoreQuery(Mutation input)
+	public static float executeScoreQuery(final Mutation mutation)
 					throws SQLException {
-		String q = "SELECT * " + "FROM " + "score " + "WHERE " + "chrom = '" + input.getChr() + 
-				"' AND position >= " + input.getStartPoint() + " AND position <= " + input.getEndPoint() + ";";
+		String q = "SELECT * " + "FROM " + "score " + "WHERE " + "chrom = '" + mutation.getChr() + 
+				"' AND position = " + mutation.getPositionGRCH37() + ";";
 		// Get all the records from database score that have mutations on the same position as our position
 		ResultSet rs = Database.select("score", q);
-		String afwijking = input.getUniqueBase();
 
 		// If the mutation is the same value as the reference, return 0		
 		while (rs.next()) {
 			String alt = rs.getString("alt");
 			float phred = rs.getFloat("phred");
-			if (alt.equals(afwijking)) {
+			if (alt.equals(mutation.getAlleles().get(0).getBaseString()) || alt.equals(mutation.getAlleles().get(1).getBaseString())) {
 				return phred;
 			}
 		}
@@ -260,7 +262,7 @@ public final class QueryProcessor {
 	}
 
 	public static void findGeneConnections(final int id,
-			final int limit, final int threshold, ProteineGraph pg)
+			final int limit, final int threshold, ProteinGraph pg)
 					throws SQLException {
 		ArrayList<String> qResult = QueryProcessor.
 				findGenesAssociatedWithSNP(id);
@@ -270,7 +272,7 @@ public final class QueryProcessor {
 	}
 
 	public static void findGeneConnections(final String p1,
-			final int limit, final int threshold, ProteineGraph pg)
+			final int limit, final int threshold, ProteinGraph pg)
 					throws SQLException {
 			pg.add(p1, QueryProcessor.executeStringQuery(
 					p1, limit, threshold).toString());

@@ -5,7 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import models.GeneDiseaseLinkReader;
+import models.reader.GeneDiseaseLinkReader;
 
 import org.junit.Test;
 

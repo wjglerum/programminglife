@@ -1,9 +1,14 @@
-@(patient: Patient, chromosome: Chromosome, mutations: List[Mutation], user: User)
+@(patient: models.patient.Patient, chromosome: dna.Chromosome, mutations: List[dna.Mutation], user: models.user.User)
+
+@import scala.collection.immutable.Map
+
+
 @scripts = {
-<script src="@routes.Assets.at("javascripts/chromosome.js")" type="text/javascript"></script>
+<script src="@routes.Assets.at("javascripts/views/chromosome/chromosome.js")" type="text/javascript"></script>
+<script src="@routes.Assets.at("javascripts/main.js")" type="text/javascript"></script>
 }
 
-@template_app("Mutations of patient " + patient.getName + " " + patient.getSurname + " in chromosome " + chromosome.getID(), user, "patients", scripts) {
+@template_app("Mutations of patient " + patient.getName + " " + patient.getSurname + " in chromosome " + chromosome.getID(), user, "patients", Map("/patients" -> "Patients", ("/patients/" + patient.getId) -> (patient.getName + " " + patient.getSurname), ("/patients/" + patient.getId + "/chromosome/" + chromosome.getID()) -> ("Chromosome " + chromosome.getID())), scripts) {
 
 
 <table class="table-mutations table table-hover clickable-rows" id="table-mutations">

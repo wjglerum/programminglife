@@ -1,4 +1,4 @@
-package models;
+package models.reader;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -39,7 +39,7 @@ public final class GeneDiseaseLinkReader {
 
 		while ((line = br.readLine()) != null) {
 			String[] splitted = line.split("\t");
-			if (splitted[1].equals(gene)) {
+			if (splitted[1].equals(gene) && !result.contains(splitted[3])) {
 				result.add(splitted[3]);
 			}
 		}

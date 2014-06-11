@@ -1,6 +1,8 @@
-@(content: String, user: User)
+@(content: String, user: models.user.User)
 
-@template_app("Dashboard", user, "dashboard") {
+@import scala.collection.immutable.Map
+
+@template_app("Dashboard", user, "dashboard", Map("dashboard" -> "Dashboard")) {
 	
 	@Html(HtmlFormat.escape(content).toString.replace("\n", "<br />"))
 	

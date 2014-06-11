@@ -1,9 +1,11 @@
-package models;
+package models.reader;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import models.dna.Mutation;
 
 import org.broad.tribble.AbstractFeatureReader;
 import org.broad.tribble.FeatureReader;
@@ -68,6 +70,7 @@ public final class VCFReader {
 
 				VariantContext vc = it.next();
 				if (hasMutation(vc)) {
+					Logger.info("Found triodata mutation.");
 					listSNP.add(toMutation(vc, "Mutation compared to parents."));
 				} else if (isPotentialHomozygousRecessive(vc)) {
 					// Geeft 280027 resultaten, moet op de een of de andere
@@ -75,7 +78,7 @@ public final class VCFReader {
 					counter++;
 					Mutation m = toMutation(vc, "Possible recessive homozygous");
 					// TODO: find a way to filter these results
-					listSNP.add(m);
+					//listSNP.add(m);
 				}
 			}
 		} catch (Exception e) {

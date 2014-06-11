@@ -3,8 +3,8 @@ package test.models;
 import static play.test.Helpers.*;
 import static org.fest.assertions.Assertions.*;
 import static org.junit.Assert.*;
-import models.Mutation;
-import models.VCFReader;
+import models.dna.Mutation;
+import models.reader.VCFReader;
 
 import java.io.IOException;
 
