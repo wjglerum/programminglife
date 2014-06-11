@@ -1,11 +1,12 @@
-package models;
+package models.protein;
 
-public class ProteineConnection {
-	protected Proteine p1;
-	protected Proteine p2;
+
+public class ProteinConnection {
+	protected Protein p1;
+	protected Protein p2;
 	private int combinedScore;
 	
-	public ProteineConnection(Proteine p1, Proteine p2, int score) {
+	public ProteinConnection(Protein p1, Protein p2, int score) {
 		this.p1 = p1;
 		this.p2 = p2;
 		combinedScore = score;
@@ -16,7 +17,7 @@ public class ProteineConnection {
 		}
 	}
 	
-	public Proteine getOtherProteine(Proteine p)
+	public Protein getOtherProteine(Protein p)
 	{
 		if(p == p1)
 			return p2;
@@ -25,12 +26,12 @@ public class ProteineConnection {
 		return null;
 	}
   
-  public Proteine getProteineFrom()
+  public Protein getProteineFrom()
   {
     return p1;
   }
   
-  public Proteine getProteineTo()
+  public Protein getProteineTo()
   {
     return p2;
   }
@@ -42,8 +43,8 @@ public class ProteineConnection {
 
 	@Override
 	public boolean equals(Object that) {
-	if (that instanceof ProteineConnection){
-		ProteineConnection pc = (ProteineConnection) that;
+	if (that instanceof ProteinConnection){
+		ProteinConnection pc = (ProteinConnection) that;
 		{
 			if(this.p1.equals(pc.p1))
 			{

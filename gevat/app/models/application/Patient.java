@@ -1,9 +1,11 @@
-package models;
+package models.application;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import models.database.Database;
 
 /**
  *

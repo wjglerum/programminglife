@@ -1,4 +1,4 @@
-package models;
+package models.database;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

@@ -4,8 +4,8 @@ import static play.data.Form.form;
 
 import java.sql.SQLException;
 
-import models.UserService;
-import models.User;
+import models.application.User;
+import models.application.UserService;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -68,13 +68,14 @@ public class Authentication extends Controller {
 
 	/**
 	 * Get the current session User
-	 * @throws SQLException 
+	 * 
+	 * @throws SQLException
 	 */
 	public static User getUser() throws SQLException {
 		String username = session("username");
 
 		if (username != null)
-		  return UserService.getUser(username);
+			return UserService.getUser(username);
 
 		return null;
 	}

@@ -1,4 +1,4 @@
-package models;
+package models.dna;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
+
+import models.database.Database;
+import models.database.QueryProcessor;
 
 import org.broadinstitute.variant.variantcontext.Allele;
 import org.broadinstitute.variant.variantcontext.GenotypesContext;
@@ -148,9 +151,7 @@ public class Mutation extends VariantContext {
 	 * @throws SQLException
 	 */
 	public float getScore() throws SQLException {
-		float test = QueryProcessor.executeScoreQuery(this.contig,
-				this.getStart(), this.getEnd(), this.getUniqueBase());
-		return test;
+		return QueryProcessor.executeScoreQuery(this);
 	}
 
 	/**

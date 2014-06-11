@@ -1,9 +1,12 @@
-package models;
+package models.database;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+
+import models.dna.Mutation;
+import models.protein.ProteinGraph;
 
 /**
  * This class processes queries.
@@ -160,14 +163,13 @@ public final class QueryProcessor {
 	 * @throws SQLException
 	 *             In case SQL goes wrong
 	 */
-	public static float executeScoreQuery(final String chrom,
-			final int positionLow, final int positionHigh, final String uniqueBase)
+	public static float executeScoreQuery(final Mutation mutation)
 					throws SQLException {
-		String q = "SELECT * " + "FROM " + "score " + "WHERE " + "chrom = '" + chrom + 
-				"' AND position >= " + positionLow + " AND position <= " + positionHigh + ";";
+		String q = "SELECT * " + "FROM " + "score " + "WHERE " + "chrom = '" + mutation.getChr() + 
+				"' AND position >= " + mutation.getStartPoint() + " AND position <= " + mutation.getEndPoint() + ";";
 		// Get all the records from database score that have mutations on the same position as our position
 		ResultSet rs = Database.select("score", q);
-		String afwijking = uniqueBase;
+		String afwijking = mutation.getUniqueBase();
 
 		// If the mutation is the same value as the reference, return 0		
 		while (rs.next()) {
@@ -260,7 +262,7 @@ public final class QueryProcessor {
 	}
 
 	public static void findGeneConnections(final int id,
-			final int limit, final int threshold, ProteineGraph pg)
+			final int limit, final int threshold, ProteinGraph pg)
 					throws SQLException {
 		ArrayList<String> qResult = QueryProcessor.
 				findGenesAssociatedWithSNP(id);
@@ -270,7 +272,7 @@ public final class QueryProcessor {
 	}
 
 	public static void findGeneConnections(final String p1,
-			final int limit, final int threshold, ProteineGraph pg)
+			final int limit, final int threshold, ProteinGraph pg)
 					throws SQLException {
 			pg.add(p1, QueryProcessor.executeStringQuery(
 					p1, limit, threshold).toString());

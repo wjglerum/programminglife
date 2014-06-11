@@ -1,6 +1,7 @@
 package test.models;
 
 import static org.junit.Assert.assertEquals;
+<<<<<<< HEAD
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -8,8 +9,12 @@ import static org.mockito.Mockito.when;
 import java.sql.SQLException;
 
 import models.User;
-import models.UserRepository;
-import models.UserService;
+=======
+import models.application.User;
+>>>>>>> master
+
+import models.application.UserRepository;
+import models.application.UserService;
 
 import org.junit.Test;
 

@@ -10,8 +10,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
 
-import models.Database;
-import models.Mutation;
+import models.database.Database;
+import models.dna.Mutation;
 
 import org.junit.Test;
 

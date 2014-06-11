@@ -1,9 +1,11 @@
-package models;
+package models.protein;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
 
+import models.application.GeneDiseaseLinkReader;
+import models.database.QueryProcessor;
 import play.Logger;
 
 /**
@@ -12,21 +14,21 @@ import play.Logger;
  * 
  */
 
-public class ProteineGraph {
-	private Map<String, Proteine> proteines = new HashMap<String, Proteine>();
-	private Collection<ProteineConnection> connections = new ArrayList<ProteineConnection>();
+public class ProteinGraph {
+	private Map<String, Protein> proteines = new HashMap<String, Protein>();
+	private Collection<ProteinConnection> connections = new ArrayList<ProteinConnection>();
 
 	/**
 	 * Creates an empty ProteineGraph
 	 */
-	public ProteineGraph() {
+	public ProteinGraph() {
 	}
 
 	/**
 	 * Creates and ProteineGraph using the proteine the location of the snp.
 	 * @param snp the rsid of the location
 	 */
-	public ProteineGraph(int snp, int limit, int threshold) {
+	public ProteinGraph(int snp, int limit, int threshold) {
 		addConnectionsOfSnp(snp, limit, threshold);
 		connectAllProteines();
 	}
@@ -75,7 +77,7 @@ public class ProteineGraph {
 	 */
 	public void add(String p1, String p2, int combinedScore)
 	{
-		ProteineConnection pc = new ProteineConnection(getProteine(p1),
+		ProteinConnection pc = new ProteinConnection(getProteine(p1),
 				getProteine(p2), combinedScore);
 		if (!this.connections.contains(pc)) {
 			this.connections.add(pc);
@@ -87,10 +89,10 @@ public class ProteineGraph {
 	 * @param name
 	 * @return the proteine with this name
 	 */
-	public Proteine getProteine(String name) {
+	public Protein getProteine(String name) {
 		if (!proteines.containsKey(name))
 			try {
-				proteines.put(name, new Proteine(name, GeneDiseaseLinkReader.findGeneDiseaseAssociation(name)));
+				proteines.put(name, new Protein(name, GeneDiseaseLinkReader.findGeneDiseaseAssociation(name)));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -102,11 +104,11 @@ public class ProteineGraph {
 		return "<ProteineGraph: " + proteines.toString() + ">";
 	}
 
-	public Collection<Proteine> getProteines() {
+	public Collection<Protein> getProteines() {
 		return proteines.values();
 	}
 
-	public Collection<ProteineConnection> getConnections() {
+	public Collection<ProteinConnection> getConnections() {
 		return connections;
 	}
 	
