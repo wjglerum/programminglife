@@ -1,6 +1,6 @@
 package test.views;
 
-import models.application.User;
+import models.user.User;
 
 import org.junit.*;
 

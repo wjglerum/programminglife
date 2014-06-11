@@ -7,46 +7,53 @@ import static org.mockito.Mockito.when;
 
 import java.sql.SQLException;
 
-import models.application.User;
+import models.user.User;
+import models.user.UserRepository;
+import models.user.UserService;
 
-import models.application.UserRepository;
-import models.application.UserService;
-
+import org.junit.Before;
 import org.junit.Test;
 
 public class UserTest {
 
+	private User u;
+	private final int id = 1;
+	private final String name = "John";
+	private final String surname = "Doe";
+	private final String username = "jdoe";
+	private final String password = "password";
+	private final UserRepository repositoryMock = mock(UserRepository.class);
+	private final UserService userService = new UserService(repositoryMock);
+
+	@Before
+	public void setUp() {
+		u = new User(id, name, surname, username);
+	}
+
 	@Test
 	public void testGetUser() throws SQLException {
-		UserRepository repositoryMock = mock(UserRepository.class);
-		User u = new User(1, "John", "Doe", "jdoe");
-		when(repositoryMock.getUser("jdoe")).thenReturn(u);
+		when(repositoryMock.getUser(username)).thenReturn(u);
+		User x = userService.getUser(username);
 
-		UserService userService = new UserService(repositoryMock);
-		User x = userService.getUser("jdoe");
-		assertEquals(x.id, 1);
-		assertEquals(x.name, "John");
-		assertEquals(x.surname, "Doe");
-		assertEquals(x.username, "jdoe");
+		assertEquals(x.id, id);
+		assertEquals(x.name, name);
+		assertEquals(x.surname, surname);
+		assertEquals(x.username, username);
 
-		verify(repositoryMock).getUser("jdoe");
-
+		verify(repositoryMock).getUser(username);
 	}
-	
+
 	@Test
 	public void testAuthentication() throws SQLException {
-		UserRepository repositoryMock = mock(UserRepository.class);
-		User u = new User(1, "John", "Doe", "jdoe");
-		when(repositoryMock.authenticate("jdoe", "password")).thenReturn(u);
-		
-		UserService userService = new UserService(repositoryMock);
-		User x = userService.authenticate("jdoe", "password");
-		assertEquals(x.id, 1);
-		assertEquals(x.name, "John");
-		assertEquals(x.surname, "Doe");
-		assertEquals(x.username, "jdoe");
+		when(repositoryMock.authenticate(username, password)).thenReturn(u);
 
-		verify(repositoryMock).authenticate("jdoe", "password");
+		User x = userService.authenticate(username, password);
+		assertEquals(x.id, id);
+		assertEquals(x.name, name);
+		assertEquals(x.surname, surname);
+		assertEquals(x.username, username);
+
+		verify(repositoryMock).authenticate(username, password);
 	}
 
 }

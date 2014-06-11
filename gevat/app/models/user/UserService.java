@@ -1,7 +1,13 @@
-package models.application;
+package models.user;
 
 import java.sql.SQLException;
 
+/**
+ * Service to interact with Users.
+ * 
+ * @author willem
+ * 
+ */
 public class UserService {
 	private final UserRepository userRepository;
 

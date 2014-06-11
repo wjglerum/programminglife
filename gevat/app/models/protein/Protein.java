@@ -4,8 +4,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import models.application.GeneDiseaseLinkReader;
 import models.database.QueryProcessor;
+import models.reader.GeneDiseaseLinkReader;
 
 /**
  * The proteine class contains the name,

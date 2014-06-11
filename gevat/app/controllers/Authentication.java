@@ -4,10 +4,10 @@ import static play.data.Form.form;
 
 import java.sql.SQLException;
 
-import models.application.User;
-import models.application.UserRepository;
-import models.application.UserRepositoryDB;
-import models.application.UserService;
+import models.user.User;
+import models.user.UserRepository;
+import models.user.UserRepositoryDB;
+import models.user.UserService;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -15,6 +15,8 @@ import views.html.login;
 
 public class Authentication extends Controller {
 
+	private static UserRepositoryDB userRepository = new UserRepositoryDB();
+	private static UserService userService = new UserService(userRepository);
 	/**
 	 * Login form class used for authentication.
 	 */
@@ -76,7 +78,7 @@ public class Authentication extends Controller {
 	public static User getUser() throws SQLException {
 		String username = session("username");
 		UserRepositoryDB ur = new UserRepositoryDB();
-		UserService us = new UserService(ur);
+		UserService us = new UserService(new UserRepositoryDB());
 		if (username != null)
 			return us.getUser(username);
 

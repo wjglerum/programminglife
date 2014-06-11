@@ -1,4 +1,4 @@
-package models.application;
+package models.reader;
 
 import java.io.IOException;
 import java.util.ArrayList;
