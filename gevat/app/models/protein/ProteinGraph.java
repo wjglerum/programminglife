@@ -65,7 +65,9 @@ public class ProteinGraph {
 	public void add(String p1, String connections) {
 		for (String s : connections.substring(1, connections.length() - 1)
 				.split(",")) {
-			add(p1,s.split("\t")[0].trim(), Integer.parseInt(s.split("\t")[1].trim()));
+			if (!s.isEmpty()) {
+				add(p1,s.split("\t")[0].trim(), Integer.parseInt(s.split("\t")[1].trim()));				
+			}
 		}
 	}
 
