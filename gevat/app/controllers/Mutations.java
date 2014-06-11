@@ -38,7 +38,7 @@ public class Mutations extends Controller {
     // Render the mutation if it's found in the requested patient's mutations
     for (Mutation m : mutations) {
       if (m.getId() == m_id) {
-        String JSON = mutationJSON(m, 10, 700);
+        String JSON = mutationJSON(p, m, 10, 700);
         
         return ok(mutation.render(p, m, Authentication.getUser(), JSON));
       }
@@ -47,7 +47,7 @@ public class Mutations extends Controller {
     return mutationNotFound(p, mutations);
   }
   
-  private static String mutationJSON(Mutation mutation, int limit, int threshold) throws SQLException {
+  private static String mutationJSON(Patient p, Mutation mutation, int limit, int threshold) throws SQLException {
     // Remove the 'rs' part of the rsID
     int rsID = Integer.parseInt(mutation.getRsID().substring(2));
     
@@ -68,6 +68,20 @@ public class Mutations extends Controller {
       proteinJSON.put("name", proteine.getName());
       proteinJSON.put("annotations", proteine.getAnnotations());
       proteinJSON.put("disease", proteine.getDisease());
+
+      JSONArray mutationsJSON = new JSONArray();
+      
+      for (Mutation m : proteine.getRelatedMutations()) {
+        JSONObject mutationJSON = new JSONObject();
+
+        mutationJSON.put("rsid", m.getRsID());
+        mutationJSON.put("id", m.getId());
+        mutationJSON.put("patient", p.getId());
+        
+        mutationsJSON.add(mutationJSON);
+      }
+      
+      proteinJSON.put("related", mutationsJSON);
       
       proteinsJSON.add(proteinJSON);
     }
@@ -104,7 +118,7 @@ public class Mutations extends Controller {
     // Render the mutation if it's found in the requested patient's mutations
     for (Mutation m : mutations) {
       if (m.getId() == m_id) {
-        String JSON = mutationJSON(m, limit, threshold);
+        String JSON = mutationJSON(p, m, limit, threshold);
         
         response().setContentType("application/json");
         

@@ -6,6 +6,7 @@ import java.util.Collection;
 
 import models.application.GeneDiseaseLinkReader;
 import models.database.QueryProcessor;
+import models.dna.Mutation;
 
 /**
  * The proteine class contains the name,
@@ -109,4 +110,13 @@ public class Protein {
 	public final String getDisease() {
 		return this.disease;
 	}
+	
+	public ArrayList<Mutation> getRelatedMutations() {
+	  ArrayList<Mutation> mutations = new ArrayList<Mutation>();
+	  
+	  mutations.add(new Mutation(1, "SNP", "rs123", 1, new char[] {'A', 'T', 'A', 'T', 'A', 'T'}, 1, 2));
+	  
+    return mutations;
+	}
+	
 }

@@ -101,9 +101,20 @@ Proteins.table = function (proteins) {
 	$(".table-proteins tr.protein").remove();
 	
 	// Add the new proteins
-	for (i = 0; i < proteins.length; i++) {
+	for (var i = 0; i < proteins.length; i++) {
 		var protein = proteins[i];
 		var related = "";
+		
+		console.log(protein.related);
+		
+		for (var j = 0; j < protein.related.length; j++) {
+			var mutation = protein.related[j];
+			
+			if (j > 0)
+				related += ", ";
+			
+			related += "<a href=\"/patients/" + mutation.patient + "/mutation/" + mutation.id + "\">" + mutation.rsid + "<a/>";
+		}
 		
 		$(".table-proteins tbody").append("<tr data-protein-id=\"" + protein.name + "\" class=\"protein\"><td>" + protein.name + "</td><td>" + protein.annotations + "</td><td>" + protein.disease + "</td><td>" + related + "</td></tr>");
 	}
