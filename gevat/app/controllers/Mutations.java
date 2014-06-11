@@ -8,11 +8,11 @@ import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import models.Mutation;
-import models.Patient;
-import models.Proteine;
-import models.ProteineConnection;
-import models.ProteineGraph;
+import models.application.Patient;
+import models.dna.Mutation;
+import models.protein.Protein;
+import models.protein.ProteinConnection;
+import models.protein.ProteinGraph;
 import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -51,10 +51,10 @@ public class Mutations extends Controller {
     // Remove the 'rs' part of the rsID
     int rsID = Integer.parseInt(mutation.getRsID().substring(2));
     
-    ProteineGraph proteinGraph = new ProteineGraph(rsID, limit, threshold);
+    ProteinGraph proteinGraph = new ProteinGraph(rsID, limit, threshold);
     
-    Collection<Proteine> proteins = proteinGraph.getProteines();
-    Collection<ProteineConnection> connections = proteinGraph.getConnections();
+    Collection<Protein> proteins = proteinGraph.getProteines();
+    Collection<ProteinConnection> connections = proteinGraph.getConnections();
     
     // Setup JSON data
     JSONObject dataJSON = new JSONObject();
@@ -62,16 +62,17 @@ public class Mutations extends Controller {
     JSONArray proteinsJSON = new JSONArray();
     JSONArray connectionsJSON = new JSONArray();
     
-    for (Proteine proteine : proteins) {
+    for (Protein proteine : proteins) {
       JSONObject proteinJSON = new JSONObject();
       
       proteinJSON.put("name", proteine.getName());
       proteinJSON.put("annotations", proteine.getAnnotations());
+      proteinJSON.put("disease", proteine.getDisease());
       
       proteinsJSON.add(proteinJSON);
     }
     
-    for (ProteineConnection connection : connections) {
+    for (ProteinConnection connection : connections) {
       JSONObject connectionJSON = new JSONObject();
       
       connectionJSON.put("from", connection.getProteineFrom().getName());

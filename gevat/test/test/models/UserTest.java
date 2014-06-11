@@ -1,8 +1,7 @@
 package test.models;
 
 import static org.junit.Assert.assertEquals;
-
-import models.User;
+import models.application.User;
 
 import org.junit.Test;
 
