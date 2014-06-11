@@ -4,6 +4,7 @@ import static play.data.Form.form;
 
 import java.sql.SQLException;
 
+import models.UserService;
 import models.User;
 import play.data.Form;
 import play.mvc.Controller;
@@ -21,7 +22,7 @@ public class Authentication extends Controller {
 		public String password;
 
 		public String validate() throws SQLException {
-			if (User.authenticate(username, password) == null)
+			if (UserService.authenticate(username, password) == null)
 				return "Invalid username or password";
 			else
 				return null;
@@ -73,8 +74,8 @@ public class Authentication extends Controller {
 		String username = session("username");
 
 		if (username != null)
-		  return User.getUser(username);
-		
+		  return UserService.getUser(username);
+
 		return null;
 	}
 

@@ -1,22 +1,35 @@
 package test.models;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.sql.SQLException;
 
 import models.User;
+import models.UserRepository;
+import models.UserService;
 
 import org.junit.Test;
 
 public class UserTest {
 
-	User user = new User(1, "John", "Doe", "jdoe");
-
 	@Test
-	public void testUserConstructor() {
-		User user = new User(1, "John", "Doe", "jdoe");
-		assertEquals(user.id, 1);
-		assertEquals(user.name, "John");
-		assertEquals(user.surname, "Doe");
-		assertEquals(user.username, "jdoe");
+	public void testGetUser() throws SQLException {
+		UserRepository repositoryMock = mock(UserRepository.class);
+		User u = new User(1, "John", "Doe", "jdoe");
+		when(repositoryMock.getUser("jdoe")).thenReturn(u);
+
+		UserService userService = new UserService(repositoryMock);
+		User x = userService.getUser("jdoe");
+		assertEquals(x.id, 1);
+		assertEquals(x.name, "John");
+		assertEquals(x.surname, "Doe");
+		assertEquals(x.username, "jdoe");
+
+		verify(repositoryMock).getUser("jdoe");
+
 	}
 
 }
