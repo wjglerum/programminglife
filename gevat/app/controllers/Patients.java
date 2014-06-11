@@ -10,6 +10,7 @@ import org.broadinstitute.variant.variantcontext.Allele;
 
 import models.application.Patient;
 import models.application.VCFReader;
+import models.application.User;
 import models.database.Database;
 import models.dna.Mutation;
 import play.Logger;
