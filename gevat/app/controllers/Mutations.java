@@ -1,30 +1,30 @@
 package controllers;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 import models.mutation.Mutation;
 import models.mutation.MutationRepositoryDB;
 import models.mutation.MutationService;
 import models.patient.Patient;
-import models.patient.PatientRepository;
 import models.patient.PatientRepositoryDB;
 import models.patient.PatientService;
 import models.protein.Protein;
 import models.protein.ProteinConnection;
 import models.protein.ProteinGraph;
-import play.Logger;
+import models.protein.ProteinRepositoryDB;
+import models.protein.ProteinService;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
-import views.html.patient;
-import views.html.patients;
 import views.html.mutation;
+import views.html.patient;
 
 public class Mutations extends Controller {
 
@@ -34,6 +34,9 @@ public class Mutations extends Controller {
 	private static MutationRepositoryDB mutationRepository = new MutationRepositoryDB();
 	private static MutationService mutationService = new MutationService(
 			mutationRepository);
+	private static ProteinRepositoryDB proteinRepository = new ProteinRepositoryDB();
+	private static ProteinService proteinService = new ProteinService(
+			proteinRepository);
 
 	/**
 	 * Display a mutation of a patient.
@@ -82,7 +85,8 @@ public class Mutations extends Controller {
 			JSONObject proteinJSON = new JSONObject();
 
 			proteinJSON.put("name", proteine.getName());
-			proteinJSON.put("annotations", proteine.getAnnotations());
+			proteinJSON.put("annotations",
+					proteinService.getAnnotations(proteine.getName()));
 			proteinJSON.put("disease", proteine.getDisease());
 
 			proteinsJSON.add(proteinJSON);
@@ -145,8 +149,12 @@ public class Mutations extends Controller {
 			throws SQLException {
 		flash("mutation-not-found",
 				"The requested mutation could not be found or you don't have permissions to view the mutation. Select another one in the overview below.");
-
-		return notFound(patient.render(p, mutations, Authentication.getUser()));
+		
+		HashMap<Mutation, Double> map =  new HashMap<Mutation, Double>();
+		for(Mutation m : mutations){
+			map.put(m, (double) mutationService.getScore(m));
+		}
+		return notFound(patient.render(p, map, Authentication.getUser()));
 	}
 
 }

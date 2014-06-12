@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.List;
 
 import models.database.Database;
+import models.database.QueryProcessor;
 
 import org.broadinstitute.variant.variantcontext.Allele;
 import org.broadinstitute.variant.variantcontext.GenotypesContext;
@@ -88,5 +89,15 @@ public class MutationRepositoryDB implements MutationRepository {
 		}
 		return mutations;
 	}
-
+	
+	/**
+	 * Gets the mutation score
+	 * 
+	 * @return mutation score
+	 * @throws SQLException
+	 */
+	@Override
+	public float getScore(Mutation m) throws SQLException {
+		return QueryProcessor.executeScoreQuery(m);
+	}
 }

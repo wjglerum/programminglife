@@ -1,4 +1,4 @@
-package test.models;
+package test.models.reader;
 
 import static play.test.Helpers.*;
 import static org.fest.assertions.Assertions.*;

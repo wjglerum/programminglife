@@ -1,12 +1,9 @@
 package models.mutation;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
-
-import models.database.QueryProcessor;
 
 import org.broadinstitute.variant.variantcontext.Allele;
 import org.broadinstitute.variant.variantcontext.Genotype;
@@ -27,6 +24,7 @@ public class Mutation extends VariantContext {
 
 	/**
 	 * Stores information about a mutation.
+	 * 
 	 * @param id
 	 * @param mutationType
 	 * @param rsID
@@ -41,9 +39,11 @@ public class Mutation extends VariantContext {
 			final int chromosome, final Collection<Allele> alleles,
 			final int startPoint, final int endPoint,
 			final GenotypesContext genotypes, final int positionGRCH37) {
+
 		super(null, rsID, Integer.toString(chromosome), startPoint, endPoint,
 				alleles, genotypes, 0, null, null, false, EnumSet
 						.noneOf(Validation.class));
+
 		this.mutationType = mutationType;
 		this.id = id;
 		this.positionGRCH37 = positionGRCH37;
@@ -51,6 +51,7 @@ public class Mutation extends VariantContext {
 
 	/**
 	 * Stores information about a mutation.
+	 * 
 	 * @param id
 	 * @param mutationType
 	 * @param rsID
@@ -63,10 +64,12 @@ public class Mutation extends VariantContext {
 	public Mutation(final int id, final String mutationType, final String rsID,
 			final int chromosome, final char[] alleles, final int startPoint,
 			final int endPoint, final int positionGRCH37) {
-		super(null, rsID, Integer.toString(chromosome), id, id,
+
+		super(null, rsID, Integer.toString(chromosome), startPoint, endPoint,
 				toAlleleCollection(new String(alleles)),
 				toGenotypesContext(new String(alleles)), 0, null, null, false,
 				EnumSet.noneOf(Validation.class));
+
 		this.mutationType = mutationType;
 		this.id = id;
 		this.positionGRCH37 = positionGRCH37;
@@ -130,16 +133,6 @@ public class Mutation extends VariantContext {
 	 */
 	public final int getStartPoint() {
 		return this.getStart();
-	}
-
-	/**
-	 * Gets the mutation score
-	 * 
-	 * @return mutation score
-	 * @throws SQLException
-	 */
-	public float getScore() throws SQLException {
-		return QueryProcessor.executeScoreQuery(this);
 	}
 
 	/**
@@ -215,7 +208,7 @@ public class Mutation extends VariantContext {
 	 * 
 	 * @return Returns the String representation of the basepair
 	 */
-	protected final String toBaseString(final List<Allele> alleles) {
+	public final String toBaseString(final List<Allele> alleles) {
 		return "[" + alleles.get(0).getBaseString() + ", "
 				+ alleles.get(1).getBaseString() + "]";
 	}
@@ -247,12 +240,26 @@ public class Mutation extends VariantContext {
 	 * 
 	 * @return Returns a collection of alleles
 	 */
-	protected static Collection<Allele> toAlleleCollection(
+	public static Collection<Allele> toAlleleCollection(
 			final String allelesString) {
 		Collection<Allele> alleles = new ArrayList<Allele>();
 		alleles.add(toAllele(allelesString.substring(0, 1), true));
 		alleles.add(toAllele(allelesString.substring(1, 2), false));
 		return alleles;
+	}
+
+	/**
+	 * Creates an allele from the given string.
+	 * 
+	 * @param s
+	 *            The give string
+	 * @param isref
+	 *            If it is ref or not
+	 * 
+	 * @return Returns an Allele
+	 */
+	public static Allele toAllele(final String s, final boolean isref) {
+		return Allele.create(s, isref);
 	}
 
 	/**
@@ -264,7 +271,7 @@ public class Mutation extends VariantContext {
 	 * 
 	 * @return Returns as a GenotypesContext
 	 */
-	protected static GenotypesContext toGenotypesContext(final String s) {
+	public static GenotypesContext toGenotypesContext(final String s) {
 		GenotypesContext gc = GenotypesContext.create();
 		gc.add(toGenotype(s.substring(2, 4), "FATHER"));
 		gc.add(toGenotype(s.substring(4, 6), "MOTHER"));
@@ -281,26 +288,12 @@ public class Mutation extends VariantContext {
 	 * 
 	 * @return Returns a Genotype
 	 */
-	protected static Genotype toGenotype(final String allelesString,
+	public static Genotype toGenotype(final String allelesString,
 			final String name) {
 		List<Allele> alleles = new ArrayList<Allele>();
 		alleles.add(toAllele(allelesString.substring(0, 1), false));
 		alleles.add(toAllele(allelesString.substring(1, 2), false));
 		return GenotypeBuilder.create(name, alleles);
-	}
-
-	/**
-	 * Creates an allele from the given string.
-	 * 
-	 * @param s
-	 *            The give string
-	 * @param isref
-	 *            If it is ref or not
-	 * 
-	 * @return Returns an Allele
-	 */
-	protected static Allele toAllele(final String s, final boolean isref) {
-		return Allele.create(s, isref);
 	}
 
 	public ArrayList<Integer> getPositions() {

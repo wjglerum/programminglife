@@ -1,4 +1,4 @@
-@(patient: models.patient.Patient, chromosome: models.chromosome.Chromosome, mutations: List[models.mutation.Mutation], user: models.user.User)
+@(patient: models.patient.Patient, chromosome: models.chromosome.Chromosome, mutations: Map[models.mutation.Mutation, Double], user: models.user.User)
 
 @import scala.collection.immutable.Map
 
@@ -24,13 +24,13 @@
     </tr>
     </thead>
     <tbody>
-		@if(mutations.length > 0){
-    @for(mutation <- mutations) {
+		@if(mutations.size() > 0){
+    @for(mutation <- mutations.keySet()) {
         <tr href="/patients/@patient.getId/mutation/@mutation.getId()" class="table-mutation" data-chr-id="@mutation.getChromosome()" data-mutation-id="@mutation.getId()">
                     <td>@mutation.getMutationType()</td>
             <td>@mutation.getRsID()</td>
             <td>@mutation.getChromosome()</td>
-            <td>@mutation.getScore()</td>
+            <td>@mutations.get(mutation)</td>
             <td>@mutation.child()</td>
             <td>@mutation.father()</td>
             <td>@mutation.mother()</td>

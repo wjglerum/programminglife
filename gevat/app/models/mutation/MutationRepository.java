@@ -8,4 +8,6 @@ public interface MutationRepository {
 
 	public List<Mutation> getMutations(final int pId, final int cId)
 			throws SQLException;
+
+	public float getScore(Mutation m) throws SQLException;
 }

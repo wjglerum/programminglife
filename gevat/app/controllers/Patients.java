@@ -2,28 +2,26 @@ package controllers;
 
 import static play.data.Form.form;
 
-import java.sql.SQLException;
 import java.io.File;
+import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
-
-import org.broadinstitute.variant.variantcontext.Allele;
 
 import models.database.Database;
 import models.mutation.Mutation;
 import models.mutation.MutationRepositoryDB;
 import models.mutation.MutationService;
 import models.patient.Patient;
-import models.patient.PatientRepository;
 import models.patient.PatientRepositoryDB;
 import models.patient.PatientService;
 import models.reader.VCFReader;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
-import play.mvc.Result;
-import play.mvc.Security;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
+import play.mvc.Result;
+import play.mvc.Security;
 import views.html.patient;
 import views.html.patient_add;
 import views.html.patients;
@@ -58,12 +56,15 @@ public class Patients extends Controller {
 	public static Result show(int p_id) throws SQLException {
 		Patient p = patientService.get(p_id, Authentication.getUser().id);
 		List<Mutation> mutations = mutationService.getMutations(p_id);
-
+		HashMap<Mutation, Double> map =  new HashMap<Mutation, Double>();
+		for(Mutation m : mutations){
+			map.put(m, (double) mutationService.getScore(m));
+		}
 		if (p == null)
 			return patientNotFound();
 
 		// Render the patient otherwise
-		return ok(patient.render(p, mutations, Authentication.getUser()));
+		return ok(patient.render(p, map, Authentication.getUser()));
 	}
 
 	/**
@@ -192,10 +193,7 @@ public class Patients extends Controller {
 						+ "',"
 						+ m.getStart()
 						+ ","
-						+ m.getEnd()
-						+ ","
-						+ m.getPositionGRCH37()
-						+ ");";
+						+ m.getEnd() + "," + m.getPositionGRCH37() + ");";
 				Logger.info(query);
 				Database.insert("data", query);
 			}
@@ -215,12 +213,9 @@ public class Patients extends Controller {
 	 */
 	public static Result remove(int p_id) throws SQLException {
 		Patient p = patientService.get(p_id, Authentication.getUser().id);
-
 		if (p == null)
 			return badRequest();
-
 		patientService.remove(p);
-
 		return ok();
 	}
 

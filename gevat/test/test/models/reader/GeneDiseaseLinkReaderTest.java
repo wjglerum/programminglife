@@ -1,4 +1,4 @@
-package test.models;
+package test.models.reader;
 
 import static org.junit.Assert.assertTrue;
 

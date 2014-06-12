@@ -18,4 +18,8 @@ public class MutationService {
 			throws SQLException {
 		return this.mutationRepository.getMutations(pId, cId);
 	}
+
+	public float getScore(Mutation m) throws SQLException {
+		return this.mutationRepository.getScore(m);
+	}
 }
