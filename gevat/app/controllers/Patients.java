@@ -14,6 +14,7 @@ import models.patient.Patient;
 import models.patient.PatientRepository;
 import models.patient.PatientRepositoryDB;
 import models.patient.PatientService;
+import models.reader.ReaderThread;
 import models.reader.VCFReader;
 import play.Logger;
 import play.data.Form;
@@ -168,36 +169,16 @@ public class Patients extends Controller {
 			// Add Patient to database
 			Patient p = patientService.add(Authentication.getUser().id, name,
 					surname, fileName, fileSize);
-
-			// Process VCF file
-			List<Mutation> mutations = VCFReader.getMutations(filePath);
-
-			// Add each mutation to the database
-			for (Mutation m : mutations) {
-				String query = "INSERT INTO mutations VALUES (nextval('m_id_seq'::regclass),"
-						+ p.getId()
-						+ ",'"
-						+ m.getMutationType()
-						+ "','"
-						+ m.getRsID()
-						+ "',"
-						+ m.getChromosome()
-						+ ",'"
-						+ m.toAllelesString()
-						+ "',"
-						+ m.getStart()
-						+ ","
-						+ m.getEnd()
-						+ ","
-						+ m.getPositionGRCH37()
-						+ ");";
-				Logger.info(query);
-				Database.insert("data", query);
-			}
+			
+			// Setup a thread for processing the VCF
+			ReaderThread readerThread = new ReaderThread(p, filePath);
+			
+			// Let the thread process the file in the background
+			readerThread.start();
 
 			// Make user happy
 			flash("patient-added", "The patient " + name + " " + surname
-					+ " is successfully added to the database.");
+					+ " is successfully added to the database. The VCF file is now being processed. Please wait...");
 
 			return redirect(routes.Patients.showAll());
 		}
