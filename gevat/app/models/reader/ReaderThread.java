@@ -26,8 +26,16 @@ public class ReaderThread implements Runnable {
   
     public void run() {
       // Process VCF file
-      List<Mutation> mutations = VCFReader.getMutations(filePath);
-
+      List<Mutation> mutations = getMutations();
+      
+      addMutationsToDatabase(mutations);
+    }
+    
+    private List<Mutation> getMutations() {
+      return VCFReader.getMutations(filePath);
+    }
+    
+    private void addMutationsToDatabase(List<Mutation> mutations) {
       // Add each mutation to the database
       for (Mutation m : mutations) {
         String query = "INSERT INTO mutations VALUES (nextval('m_id_seq'::regclass),"
