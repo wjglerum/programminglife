@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import models.dna.Mutation;
+import models.mutation.Mutation;
 
 import org.broad.tribble.AbstractFeatureReader;
 import org.broad.tribble.FeatureReader;

@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import models.dna.Mutation;
+import models.mutation.Mutation;
 import models.protein.ProteinGraph;
 
 /**
