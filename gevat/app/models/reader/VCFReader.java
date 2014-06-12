@@ -13,6 +13,8 @@ import org.broadinstitute.variant.variantcontext.Allele;
 import org.broadinstitute.variant.variantcontext.VariantContext;
 import org.broadinstitute.variant.vcf.VCFCodec;
 
+import play.Logger;
+
 /**
  * This class reads the VCF-files.
  *
@@ -59,13 +61,32 @@ public final class VCFReader {
 	protected static List<Mutation> getMutations(
 			final FeatureReader<VariantContext> fr) {
 		List<Mutation> listSNP = new ArrayList<Mutation>();
+		List<Mutation> filter = new ArrayList<Mutation>();
+		int counter = 0;
 		try {
 			Iterator<VariantContext> it;
 			it = fr.iterator();
 			while (it.hasNext()) {
 				VariantContext vc = it.next();
 				if (hasMutation(vc)) {
-					listSNP.add(toMutation(vc, "SNP"));
+					try {
+						listSNP.add(toMutation(vc, "De Novo"));
+					} catch (NullPointerException e) {
+						Logger.info("Het lukt niet om een snp om te zetten in mutation.");
+					}	
+				}
+				else if (isPotentialHomozygousRecessive(vc)) {
+					
+					counter++;
+					if (counter % 10000 == 0) {
+						Logger.info("We hebben " + counter + " potentiele recessive snps gevonden.");
+					}
+					try {
+						filter.add(toMutation(vc, "Recessive Homozygous"));
+					}
+					catch (NullPointerException e) {
+						Logger.info("Het lukt niet om een snp om te zetten in een mutation.");
+					}
 				}
 			}
 		} catch (Exception e) {
@@ -119,5 +140,20 @@ public final class VCFReader {
 		return ((f.contains(d.get(0)) && m.contains(d.get(1)))
 				|| (f.contains(d.get(1))
 						&& m.contains(d.get(0))));
+	}
+	private static boolean isPotentialHomozygousRecessive(
+			final VariantContext vc) {
+		List<Allele> d = vc.getGenotype("DAUGHTER").getAlleles();
+		List<Allele> f = vc.getGenotype("FATHER").getAlleles();
+		List<Allele> m = vc.getGenotype("MOTHER").getAlleles();
+		return (isHeterozygous(f) && isHeterozygous(m) && isHomozygous(d));
+	}
+
+	private static boolean isHeterozygous(final List<Allele> input) {
+		return (!input.get(0).equals(input.get(1)));
+	}
+
+	private static boolean isHomozygous(final List<Allele> input) {
+		return (input.get(0).equals(input.get(1)));
 	}
 }
