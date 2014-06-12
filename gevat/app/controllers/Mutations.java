@@ -79,7 +79,9 @@ public class Mutations extends Controller {
   
       JSONArray mutationsJSON = new JSONArray();
       
-      for (Mutation m : proteine.getRelatedMutations(patient, mutation)) {
+      ArrayList<Mutation> relatedMutations = proteine.getRelatedMutations(patient, mutation);
+      
+      for (Mutation m : relatedMutations) {
         JSONObject mutationJSON = new JSONObject();
   
         mutationJSON.put("rsid", m.getRsID());
