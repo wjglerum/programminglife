@@ -1,34 +1,45 @@
 package test.models;
 
-import static play.test.Helpers.*;
-import static org.fest.assertions.Assertions.*;
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import models.mutation.Mutation;
+import models.mutation.MutationRepository;
+import models.mutation.MutationService;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.List;
-
-import models.database.Database;
-import models.dna.Mutation;
-
+import org.junit.Before;
 import org.junit.Test;
-
-import play.Logger;
-import scalaz.std.list;
 
 public class MutationTest {
 
-	private Mutation m = new Mutation(1, "SNP", "rsID", 1, new char[] { 'A',
-			'T', 'T', 'T', 'T', 'T' }, 1, 2, 0);
+	private Mutation m;
+	private static int id = 1;
+	private static String mutationType = "SNP";
+	private static String rsID = "rsID";
+	private static int chromosome = 1;
+	private static char[] alleles = { 'A', 'T', 'T', 'T', 'T', 'T' };
+	private static int startPoint = 2;
+	private static int endPoint = 2;
+	private static int position = 3;
+
+	private final MutationRepository repositoryMock = mock(MutationRepository.class);
+	private final MutationService mutationService = new MutationService(
+			repositoryMock);
+
+	@Before
+	public void setUp() {
+		m = new Mutation(id, mutationType, rsID, chromosome, alleles,
+				startPoint, endPoint, position);
+	}
 
 	@Test
 	public void testConstructor() {
-		assertEquals(m.getId(), 1);
-		assertEquals(m.getMutationType(), "SNP");
-		assertEquals(m.getRsID(), "rsID");
-		assertEquals(m.getChromosome(), 1);
+		assertEquals(m.getId(), id);
+		assertEquals(m.getMutationType(), mutationType);
+		assertEquals(m.getRsID(), rsID);
+		assertEquals(m.getChromosome(), chromosome);
+		//assertEquals(m.getStartPoint(), startPoint);
+		//assertEquals(m.getEndPoint(), endPoint);
+		assertEquals(m.getPositionGRCH37(), position);
 	}
 
 	@Test
@@ -36,20 +47,6 @@ public class MutationTest {
 		assertEquals("[A, T]", m.child());
 		assertEquals("[T, T]", m.father());
 		assertEquals("[T, T]", m.mother());
-	}
-
-	@Test
-	public void findById() {
-		running(fakeApplication(), new Runnable() {
-			public void run() {
-				try {
-					List<Mutation> list = Mutation.getMutations(1);
-					assertEquals(list.size(), 0);
-				} catch (SQLException e) {
-					Logger.error(e.toString());
-				}
-			}
-		});
 	}
 
 	@Test

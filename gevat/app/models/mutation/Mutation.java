@@ -1,19 +1,17 @@
-package models.dna;
+package models.mutation;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
 
-import models.database.Database;
 import models.database.QueryProcessor;
 
 import org.broadinstitute.variant.variantcontext.Allele;
-import org.broadinstitute.variant.variantcontext.GenotypesContext;
 import org.broadinstitute.variant.variantcontext.Genotype;
 import org.broadinstitute.variant.variantcontext.GenotypeBuilder;
+import org.broadinstitute.variant.variantcontext.GenotypesContext;
 import org.broadinstitute.variant.variantcontext.VariantContext;
 
 /**
@@ -29,23 +27,15 @@ public class Mutation extends VariantContext {
 
 	/**
 	 * Stores information about a mutation.
-	 * 
 	 * @param id
-	 *            The location of the allele
 	 * @param mutationType
-	 *            The type of mutation
 	 * @param rsID
-	 *            The id of the SNP
 	 * @param chromosome
-	 *            The chromosome the SNP is on
 	 * @param alleles
-	 *            The basepair of the child
 	 * @param startPoint
-	 *            The startpoint of the mutation
 	 * @param endPoint
-	 *            The endpoint of the mutation
 	 * @param genotypes
-	 *            The genotype of the parents
+	 * @param positionGRCH37
 	 */
 	public Mutation(final int id, final String mutationType, final String rsID,
 			final int chromosome, final Collection<Allele> alleles,
@@ -61,21 +51,14 @@ public class Mutation extends VariantContext {
 
 	/**
 	 * Stores information about a mutation.
-	 * 
 	 * @param id
-	 *            The location of the allele
 	 * @param mutationType
-	 *            The type of mutation
 	 * @param rsID
-	 *            The id of the SN
 	 * @param chromosome
-	 *            The chromosome the SNP is on
 	 * @param alleles
-	 *            The basepairs which need to be converted
 	 * @param startPoint
-	 *            The startpoint of the mutation
 	 * @param endPoint
-	 *            The endpoint of the mutation
+	 * @param positionGRCH37
 	 */
 	public Mutation(final int id, final String mutationType, final String rsID,
 			final int chromosome, final char[] alleles, final int startPoint,
@@ -171,6 +154,7 @@ public class Mutation extends VariantContext {
 	public final int getPositionGRCH37() {
 		return this.positionGRCH37;
 	}
+
 	/**
 	 * Return the alleles of the child.
 	 * 
@@ -255,77 +239,6 @@ public class Mutation extends VariantContext {
 	}
 
 	/**
-	 * Retrieve a list of all the mutations of a patient.
-	 * 
-	 * @param pId
-	 *            The id
-	 * 
-	 * @return Returns List<Mutation>, a list of all mutations
-	 * 
-	 * @throws SQLException
-	 *             In case SQL goes wrong
-	 */
-	public static List<Mutation> getMutations(final int pId)
-			throws SQLException {
-		String query = "SELECT * FROM mutations WHERE p_id = '" + pId + "';";
-		ResultSet rs = Database.select("data", query);
-		List<Mutation> mutations = new ArrayList<Mutation>();
-
-		while (rs.next()) {
-			int id = rs.getInt("m_id");
-			String sort = rs.getString("sort");
-			String rsID = rs.getString("rsID");
-			int chromosome = rs.getInt("chromosome");
-			Collection<Allele> alleles = toAlleleCollection(rs
-					.getString("alleles"));
-			GenotypesContext genotypescontext = toGenotypesContext(rs
-					.getString("alleles"));
-			int startPoint = rs.getInt("startpoint");
-			int endPoint = rs.getInt("endpoint");
-			int positionGRCH37 = rs.getInt("GRCH37_pos");
-			mutations.add(new Mutation(id, sort, rsID, chromosome, alleles,
-					startPoint, endPoint, genotypescontext, positionGRCH37));
-		}
-		return mutations;
-	}
-
-	/**
-	 * Retrieve a list of all the mutations of a patient in a certain chromosome.
-	 * 
-	 * @param pId
-	 *            The id
-	 * @param cId
-	 *            The chromosome number
-	 * 
-	 * @return Returns List<Mutation>, a list of all mutations in the chromosome.
-	 * 
-	 * @throws SQLException
-	 *             In case SQL goes wrong
-	 */
-	public static List<Mutation> getMutations(final int pId, final int cId)
-			throws SQLException {
-		String query = "SELECT * FROM mutations WHERE p_id = '" + pId + "' and chromosome = '" + cId + "';";
-		ResultSet rs = Database.select("data", query);
-		List<Mutation> mutations = new ArrayList<Mutation>();
-
-		while (rs.next()) {
-			int id = rs.getInt("m_id");
-			String sort = rs.getString("sort");
-			String rsID = rs.getString("rsID");
-			int chromosome = rs.getInt("chromosome");
-			Collection<Allele> alleles = toAlleleCollection(rs
-					.getString("alleles"));
-			GenotypesContext genotypescontext = toGenotypesContext(rs
-					.getString("alleles"));
-			int startPoint = rs.getInt("startpoint");
-			int endPoint = rs.getInt("endpoint");
-			int positionGRCH37 = rs.getInt("GRCH37_pos");
-			mutations.add(new Mutation(id, sort, rsID, chromosome, alleles,
-					startPoint, endPoint, genotypescontext, positionGRCH37));
-		}
-		return mutations;
-	}
-	/**
 	 * Makes an allele collection of the alleles of the child (the first two
 	 * alleles in the string).
 	 * 
@@ -389,7 +302,7 @@ public class Mutation extends VariantContext {
 	protected static Allele toAllele(final String s, final boolean isref) {
 		return Allele.create(s, isref);
 	}
-	
+
 	public ArrayList<Integer> getPositions() {
 		ArrayList<Integer> list = new ArrayList<Integer>();
 		list.add(103843421);

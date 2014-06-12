@@ -8,7 +8,9 @@ import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import models.dna.Mutation;
+import models.mutation.Mutation;
+import models.mutation.MutationRepositoryDB;
+import models.mutation.MutationService;
 import models.patient.Patient;
 import models.patient.PatientRepository;
 import models.patient.PatientRepositoryDB;
@@ -32,6 +34,10 @@ public class Chromosomes extends Controller {
 	private static PatientRepositoryDB patientRepository = new PatientRepositoryDB();
 	private static PatientService patientService = new PatientService(
 			patientRepository);
+	private static MutationRepositoryDB mutationRepository = new MutationRepositoryDB();
+	private static MutationService mutationService = new MutationService(
+			mutationRepository);
+
 	/**
 	 * Display all the mutations in a certain chromosome of a patient.
 	 * 
@@ -40,8 +46,8 @@ public class Chromosomes extends Controller {
 	@Security.Authenticated(Secured.class)
 	public static Result show(int p_id, int c_id) throws SQLException {
 		Patient p = patientService.get(p_id, Authentication.getUser().id);
-		List<Mutation> mutations = Mutation.getMutations(p_id, c_id);
-		models.dna.Chromosome c = new models.dna.Chromosome(c_id);
+		List<Mutation> mutations = mutationService.getMutations(p_id, c_id);
+		models.chromosome.Chromosome c = new models.chromosome.Chromosome(c_id);
 
 		if (p == null)
 			return Patients.patientNotFound();

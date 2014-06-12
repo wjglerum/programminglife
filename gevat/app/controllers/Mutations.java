@@ -8,7 +8,9 @@ import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import models.dna.Mutation;
+import models.mutation.Mutation;
+import models.mutation.MutationRepositoryDB;
+import models.mutation.MutationService;
 import models.patient.Patient;
 import models.patient.PatientRepository;
 import models.patient.PatientRepositoryDB;
@@ -29,6 +31,9 @@ public class Mutations extends Controller {
 	private static PatientRepositoryDB patientRepository = new PatientRepositoryDB();
 	private static PatientService patientService = new PatientService(
 			patientRepository);
+	private static MutationRepositoryDB mutationRepository = new MutationRepositoryDB();
+	private static MutationService mutationService = new MutationService(
+			mutationRepository);
 
 	/**
 	 * Display a mutation of a patient.
@@ -38,7 +43,7 @@ public class Mutations extends Controller {
 	@Security.Authenticated(Secured.class)
 	public static Result show(int p_id, int m_id) throws SQLException {
 		Patient p = patientService.get(p_id, Authentication.getUser().id);
-		List<Mutation> mutations = Mutation.getMutations(p_id);
+		List<Mutation> mutations = mutationService.getMutations(p_id);
 
 		if (p == null)
 			return Patients.patientNotFound();
@@ -109,7 +114,7 @@ public class Mutations extends Controller {
 	public static Result proteinsJSON(int p_id, int m_id, int limit,
 			int threshold) throws SQLException {
 		Patient p = patientService.get(p_id, Authentication.getUser().id);
-		List<Mutation> mutations = Mutation.getMutations(p_id);
+		List<Mutation> mutations = mutationService.getMutations(p_id);
 
 		if (p == null)
 			return badRequest();

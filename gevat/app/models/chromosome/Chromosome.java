@@ -1,4 +1,4 @@
-package models.dna;
+package models.chromosome;
 
 public class Chromosome{
 
