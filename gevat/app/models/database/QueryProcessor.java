@@ -71,7 +71,7 @@ public final class QueryProcessor {
 		while (rs.next()) {
 			String codeName = rs.getString("preferred_name");
 			int score = rs.getInt("combined_score");
-			list.add(codeName + "\t" + score);
+			list.add(codeName.replaceAll(",", "") + "\t" + score);
 		}
 		return list;
 	}
