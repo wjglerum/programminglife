@@ -38,7 +38,9 @@ public class PatientRepositoryDB implements PatientRepository {
 			String surname = rs.getString("surname");
 			String vcfFile = rs.getString("vcf_file");
 			Long vcfLength = rs.getLong("vcf_length");
-			return new Patient(pId, name, surname, vcfFile, vcfLength);
+			boolean processed = rs.getBoolean("processed");
+			
+			return new Patient(pId, name, surname, vcfFile, vcfLength, processed);
 		}
 		return null;
 	}
@@ -67,7 +69,9 @@ public class PatientRepositoryDB implements PatientRepository {
 			String surname = rs.getString("surname");
 			String vcfFile = rs.getString("vcf_file");
 			Long vcfLength = rs.getLong("vcf_length");
-			patients.add(new Patient(id, name, surname, vcfFile, vcfLength));
+      boolean processed = rs.getBoolean("processed");
+      
+			patients.add(new Patient(id, name, surname, vcfFile, vcfLength, processed));
 		}
 		return patients;
 	}

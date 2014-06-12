@@ -29,6 +29,8 @@ public class ReaderThread implements Runnable {
       List<Mutation> mutations = getMutations();
       
       addMutationsToDatabase(mutations);
+      
+      updatePatientToProcessed();
     }
     
     private List<Mutation> getMutations() {
@@ -58,6 +60,12 @@ public class ReaderThread implements Runnable {
         
         Database.insert("data", query);
       }
+    }
+    
+    private void updatePatientToProcessed() {
+      String query = "UPDATE patient SET processed = 'true' WHERE p_id = " + patient.getId() + ";";
+      
+      Database.insert("data", query);
     }
 
 }

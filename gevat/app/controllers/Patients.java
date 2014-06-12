@@ -187,20 +187,47 @@ public class Patients extends Controller {
 		}
 	}
 
-	/**
-	 * Handle the ajax request for removing patients
-	 * 
-	 * @throws SQLException
-	 */
-	public static Result remove(int p_id) throws SQLException {
-		Patient p = patientService.get(p_id, Authentication.getUser().id);
+  /**
+   * Handle the ajax request for removing patients
+   * 
+   * @throws SQLException
+   */
+  public static Result remove(int p_id) throws SQLException {
+    Patient p = patientService.get(p_id, Authentication.getUser().id);
 
-		if (p == null)
-			return badRequest();
+    if (p == null)
+      return badRequest();
 
-		patientService.remove(p);
+    patientService.remove(p);
 
-		return ok();
-	}
+    return ok();
+  }
+
+  /**
+   * Handle the ajax request for removing patients
+   * 
+   * @throws SQLException
+   */
+  public static Result isProcessed(int p_id) throws SQLException {
+    Patient p = patientService.get(p_id, Authentication.getUser().id);
+
+    if (p == null)
+      return badRequest();
+
+    if (!p.isProcessed())
+      return ok("0");
+    else {
+      String row = "";
+      
+      row += "<td>" + p.getId() + "</td>";
+      row += "<td>" + p.getName() + "</td>";
+      row += "<td>" + p.getSurname() + "</td>";
+      row += "<td>" + p.getVcfFile() + "</td>";
+      row += "<td>" + p.getVcfLengthMB() + " MB</td>";
+      row += "<td class=\"remove\"><a class=\"remove-patient center-block text-danger\"><span class=\"glyphicon glyphicon-remove\"></span></a></td>";
+      
+      return ok(row);
+    }
+  }
 
 }
