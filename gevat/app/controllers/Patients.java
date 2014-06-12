@@ -14,6 +14,7 @@ import models.mutation.MutationService;
 import models.patient.Patient;
 import models.patient.PatientRepositoryDB;
 import models.patient.PatientService;
+import models.reader.ReaderThread;
 import models.reader.VCFReader;
 import play.Logger;
 import play.data.Form;
@@ -107,7 +108,10 @@ public class Patients extends Controller {
 					// Check file extension
 					if (!checkFileExtension(fileName)) {
 						/*
-						 * ^^^^^^^^^^^ { || || } X \_______/
+						 * ^^^^^^^^^^^
+						 *  { || || }
+						 *      X 
+						 *  \_______/
 						 * 
 						 * YEAH SIG WE FIXED THIS !!!
 						 */
@@ -197,10 +201,16 @@ public class Patients extends Controller {
 				Logger.info(query);
 				Database.insert("data", query);
 			}
+			
+			// Setup a thread for processing the VCF
+			ReaderThread readerThread = new ReaderThread(p, filePath);
+			
+			// Let the thread process the file in the background
+			readerThread.start();
 
 			// Make user happy
 			flash("patient-added", "The patient " + name + " " + surname
-					+ " is successfully added to the database.");
+					+ " is successfully added to the database. The VCF file is now being processed. Please wait...");
 
 			return redirect(routes.Patients.showAll());
 		}
