@@ -11,6 +11,8 @@ import org.broadinstitute.variant.variantcontext.GenotypeBuilder;
 import org.broadinstitute.variant.variantcontext.GenotypesContext;
 import org.broadinstitute.variant.variantcontext.VariantContext;
 
+import play.Logger;
+
 /**
  * 
  * @author rhvanstaveren
@@ -154,7 +156,7 @@ public class Mutation extends VariantContext {
 	 * @return String with alleles of the child
 	 */
 	public final String child() {
-		return this.toBaseString(this.getAlleles());
+		return this.toBaseString(this.getGenotype("DAUGHTER").getAlleles());
 	}
 
 	/**
@@ -184,12 +186,12 @@ public class Mutation extends VariantContext {
 	public final String getUniqueBase() {
 		String output = "";
 		// Get all the individual base pairs
-		char p1 = child().charAt(0);
-		char p2 = child().charAt(1);
-		char f1 = father().charAt(0);
-		char f2 = father().charAt(1);
-		char m1 = mother().charAt(0);
-		char m2 = mother().charAt(1);
+		char p1 = child().charAt(1);
+		char p2 = child().charAt(4);
+		char f1 = father().charAt(1);
+		char f2 = father().charAt(4);
+		char m1 = mother().charAt(1);
+		char m2 = mother().charAt(4);
 		// Check if the mutation is in the first, or the second basepair
 		if (p1 != f1 && p1 != f2 && p1 != m1 && p1 != m2) {
 			output = "" + p1;
@@ -219,7 +221,7 @@ public class Mutation extends VariantContext {
 	 * @return Returns the String representation of the basepair
 	 */
 	public final String toAllelesString() {
-		List<Allele> childAlleles = this.getAlleles();
+		List<Allele> childAlleles = this.getGenotype("DAUGHTER").getAlleles();
 		List<Allele> fatherAlleles = this.getGenotype("FATHER").getAlleles();
 		List<Allele> motherAlleles = this.getGenotype("MOTHER").getAlleles();
 
@@ -244,7 +246,13 @@ public class Mutation extends VariantContext {
 			final String allelesString) {
 		Collection<Allele> alleles = new ArrayList<Allele>();
 		alleles.add(toAllele(allelesString.substring(0, 1), true));
-		alleles.add(toAllele(allelesString.substring(1, 2), false));
+		for(int i=1; i<6; i++)
+		{
+			if(!allelesString.substring(0,i).contains(allelesString.substring(i, i+1)))
+			{
+				alleles.add(toAllele(allelesString.substring(i, i+1), false));
+			}
+		}
 		return alleles;
 	}
 
@@ -273,6 +281,7 @@ public class Mutation extends VariantContext {
 	 */
 	public static GenotypesContext toGenotypesContext(final String s) {
 		GenotypesContext gc = GenotypesContext.create();
+		gc.add(toGenotype(s.substring(0, 2), "DAUGHTER"));
 		gc.add(toGenotype(s.substring(2, 4), "FATHER"));
 		gc.add(toGenotype(s.substring(4, 6), "MOTHER"));
 		return gc;

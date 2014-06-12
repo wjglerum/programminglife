@@ -172,15 +172,18 @@ public final class QueryProcessor {
 
 		// If the mutation is the same value as the reference, return 0		
 		while (rs.next()) {
+			String ref = rs.getString("ref");
 			String alt = rs.getString("alt");
 			float phred = rs.getFloat("phred");
-			if (alt.equals(mutation.getAlleles().get(0).getBaseString()) || alt.equals(mutation.getAlleles().get(1).getBaseString())) {
+			System.out.println(mutation.getID() + " - " + ref + " - " + alt + " - " + mutation.getUniqueBase() + " - " + phred);
+			
+			if (alt.equals(mutation.getUniqueBase())) {
 				return phred;
 			}
 		}
 		return 0;
 	}
-
+	
 	/**
 	 * Gets the annotation of a protein.
 	 *
