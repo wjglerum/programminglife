@@ -192,6 +192,22 @@ public class Patients extends Controller {
 			return redirect(routes.Patients.showAll());
 		}
 	}
+	
+  /**
+   * Handle the ajax request for removing patients
+   * 
+   * @throws SQLException
+   */
+  public static Result remove(int p_id) throws SQLException {
+    Patient p = patientService.get(p_id, Authentication.getUser().id);
+
+    if (p == null)
+      return badRequest();
+
+    patientService.remove(p);
+
+    return ok();
+  }
 
   /**
    * Handle the ajax request for removing patients
