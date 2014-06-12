@@ -33,6 +33,7 @@ public class Authentication extends Controller {
 			else
 				return null;
 		}
+
 	}
 
 	/**
@@ -40,6 +41,7 @@ public class Authentication extends Controller {
 	 */
 	public static Result login() {
 		session().clear();
+
 		return ok(login.render(form(Login.class)));
 	}
 
@@ -73,7 +75,7 @@ public class Authentication extends Controller {
 	/**
 	 * Get the current session User
 	 * 
-	 * @throws SQLException
+	 * @throws SQLException 
 	 */
 	public static User getUser() throws SQLException {
 		String username = session("username");
@@ -81,7 +83,7 @@ public class Authentication extends Controller {
 		UserService us = new UserService(new UserRepositoryDB());
 		if (username != null)
 			return us.getUser(username);
-
+		
 		return null;
 	}
 
