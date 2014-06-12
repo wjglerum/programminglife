@@ -1,6 +1,10 @@
 package models.protein;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+
+import models.mutation.Mutation;
+import models.patient.Patient;
 
 /**
  * Interface for protein.
@@ -16,4 +20,6 @@ public interface ProteinRepository {
 
 	public void addConnectionsOfProteine(ProteinGraph pg, String proteine)
 			throws SQLException;
+
+	public ArrayList<Mutation> getRelatedMutations(Patient p, Mutation m) throws SQLException;
 }

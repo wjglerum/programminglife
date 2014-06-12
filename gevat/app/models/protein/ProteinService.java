@@ -1,6 +1,10 @@
 package models.protein;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+
+import models.mutation.Mutation;
+import models.patient.Patient;
 
 /**
  * Service for protein.
@@ -27,6 +31,10 @@ public class ProteinService {
 	public void addConnectionsOfProteine(ProteinGraph pg, String proteine)
 			throws SQLException {
 		proteinRepository.addConnectionsOfProteine(pg, proteine);
+	}
+	
+	public ArrayList<Mutation> getRelatedMutations(Patient p, Mutation m) throws SQLException {
+		return proteinRepository.getRelatedMutations(p, m);
 	}
 
 }

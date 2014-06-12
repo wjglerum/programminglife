@@ -71,7 +71,7 @@ public final class QueryProcessor {
 		while (rs.next()) {
 			String codeName = rs.getString("preferred_name");
 			int score = rs.getInt("combined_score");
-			list.add(codeName + "\t" + score);
+			list.add(codeName.replaceAll(",", "") + "\t" + score);
 		}
 		return list;
 	}
@@ -175,7 +175,6 @@ public final class QueryProcessor {
 			String ref = rs.getString("ref");
 			String alt = rs.getString("alt");
 			float phred = rs.getFloat("phred");
-			System.out.println(mutation.getID() + " - " + ref + " - " + alt + " - " + mutation.getUniqueBase() + " - " + phred);
 			
 			if (alt.equals(mutation.getUniqueBase())) {
 				return phred;
@@ -263,20 +262,21 @@ public final class QueryProcessor {
 		return list;
 	}
 
-	public static void findGeneConnections(final int id,
+	public static String findGeneConnections(final int id,
 			final int limit, final int threshold, ProteinGraph pg)
 					throws SQLException {
 		ArrayList<String> qResult = QueryProcessor.
 				findGenesAssociatedWithSNP(id);
 		if (!qResult.isEmpty()) {
-			findGeneConnections(qResult.get(0), limit, threshold, pg);
+			return findGeneConnections(qResult.get(0), limit, threshold, pg);
 		}
+		return "";
 	}
 
-	public static void findGeneConnections(final String p1,
+	public static String findGeneConnections(final String p1,
 			final int limit, final int threshold, ProteinGraph pg)
 					throws SQLException {
-			pg.add(p1, QueryProcessor.executeStringQuery(
-					p1, limit, threshold).toString());
+			return QueryProcessor.executeStringQuery(
+					p1, limit, threshold).toString();
 	}
 }

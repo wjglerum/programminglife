@@ -91,4 +91,5 @@ public class Protein {
 	public final String getDisease() {
 		return this.disease;
 	}
+
 }
