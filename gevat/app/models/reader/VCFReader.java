@@ -72,7 +72,7 @@ public final class VCFReader {
 					try {
 						listSNP.add(toMutation(vc, "De Novo"));
 					} catch (NullPointerException e) {
-						Logger.info("Het lukt niet om een snp om te zetten in mutation.");
+						//Logger.info("Het lukt niet om een snp om te zetten in mutation.");
 					}	
 				}
 				else if (isPotentialHomozygousRecessive(vc)) {
@@ -85,15 +85,24 @@ public final class VCFReader {
 						filter.add(toMutation(vc, "Recessive Homozygous"));
 					}
 					catch (NullPointerException e) {
-						Logger.info("Het lukt niet om een snp om te zetten in een mutation.");
+						//Logger.info("Het lukt niet om een snp om te zetten in een mutation.");
 					}
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		Logger.info("Klaar! We hebben " + counter + " potentiele recessive snps gevonden.");
 		return listSNP;
 	}
+
+	//TODO: finish this...
+//	protected static List<Mutation> filterMutations(List<Mutation> mutations) {
+//		for (Mutation m : mutations) {
+//			
+//		}
+//		return null;
+//	}
 
 	/**
 	 * Takes alleles from the child and parents and checks whether a
