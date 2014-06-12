@@ -102,7 +102,10 @@ public class Patients extends Controller {
 					// Check file extension
 					if (!checkFileExtension(fileName)) {
 						/*
-						 * ^^^^^^^^^^^ { || || } X \_______/
+						 * ^^^^^^^^^^^
+						 *  { || || }
+						 *      X 
+						 *  \_______/
 						 * 
 						 * YEAH SIG WE FIXED THIS !!!
 						 */
