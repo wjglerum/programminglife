@@ -75,14 +75,18 @@ public final class VCFReader {
 						//Logger.info("Het lukt niet om een snp om te zetten in mutation.");
 					}	
 				}
-				else if (isPotentialHomozygousRecessive(vc)) {
-					
+				else if (isPotentialHomozygousRecessive(vc)) {					
 					counter++;
 					if (counter % 10000 == 0) {
 						Logger.info("We hebben " + counter + " potentiele recessive snps gevonden.");
 					}
 					try {
-						filter.add(toMutation(vc, "Recessive Homozygous"));
+						//filter.add(toMutation(vc, "Recessive Homozygous"));
+						Mutation m = toMutation(vc, "Recessive Homozygous");
+						if (m.getFrequency() > 0) {
+							Logger.info("Bingo @ " + counter);
+							listSNP.add(m);
+						}
 					}
 					catch (NullPointerException e) {
 						//Logger.info("Het lukt niet om een snp om te zetten in een mutation.");

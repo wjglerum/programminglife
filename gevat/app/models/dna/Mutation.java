@@ -158,6 +158,10 @@ public class Mutation extends VariantContext {
 	public float getScore() throws SQLException {
 		return QueryProcessor.executeScoreQuery(this);
 	}
+	
+	public float getFrequency() throws SQLException {
+		return QueryProcessor.getFrequency(this);
+	}
 
 	/**
 	 * Gets the endpoint of the mutation.

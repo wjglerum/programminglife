@@ -165,7 +165,7 @@ public final class QueryProcessor {
 	 */
 	public static float executeScoreQuery(final Mutation mutation)
 					throws SQLException {
-		String q = "SELECT * " + "FROM " + "score " + "WHERE " + "chrom = '" + mutation.getChr() + 
+		String q = "SELECT * FROM score WHERE chrom = '" + mutation.getChr() + 
 				"' AND position = " + mutation.getPositionGRCH37() + ";";
 		// Get all the records from database score that have mutations on the same position as our position
 		ResultSet rs = Database.select("score", q);
@@ -177,6 +177,15 @@ public final class QueryProcessor {
 			if (alt.equals(mutation.getAlleles().get(0).getBaseString()) || alt.equals(mutation.getAlleles().get(1).getBaseString())) {
 				return phred;
 			}
+		}
+		return 0;
+	}
+	
+	public static float getFrequency(final Mutation mutation) throws SQLException {
+		String q = "SELECT * FROM snpallelefreq WHERE snp_id =" + mutation.getID().substring(2) + " AND freq < 0.0001;";
+		ResultSet rs = Database.select("snp", q);
+		while (rs.next()) {
+			return rs.getFloat("freq");
 		}
 		return 0;
 	}
