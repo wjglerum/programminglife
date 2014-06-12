@@ -162,6 +162,10 @@ public class Mutation extends VariantContext {
 	public float getFrequency() throws SQLException {
 		return QueryProcessor.getFrequency(this);
 	}
+	
+	public float getFrequency(ArrayList<Mutation> mutationList) throws SQLException {
+		return QueryProcessor.getFrequency(mutationList);
+	}
 
 	/**
 	 * Gets the endpoint of the mutation.

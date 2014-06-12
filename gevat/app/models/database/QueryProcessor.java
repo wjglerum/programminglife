@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import play.Logger;
 import models.dna.Mutation;
 import models.protein.ProteinGraph;
 
@@ -182,14 +183,38 @@ public final class QueryProcessor {
 	}
 	
 	public static float getFrequency(final Mutation mutation) throws SQLException {
-		String q = "SELECT * FROM snpallelefreq WHERE snp_id =" + mutation.getID().substring(2) + " AND freq < 0.0001;";
+		String q = "SELECT DISTINCT * FROM snpallelefreq WHERE snp_id =" + mutation.getID().substring(2) + " AND freq < 0.0001;";
 		ResultSet rs = Database.select("snp", q);
 		while (rs.next()) {
 			return rs.getFloat("freq");
 		}
 		return 0;
 	}
-
+	
+	public static float getFrequency(final ArrayList<Mutation> mutationList) throws SQLException {
+		System.out.println("Getting frequencies");
+		String q = "SELECT DISTINCT * FROM snpallelefreq WHERE snp_id IN (";
+		int counter = 0;
+		int addCounter = 0;
+		for (Mutation m : mutationList) {
+			counter++;
+			String[] idAsString = m.getID().split(";");
+			q +=  idAsString[0].substring(2) + ",";
+			if (counter % 10000 == 0 || counter == mutationList.size()) {
+				q = q.substring(0, q.length() - 1);
+				q += ") AND freq < 0.0001;";
+				ResultSet rs = Database.select("snp", q);
+				q = "SELECT DISTINCT * FROM snpallelefreq WHERE snp_id IN (";
+				while (rs.next()) {
+					addCounter++;
+					System.out.println(rs.getString("snp_id") + " - " + rs.getFloat("freq"));
+				}
+				System.out.println("Currently processed " + counter);
+			}
+		}
+		System.out.println("Added " + addCounter);
+		return 0;
+	}
 	/**
 	 * Gets the annotation of a protein.
 	 *

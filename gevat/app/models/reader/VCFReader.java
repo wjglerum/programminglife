@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import models.database.QueryProcessor;
 import models.dna.Mutation;
 
 import org.broad.tribble.AbstractFeatureReader;
@@ -61,7 +62,7 @@ public final class VCFReader {
 	protected static List<Mutation> getMutations(
 			final FeatureReader<VariantContext> fr) {
 		List<Mutation> listSNP = new ArrayList<Mutation>();
-		List<Mutation> filter = new ArrayList<Mutation>();
+		ArrayList<Mutation> filter = new ArrayList<Mutation>();
 		int counter = 0;
 		try {
 			Iterator<VariantContext> it;
@@ -81,18 +82,23 @@ public final class VCFReader {
 						Logger.info("We hebben " + counter + " potentiele recessive snps gevonden.");
 					}
 					try {
-						//filter.add(toMutation(vc, "Recessive Homozygous"));
-						Mutation m = toMutation(vc, "Recessive Homozygous");
-						if (m.getFrequency() > 0) {
-							Logger.info("Bingo @ " + counter);
-							listSNP.add(m);
-						}
+						filter.add(toMutation(vc, "Recessive Homozygous"));
+						//String[] idAsString = vc.getID().split(";");
+						//if (!idAsString[0].equals(".")) {
+						//	filter.add(Integer.parseInt(idAsString[0].substring(2)));							
+						//}
+						//Mutation m = toMutation(vc, "Recessive Homozygous");
+						//if (m.getFrequency() > 0) {
+						//	Logger.info("Bingo @ " + counter);
+						//	listSNP.add(m);
+						//}
 					}
 					catch (NullPointerException e) {
 						//Logger.info("Het lukt niet om een snp om te zetten in een mutation.");
 					}
 				}
 			}
+			QueryProcessor.getFrequency(filter);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
