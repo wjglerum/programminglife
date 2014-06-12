@@ -175,7 +175,6 @@ public final class QueryProcessor {
 			String ref = rs.getString("ref");
 			String alt = rs.getString("alt");
 			float phred = rs.getFloat("phred");
-			System.out.println(mutation.getID() + " - " + ref + " - " + alt + " - " + mutation.getUniqueBase() + " - " + phred);
 			
 			if (alt.equals(mutation.getUniqueBase())) {
 				return phred;
