@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import play.Logger;
 import models.database.QueryProcessor;
 import models.dna.Mutation;
 import models.patient.Patient;
@@ -117,26 +116,13 @@ public class Protein {
 	public ArrayList<Mutation> getRelatedMutations(Patient p, Mutation m) throws SQLException {
 	  List<Mutation> mutations = Mutation.getMutations(p.getId());
 	  ArrayList<Mutation> related = new ArrayList<Mutation>();
-	  
-    String log = "";
+    
     // Find mutation related to this protein (should be faster)
     for (Mutation mutation : mutations) {
-      log += mutation.getID() + ":";
-      //if (mutation.getId() != m.getId()) {
-        int rsId = Integer.parseInt(mutation.getRsID().substring(2));
-        
-        ProteinGraph pg = new ProteinGraph(rsId,20,300);
-        
-        for (Protein protein : pg.getProteines()) {
-          log += " " + protein.getName();
-          if (protein.getName().equals(this.getName()))
-            related.add(mutation);
-        }
-      //}
-     log += "\n";
+      if (mutation.getId() != m.getId()) {
+        // TODO add related proteins found in mutation
+      }
     }
-    
-    Logger.info(log);
 	  
     return related;
 	}
