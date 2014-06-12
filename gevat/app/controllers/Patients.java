@@ -201,7 +201,7 @@ public class Patients extends Controller {
   public static Result remove(int p_id) throws SQLException {
     Patient p = patientService.get(p_id, Authentication.getUser().id);
 
-    if (p == null)
+    if (p == null || !p.isProcessed())
       return badRequest();
 
     patientService.remove(p);
