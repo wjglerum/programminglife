@@ -25,6 +25,7 @@ public class Mutation extends VariantContext {
 
 	public String mutationType;
 	public int id;
+	private int positionGRCH37;
 
 	/**
 	 * Stores information about a mutation.
@@ -49,12 +50,13 @@ public class Mutation extends VariantContext {
 	public Mutation(final int id, final String mutationType, final String rsID,
 			final int chromosome, final Collection<Allele> alleles,
 			final int startPoint, final int endPoint,
-			final GenotypesContext genotypes) {
+			final GenotypesContext genotypes, final int positionGRCH37) {
 		super(null, rsID, Integer.toString(chromosome), startPoint, endPoint,
 				alleles, genotypes, 0, null, null, false, EnumSet
 						.noneOf(Validation.class));
 		this.mutationType = mutationType;
 		this.id = id;
+		this.positionGRCH37 = positionGRCH37;
 	}
 
 	/**
@@ -77,13 +79,14 @@ public class Mutation extends VariantContext {
 	 */
 	public Mutation(final int id, final String mutationType, final String rsID,
 			final int chromosome, final char[] alleles, final int startPoint,
-			final int endPoint) {
+			final int endPoint, final int positionGRCH37) {
 		super(null, rsID, Integer.toString(chromosome), id, id,
 				toAlleleCollection(new String(alleles)),
 				toGenotypesContext(new String(alleles)), 0, null, null, false,
 				EnumSet.noneOf(Validation.class));
 		this.mutationType = mutationType;
 		this.id = id;
+		this.positionGRCH37 = positionGRCH37;
 	}
 
 	/**
@@ -97,6 +100,8 @@ public class Mutation extends VariantContext {
 	public Mutation(final VariantContext vc, final String mutationType) {
 		super(vc);
 		this.mutationType = mutationType;
+		String[] splitGP = ((String) vc.getAttribute("GP")).split(":");
+		this.positionGRCH37 = Integer.parseInt(splitGP[1]);
 	}
 
 	/**
@@ -163,6 +168,9 @@ public class Mutation extends VariantContext {
 		return this.getEnd();
 	}
 
+	public final int getPositionGRCH37() {
+		return this.positionGRCH37;
+	}
 	/**
 	 * Return the alleles of the child.
 	 * 
@@ -274,8 +282,9 @@ public class Mutation extends VariantContext {
 					.getString("alleles"));
 			int startPoint = rs.getInt("startpoint");
 			int endPoint = rs.getInt("endpoint");
+			int positionGRCH37 = rs.getInt("GRCH37_pos");
 			mutations.add(new Mutation(id, sort, rsID, chromosome, alleles,
-					startPoint, endPoint, genotypescontext));
+					startPoint, endPoint, genotypescontext, positionGRCH37));
 		}
 		return mutations;
 	}
@@ -310,8 +319,9 @@ public class Mutation extends VariantContext {
 					.getString("alleles"));
 			int startPoint = rs.getInt("startpoint");
 			int endPoint = rs.getInt("endpoint");
+			int positionGRCH37 = rs.getInt("GRCH37_pos");
 			mutations.add(new Mutation(id, sort, rsID, chromosome, alleles,
-					startPoint, endPoint, genotypescontext));
+					startPoint, endPoint, genotypescontext, positionGRCH37));
 		}
 		return mutations;
 	}

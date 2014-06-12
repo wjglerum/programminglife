@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import models.application.GeneDiseaseLinkReader;
-import models.application.Patient;
 import models.database.QueryProcessor;
 import models.dna.Mutation;
+import models.patient.Patient;
+import models.reader.GeneDiseaseLinkReader;
 
 /**
  * The proteine class contains the name,
