@@ -11,9 +11,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import models.application.Patient;
-import models.application.User;
 import models.dna.Mutation;
+import models.patient.Patient;
+import models.user.User;
 
 import org.junit.AfterClass;
 import org.junit.Before;

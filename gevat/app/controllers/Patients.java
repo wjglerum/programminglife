@@ -13,6 +13,9 @@ import models.application.VCFReader;
 import models.application.User;
 import models.database.Database;
 import models.dna.Mutation;
+import models.patient.PatientRepository;
+import models.patient.PatientRepositoryDB;
+import models.patient.PatientService;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
@@ -26,23 +29,30 @@ import views.html.patients;
 
 public class Patients extends Controller {
 
+	private static PatientRepositoryDB patientRepository = new PatientRepositoryDB();
+	private static PatientService patientService = new PatientService(
+			patientRepository);
+
 	/**
 	 * List all patients.
-	 * @throws SQLException 
+	 * 
+	 * @throws SQLException
 	 */
 	@Security.Authenticated(Secured.class)
 	public static Result showAll() throws SQLException {
-		return ok(patients.render(Patient.getAll(Authentication.getUser().id),
+		return ok(patients.render(
+				patientService.getAll(Authentication.getUser().id),
 				Authentication.getUser()));
 	}
 
 	/**
 	 * Display a patient.
-	 * @throws SQLException 
+	 * 
+	 * @throws SQLException
 	 */
 	@Security.Authenticated(Secured.class)
 	public static Result show(int p_id) throws SQLException {
-		Patient p = Patient.get(p_id, Authentication.getUser().id);
+		Patient p = patientService.get(p_id, Authentication.getUser().id);
 		List<Mutation> mutations = Mutation.getMutations(p_id);
 
 		if (p == null)
@@ -53,8 +63,10 @@ public class Patients extends Controller {
 	}
 
 	/**
-	 * Return to the patients overview and display a message the requested patient isn't found
-	 * @throws SQLException 
+	 * Return to the patients overview and display a message the requested
+	 * patient isn't found
+	 * 
+	 * @throws SQLException
 	 */
 	@Security.Authenticated(Secured.class)
 	public static Result patientNotFound() throws SQLException {
@@ -62,7 +74,7 @@ public class Patients extends Controller {
 				"The requested patient could not be found. Please select another one below.");
 
 		return notFound(patients.render(
-				Patient.getAll(Authentication.getUser().id),
+				patientService.getAll(Authentication.getUser().id),
 				Authentication.getUser()));
 	}
 
@@ -88,22 +100,21 @@ public class Patients extends Controller {
 					String contentType = vcf.getContentType();
 
 					// Check file extension
-					if (!checkFileExtension(fileName)) { 
-						/*        ^^^^^^^^^^^
-						 *      {  ||     ||  }
-						 *             X
-						 *         \_______/
+					if (!checkFileExtension(fileName)) {
+						/*
+						 * ^^^^^^^^^^^ { || || } X \_______/
 						 * 
-						 *   YEAH SIG WE FIXED THIS !!!
+						 * YEAH SIG WE FIXED THIS !!!
 						 */
 						return "The uploaded file hasn't the .vcf extension";
 					}
 
 					// Check content type
-					if (!contentType.equals("text/directory") && !contentType.equals("text/vcard"))
+					if (!contentType.equals("text/directory")
+							&& !contentType.equals("text/vcard"))
 						return "File has wrong content type";
 				} else {
-					return "No VCF file provided";   
+					return "No VCF file provided";
 				}
 			}
 
@@ -124,7 +135,8 @@ public class Patients extends Controller {
 
 	/**
 	 * Render the form to add a patient.
-	 * @throws SQLException 
+	 * 
+	 * @throws SQLException
 	 */
 	public static Result add() throws SQLException {
 		return ok(patient_add.render(form(Add.class), Authentication.getUser()));
@@ -132,7 +144,8 @@ public class Patients extends Controller {
 
 	/**
 	 * Insert the newly added patient in the database
-	 * @throws SQLException 
+	 * 
+	 * @throws SQLException
 	 */
 	public static Result insert() throws SQLException {
 		Form<Add> addForm = form(Add.class).bindFromRequest();
@@ -154,14 +167,31 @@ public class Patients extends Controller {
 			String filePath = file.getAbsolutePath();
 
 			// Add Patient to database
-			Patient p = Patient.add(Authentication.getUser().id, name, surname, fileName, fileSize);
+			Patient p = patientService.add(Authentication.getUser().id, name,
+					surname, fileName, fileSize);
 
 			// Process VCF file
 			List<Mutation> mutations = VCFReader.getMutations(filePath);
 
 			// Add each mutation to the database
 			for (Mutation m : mutations) {
-				String query = "INSERT INTO mutations VALUES (nextval('m_id_seq'::regclass)," + p.getId() + ",'" + m.getMutationType() + "','" + m.getRsID() + "'," + m.getChromosome() + ",'" + m.toAllelesString() + "'," + m.getStart() + "," + m.getEnd() +  "," + m.getPositionGRCH37() + ");";
+				String query = "INSERT INTO mutations VALUES (nextval('m_id_seq'::regclass),"
+						+ p.getId()
+						+ ",'"
+						+ m.getMutationType()
+						+ "','"
+						+ m.getRsID()
+						+ "',"
+						+ m.getChromosome()
+						+ ",'"
+						+ m.toAllelesString()
+						+ "',"
+						+ m.getStart()
+						+ ","
+						+ m.getEnd()
+						+ ","
+						+ m.getPositionGRCH37()
+						+ ");";
 				Logger.info(query);
 				Database.insert("data", query);
 			}
@@ -176,15 +206,16 @@ public class Patients extends Controller {
 
 	/**
 	 * Handle the ajax request for removing patients
-	 * @throws SQLException 
+	 * 
+	 * @throws SQLException
 	 */
 	public static Result remove(int p_id) throws SQLException {
-		Patient p = Patient.get(p_id, Authentication.getUser().id);
+		Patient p = patientService.get(p_id, Authentication.getUser().id);
 
 		if (p == null)
 			return badRequest();
 
-		Patient.remove(p);
+		patientService.remove(p);
 
 		return ok();
 	}

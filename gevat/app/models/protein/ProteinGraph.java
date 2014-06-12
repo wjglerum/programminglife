@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
 
-import models.application.GeneDiseaseLinkReader;
 import models.database.QueryProcessor;
+import models.reader.GeneDiseaseLinkReader;
 import play.Logger;
 
 /**
