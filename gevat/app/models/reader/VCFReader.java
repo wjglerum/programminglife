@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-
 import models.database.QueryProcessor;
-import models.dna.Mutation;
+import models.mutation.Mutation;
+
 
 import org.broad.tribble.AbstractFeatureReader;
 import org.broad.tribble.FeatureReader;
@@ -101,14 +101,6 @@ public final class VCFReader {
 		Logger.info("Klaar! We hebben " + counter + " potentiele recessive snps gevonden.");
 		return listSNP;
 	}
-
-	//TODO: finish this...
-//	protected static List<Mutation> filterMutations(List<Mutation> mutations) {
-//		for (Mutation m : mutations) {
-//			
-//		}
-//		return null;
-//	}
 
 	/**
 	 * Takes alleles from the child and parents and checks whether a

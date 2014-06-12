@@ -1,4 +1,4 @@
-@(patient: models.patient.Patient, mutation: dna.Mutation, user: models.user.User, proteinsData: String)
+@(patient: models.patient.Patient, mutation: models.mutation.Mutation, user: models.user.User, proteinsData: String)
 
 @import scala.collection.immutable.Map
 
@@ -75,6 +75,7 @@
 				<th>Name</th>
 				<th>Annotations</th>
 				<th>Disease</th>
+				<th>Related mutations</th>
 			</tr>
 		</thead>
 		<tbody>
