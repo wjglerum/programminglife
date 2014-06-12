@@ -3,7 +3,7 @@ package models.reader;
 import java.util.List;
 
 import models.database.Database;
-import models.dna.Mutation;
+import models.mutation.Mutation;
 import models.patient.Patient;
 
 public class ReaderThread implements Runnable {
