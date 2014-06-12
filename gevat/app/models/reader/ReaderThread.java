@@ -2,7 +2,6 @@ package models.reader;
 
 import java.util.List;
 
-import play.Logger;
 import models.database.Database;
 import models.dna.Mutation;
 import models.patient.Patient;
@@ -48,7 +47,7 @@ public class ReaderThread implements Runnable {
             + ","
             + m.getPositionGRCH37()
             + ");";
-        Logger.info(query);
+        
         Database.insert("data", query);
       }
     }
