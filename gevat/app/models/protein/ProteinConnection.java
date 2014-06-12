@@ -1,5 +1,8 @@
 package models.protein;
 
+import models.database.Database;
+import play.Logger;
+
 
 public class ProteinConnection {
 	protected Protein p1;
@@ -55,5 +58,20 @@ public class ProteinConnection {
 			}
 		}
 	return false;
+	}
+	
+	public void insertIntoDB(int patientId)
+	{
+		String query = "INSERT INTO protein_connections VALUES ("
+				+ patientId
+				+ ",'"
+				+ p1.getName()
+				+ "','"
+				+ p2.getName()
+				+ "',"
+				+ combinedScore
+				+ ");";
+		Logger.info(query);
+		Database.insert("data", query);
 	}
 }

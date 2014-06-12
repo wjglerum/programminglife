@@ -263,18 +263,18 @@ public final class QueryProcessor {
 	}
 
 	public static String findGeneConnections(final int id,
-			final int limit, final int threshold, ProteinGraph pg)
+			final int limit, final int threshold)
 					throws SQLException {
 		ArrayList<String> qResult = QueryProcessor.
 				findGenesAssociatedWithSNP(id);
 		if (!qResult.isEmpty()) {
-			return findGeneConnections(qResult.get(0), limit, threshold, pg);
+			return findGeneConnections(qResult.get(0), limit, threshold);
 		}
 		return "";
 	}
 
 	public static String findGeneConnections(final String p1,
-			final int limit, final int threshold, ProteinGraph pg)
+			final int limit, final int threshold)
 					throws SQLException {
 			return QueryProcessor.executeStringQuery(
 					p1, limit, threshold).toString();

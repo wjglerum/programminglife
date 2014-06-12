@@ -106,7 +106,7 @@ public class ProteinGraph {
 	 */
 	public Collection<Protein> addConnectionsOfProteine(String protein, int limit, int threshold) {
 		try {
-			return addConnections(protein, QueryProcessor.findGeneConnections(protein, limit, threshold, this));
+			return addConnections(protein, QueryProcessor.findGeneConnections(protein, limit, threshold));
 		} catch (SQLException e) {
 			Logger.info(e.toString());
 			return new ArrayList<Protein>();
@@ -121,7 +121,7 @@ public class ProteinGraph {
 	 */
 	private Collection<Protein> addConnections(String p1, String connections) {
 		Collection<Protein> newProteins = new ArrayList<Protein>();
-		if(connections.length()==0)
+		if(connections.length()<=2)
 			return newProteins;
 		for (String s : connections.substring(1, connections.length() - 1)
 				.split(",")) {
