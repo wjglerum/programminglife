@@ -172,15 +172,18 @@ public final class QueryProcessor {
 
 		// If the mutation is the same value as the reference, return 0		
 		while (rs.next()) {
+			String ref = rs.getString("ref");
 			String alt = rs.getString("alt");
 			float phred = rs.getFloat("phred");
-			if (alt.equals(mutation.getAlleles().get(0).getBaseString()) || alt.equals(mutation.getAlleles().get(1).getBaseString())) {
+			System.out.println(mutation.getID() + " - " + ref + " - " + alt + " - " + mutation.getUniqueBase() + " - " + phred);
+			
+			if (alt.equals(mutation.getUniqueBase())) {
 				return phred;
 			}
 		}
 		return 0;
 	}
-
+	
 	/**
 	 * Gets the annotation of a protein.
 	 *
@@ -260,20 +263,21 @@ public final class QueryProcessor {
 		return list;
 	}
 
-	public static void findGeneConnections(final int id,
+	public static String findGeneConnections(final int id,
 			final int limit, final int threshold, ProteinGraph pg)
 					throws SQLException {
 		ArrayList<String> qResult = QueryProcessor.
 				findGenesAssociatedWithSNP(id);
 		if (!qResult.isEmpty()) {
-			findGeneConnections(qResult.get(0), limit, threshold, pg);
+			return findGeneConnections(qResult.get(0), limit, threshold, pg);
 		}
+		return "";
 	}
 
-	public static void findGeneConnections(final String p1,
+	public static String findGeneConnections(final String p1,
 			final int limit, final int threshold, ProteinGraph pg)
 					throws SQLException {
-			pg.add(p1, QueryProcessor.executeStringQuery(
-					p1, limit, threshold).toString());
+			return QueryProcessor.executeStringQuery(
+					p1, limit, threshold).toString();
 	}
 }
