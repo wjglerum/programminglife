@@ -187,7 +187,10 @@ public class Patients extends Controller {
 						+ "',"
 						+ m.getStart()
 						+ ","
-						+ m.getEnd() + ");";
+						+ m.getEnd()
+						+ ","
+						+ m.getPositionGRCH37()
+						+ ");";
 				Logger.info(query);
 				Database.insert("data", query);
 			}
