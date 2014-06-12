@@ -2,6 +2,7 @@ package models.reader;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -63,6 +64,8 @@ public final class VCFReader {
 			final FeatureReader<VariantContext> fr) {
 		List<Mutation> listSNP = new ArrayList<Mutation>();
 		ArrayList<Mutation> filter = new ArrayList<Mutation>();
+		ArrayList<Mutation> output = new ArrayList<Mutation>();
+		HashMap<Integer, Mutation> output2 = new HashMap<Integer, Mutation>();
 		int counter = 0;
 		try {
 			Iterator<VariantContext> it;
@@ -78,30 +81,23 @@ public final class VCFReader {
 				}
 				else if (isPotentialHomozygousRecessive(vc)) {					
 					counter++;
-					if (counter % 10000 == 0) {
-						Logger.info("We hebben " + counter + " potentiele recessive snps gevonden.");
-					}
 					try {
-						filter.add(toMutation(vc, "Recessive Homozygous"));
-						//String[] idAsString = vc.getID().split(";");
-						//if (!idAsString[0].equals(".")) {
-						//	filter.add(Integer.parseInt(idAsString[0].substring(2)));							
-						//}
-						//Mutation m = toMutation(vc, "Recessive Homozygous");
-						//if (m.getFrequency() > 0) {
-						//	Logger.info("Bingo @ " + counter);
-						//	listSNP.add(m);
-						//}
+						Mutation m = toMutation(vc, "Recessive Homozygous");
+						String[] idAsString = m.getID().split(";");
+						int i = Integer.parseInt(idAsString[0].substring(2));
+						output2.put(i, m);
+						//filter.set((Integer.parseInt(index)), m);
 					}
 					catch (NullPointerException e) {
 						//Logger.info("Het lukt niet om een snp om te zetten in een mutation.");
 					}
 				}
 			}
-			QueryProcessor.getFrequency(filter);
+			output = QueryProcessor.getFrequency(output2);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		listSNP.addAll(output);
 		Logger.info("Klaar! We hebben " + counter + " potentiele recessive snps gevonden.");
 		return listSNP;
 	}
