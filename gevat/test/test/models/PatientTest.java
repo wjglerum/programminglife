@@ -32,7 +32,7 @@ public class PatientTest {
 
 	@Before
 	public void setUp() {
-		p = new Patient(id, name, surname, vcfFile, vcfLength);
+		p = new Patient(id, name, surname, vcfFile, vcfLength, true);
 	}
 
 	@Test
