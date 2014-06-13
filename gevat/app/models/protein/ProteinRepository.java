@@ -15,11 +15,6 @@ import models.patient.Patient;
 public interface ProteinRepository {
 	public String getAnnotations(String name) throws SQLException;
 
-	public void addConnectionsOfSnp(ProteinGraph pg, int snp, int limit,
-			int threshold) throws SQLException;
-
-	public void addConnectionsOfProteine(ProteinGraph pg, String proteine)
+	public ArrayList<Mutation> getRelatedMutations(Patient p, Mutation m)
 			throws SQLException;
-
-	public ArrayList<Mutation> getRelatedMutations(Patient p, Mutation m) throws SQLException;
 }

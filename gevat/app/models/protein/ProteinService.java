@@ -8,8 +8,9 @@ import models.patient.Patient;
 
 /**
  * Service for protein.
+ * 
  * @author willem
- *
+ * 
  */
 public class ProteinService {
 
@@ -23,17 +24,8 @@ public class ProteinService {
 		return proteinRepository.getAnnotations(name);
 	}
 
-	public void addConnectionsOfSnp(ProteinGraph pg, int snp, int limit,
-			int threshold) throws SQLException {
-		proteinRepository.addConnectionsOfSnp(pg, snp, limit, threshold);
-	}
-
-	public void addConnectionsOfProteine(ProteinGraph pg, String proteine)
+	public ArrayList<Mutation> getRelatedMutations(Patient p, Mutation m)
 			throws SQLException {
-		proteinRepository.addConnectionsOfProteine(pg, proteine);
-	}
-	
-	public ArrayList<Mutation> getRelatedMutations(Patient p, Mutation m) throws SQLException {
 		return proteinRepository.getRelatedMutations(p, m);
 	}
 

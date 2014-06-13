@@ -41,7 +41,7 @@ public class ProteinGraph {
 	 * @throws SQLException
 	 */
 	public ProteinGraph(int snp, int limit, int threshold) throws SQLException {
-		proteinService.addConnectionsOfSnp(this, snp, limit, threshold);
+		addConnectionsOfSnp(snp, limit, threshold);
 		connectAllProteines();
 	}
 
