@@ -1,0 +1,48 @@
+\documentclass[a4paper]{article}
+\usepackage{natbib}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+\usepackage{graphicx}
+\usepackage[english]{babel}
+
+\begin{document}
+	\input{title.tex}
+	
+	\input{abstract.tex}
+	\clearpage
+	
+	\tableofcontents
+	\clearpage
+	
+	\section{Introduction}
+	\input{introduction.tex}
+	
+	\section{Overview}
+	\input{overview.tex}
+		
+	\section{Description}
+	\input{description.tex}
+		
+	\section{Human Computer Interaction (HCI)}
+	\input{hci.tex}
+		
+	\section{Evaluation}
+	\input{evaluation.tex}
+		
+	\section{Outlook}
+	\input{outlook.tex}
+	
+	\section{Glossary}
+	\input{glossary.tex}
+	
+	\clearpage
+	\bibliography{bibtex}{}
+	\bibliographystyle{unsrt}
+	
+\end{document}
