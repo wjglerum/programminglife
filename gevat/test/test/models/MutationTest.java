@@ -23,7 +23,7 @@ public class MutationTest {
 	private static int id = 1;
 	private static String mutationType = "SNP";
 	private static String rsID = "rsID";
-	private static int chromosome = 1;
+	private static String chromosome = "1";
 	private static char[] alleles = { 'A', 'T', 'T', 'T', 'T', 'T' };
 	private static int startPoint = 1;
 	private static int endPoint = 2;
@@ -124,9 +124,9 @@ public class MutationTest {
 	public void testGetMutationsPerChromosome() throws SQLException {
 		List<Mutation> list = new ArrayList<Mutation>();
 		list.add(m);
-		when(repositoryMock.getMutations(1, 1)).thenReturn(list);
+		when(repositoryMock.getMutations(1, "1")).thenReturn(list);
 
-		List<Mutation> res = mutationService.getMutations(1, 1);
+		List<Mutation> res = mutationService.getMutations(1, "1");
 		m = res.get(0);
 		assertEquals(m.getId(), id);
 		assertEquals(m.getMutationType(), mutationType);
@@ -136,7 +136,7 @@ public class MutationTest {
 		assertEquals(m.getEndPoint(), endPoint);
 		assertEquals(m.getPositionGRCH37(), position);
 
-		verify(repositoryMock).getMutations(1, 1);
+		verify(repositoryMock).getMutations(1, "1");
 	}
 
 	@Test

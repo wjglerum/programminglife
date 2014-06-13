@@ -14,7 +14,7 @@ public class MutationService {
 		return this.mutationRepository.getMutations(pId);
 	}
 
-	public List<Mutation> getMutations(final int pId, final int cId)
+	public List<Mutation> getMutations(final int pId, final String cId)
 			throws SQLException {
 		return this.mutationRepository.getMutations(pId, cId);
 	}
