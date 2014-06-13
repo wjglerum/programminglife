@@ -165,7 +165,6 @@ public final class QueryProcessor {
 
 		// If the mutation is the same value as the reference, return 0
 		while (rs.next()) {
-			String ref = rs.getString("ref");
 			String alt = rs.getString("alt");
 			float phred = rs.getFloat("phred");
 			if (alt.equals(mutation.getAlleles().get(0).getBaseString())
@@ -176,6 +175,13 @@ public final class QueryProcessor {
 		return 0;
 	}
 
+	/**
+	 * Gets the snp allele frequency of a mutation.
+	 * 
+	 * @param mutation
+	 * @return float
+	 * @throws SQLException
+	 */
 	public static float getFrequency(final Mutation mutation)
 			throws SQLException {
 		String q = "SELECT DISTINCT * FROM snpallelefreq WHERE snp_id ="
@@ -187,19 +193,29 @@ public final class QueryProcessor {
 		return 0;
 	}
 
-	public static ArrayList<Mutation> getFrequency(HashMap<Integer, Mutation> hm) throws SQLException {
-		System.out.println("Getting frequencies");
+	/**
+	 * Filters a hashmap with mutations, based on their snp allele frequency.
+	 * 
+	 * @param hm
+	 *            A HashMap that has uses a mutation ID as key for a mutation
+	 *            object.
+	 * @return A ArrayList<Mutation> with all the mutations that had a frequency
+	 *         that is low enough.
+	 * @throws SQLException
+	 */
+	public static ArrayList<Mutation> filterOnFrequency(
+			HashMap<Integer, Mutation> hm) throws SQLException {
 		String q = "SELECT DISTINCT * FROM snpallelefreq WHERE snp_id IN (";
 		int counter = 0;
 		int addCounter = 0;
 		ArrayList<Mutation> output = new ArrayList<Mutation>();
-		
 		for (Entry<Integer, Mutation> entry : hm.entrySet()) {
 			counter++;
+			// Add 10000 mutation IDs per query, to speed up the result.
 			q += entry.getKey() + ",";
 			if (counter % 10000 == 0 || counter == hm.size()) {
 				q = q.substring(0, q.length() - 1);
-				q += ") AND freq < 0.0001;";
+				q += ") AND freq < 0.001 AND freq > 0;";
 				ResultSet rs = Database.select("snp", q);
 				q = "SELECT DISTINCT * FROM snpallelefreq WHERE snp_id IN (";
 				while (rs.next()) {
@@ -208,7 +224,7 @@ public final class QueryProcessor {
 				}
 			}
 		}
-		System.out.println("Added " + addCounter);
+		Logger.info("Added " + addCounter + " recessive homozygous mutations.");
 		return output;
 	}
 
@@ -288,21 +304,19 @@ public final class QueryProcessor {
 		return list;
 	}
 
-	public static String findGeneConnections(final int id,
-final int limit, final int threshold, ProteinGraph pg)
-throws SQLException {
-ArrayList<String> qResult = QueryProcessor.
-findGenesAssociatedWithSNP(id);
-if (!qResult.isEmpty()) {
-return findGeneConnections(qResult.get(0), limit, threshold, pg);
-}
-return "";
-}
+	public static String findGeneConnections(final int id, final int limit,
+			final int threshold, ProteinGraph pg) throws SQLException {
+		ArrayList<String> qResult = QueryProcessor
+				.findGenesAssociatedWithSNP(id);
+		if (!qResult.isEmpty()) {
+			return findGeneConnections(qResult.get(0), limit, threshold, pg);
+		}
+		return "";
+	}
 
-public static String findGeneConnections(final String p1,
-final int limit, final int threshold, ProteinGraph pg)
-throws SQLException {
-return QueryProcessor.executeStringQuery(
-p1, limit, threshold).toString();
-}
+	public static String findGeneConnections(final String p1, final int limit,
+			final int threshold, ProteinGraph pg) throws SQLException {
+		return QueryProcessor.executeStringQuery(p1, limit, threshold)
+				.toString();
+	}
 }
