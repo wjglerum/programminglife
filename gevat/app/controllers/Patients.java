@@ -209,10 +209,11 @@ public class Patients extends Controller {
 	
 	public static void findProteinConnections(List<Mutation> mutations, Patient p)
 	{
+		Logger.info(p.getName() + " " + p.getSurname() + ": " + p.getId());
 		ProteinGraph pg = new ProteinGraph();
 		for(Mutation m: mutations)
 		{
-			pg.addConnectionsOfSnp(Integer.parseInt(m.getRsID().substring(2)), 30, 300);
+			pg.addConnectionsOfSnp(Integer.parseInt(m.getRsID().substring(2)), 10, 300);
 		}
 		for(ProteinConnection pc : pg.getConnections())
 		{

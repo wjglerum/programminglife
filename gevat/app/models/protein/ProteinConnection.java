@@ -71,7 +71,7 @@ public class ProteinConnection {
 				+ "',"
 				+ combinedScore
 				+ ");";
-		Logger.info(query);
+//		Logger.info(query);
 		Database.insert("data", query);
 	}
 }
