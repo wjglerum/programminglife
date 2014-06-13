@@ -19,17 +19,17 @@ public interface ProteinRepository {
 	public ArrayList<Mutation> getRelatedMutations(Patient p, Mutation m)
 			throws SQLException;
 
-	public void addConnectionsOfSnp(ProteinGraph pq, int snp, int limit,
+	public void addConnectionsOfSnp(int snp, int limit,
 			int threshold) throws SQLException;
 
-	public void addDistantConnectionsOfSnp(ProteinGraph pg, int snp, int limit,
+	public void addDistantConnectionsOfSnp(int snp, int limit,
 			int threshold, int distance) throws SQLException;
 
-	public void addDistantConnectionsOfProtein(ProteinGraph pq, String protein,
+	public void addDistantConnectionsOfProtein(String protein,
 			int limit, int threshold, int distance) throws SQLException;
 
-	public Collection<Protein> addConnectionsOfProteine(ProteinGraph pg,
-			String protein, int limit, int threshold) throws SQLException;
+	public Collection<Protein> addConnectionsOfProteine(String protein,
+			int limit, int threshold) throws SQLException;
 
 	public Collection<Protein> addConnections(String p1, String connections);
 
