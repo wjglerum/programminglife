@@ -168,12 +168,7 @@ public class Patients extends Controller {
 			String name = addForm.get().name;
 			String surname = addForm.get().surname;
 			String sex = addForm.get().sex;
-			boolean female;
-			if (sex == "female") {
-				female = true;
-			} else {
-				female = false;
-			}
+			boolean female = (sex.equals("female")) ? true : false;
 
 			// Get VCF file data
 			MultipartFormData body = request().body().asMultipartFormData();
