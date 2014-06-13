@@ -2,6 +2,7 @@ package models.protein;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import models.mutation.Mutation;
 import models.patient.Patient;
@@ -17,4 +18,20 @@ public interface ProteinRepository {
 
 	public ArrayList<Mutation> getRelatedMutations(Patient p, Mutation m)
 			throws SQLException;
+
+	public void addConnectionsOfSnp(ProteinGraph pq, int snp, int limit,
+			int threshold) throws SQLException;
+
+	public void addDistantConnectionsOfSnp(ProteinGraph pg, int snp, int limit,
+			int threshold, int distance) throws SQLException;
+
+	public void addDistantConnectionsOfProtein(ProteinGraph pq, String protein,
+			int limit, int threshold, int distance) throws SQLException;
+
+	public Collection<Protein> addConnectionsOfProteine(ProteinGraph pg,
+			String protein, int limit, int threshold) throws SQLException;
+
+	public Collection<Protein> addConnections(String p1, String connections);
+
+	public void add(String p1, String p2, int combinedScore);
 }
