@@ -7,16 +7,12 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 
-import models.database.Database;
 import models.mutation.Mutation;
 import models.mutation.MutationRepositoryDB;
 import models.mutation.MutationService;
 import models.patient.Patient;
 import models.patient.PatientRepositoryDB;
 import models.patient.PatientService;
-import models.reader.ReaderThread;
-import models.reader.VCFReader;
-import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData;
@@ -57,8 +53,8 @@ public class Patients extends Controller {
 	public static Result show(int p_id) throws SQLException {
 		Patient p = patientService.get(p_id, Authentication.getUser().id);
 		List<Mutation> mutations = mutationService.getMutations(p_id);
-		HashMap<Mutation, Double> map =  new HashMap<Mutation, Double>();
-		for(Mutation m : mutations){
+		HashMap<Mutation, Double> map = new HashMap<Mutation, Double>();
+		for (Mutation m : mutations) {
 			map.put(m, (double) mutationService.getScore(m));
 		}
 		if (p == null)
@@ -108,10 +104,7 @@ public class Patients extends Controller {
 					// Check file extension
 					if (!checkFileExtension(fileName)) {
 						/*
-						 * ^^^^^^^^^^^
-						 *  { || || }
-						 *      X 
-						 *  \_______/
+						 * ^^^^^^^^^^^ { || || } X \_______/
 						 * 
 						 * YEAH SIG WE FIXED THIS !!!
 						 */
@@ -178,62 +171,62 @@ public class Patients extends Controller {
 			// Add Patient to database
 			Patient p = patientService.add(Authentication.getUser().id, name,
 					surname, fileName, fileSize);
-			
-			// Setup a thread for processing the VCF
-			ReaderThread readerThread = new ReaderThread(p, filePath);
-			
-			// Let the thread process the file in the background
-			readerThread.start();
+
+			p.setupReaderThread(filePath);
 
 			// Make user happy
-			flash("patient-added", "The patient " + name + " " + surname
-					+ " is successfully added to the database. The VCF file is now being processed. Please wait...");
+			flash("patient-added",
+					"The patient "
+							+ name
+							+ " "
+							+ surname
+							+ " is successfully added to the database. The VCF file is now being processed. Please wait...");
 
 			return redirect(routes.Patients.showAll());
 		}
 	}
-	
-  /**
-   * Handle the ajax request for removing patients
-   * 
-   * @throws SQLException
-   */
-  public static Result remove(int p_id) throws SQLException {
-    Patient p = patientService.get(p_id, Authentication.getUser().id);
 
-    if (p == null || !p.isProcessed())
-      return badRequest();
+	/**
+	 * Handle the ajax request for removing patients
+	 * 
+	 * @throws SQLException
+	 */
+	public static Result remove(int p_id) throws SQLException {
+		Patient p = patientService.get(p_id, Authentication.getUser().id);
 
-    patientService.remove(p);
+		if (p == null || !p.isProcessed())
+			return badRequest();
 
-    return ok();
-  }
+		patientService.remove(p);
 
-  /**
-   * Handle the ajax request for removing patients
-   * 
-   * @throws SQLException
-   */
-  public static Result isProcessed(int p_id) throws SQLException {
-    Patient p = patientService.get(p_id, Authentication.getUser().id);
+		return ok();
+	}
 
-    if (p == null)
-      return badRequest();
+	/**
+	 * Handle the ajax request for removing patients
+	 * 
+	 * @throws SQLException
+	 */
+	public static Result isProcessed(int p_id) throws SQLException {
+		Patient p = patientService.get(p_id, Authentication.getUser().id);
 
-    if (!p.isProcessed())
-      return ok("0");
-    else {
-      String row = "";
-      
-      row += "<td>" + p.getId() + "</td>";
-      row += "<td>" + p.getName() + "</td>";
-      row += "<td>" + p.getSurname() + "</td>";
-      row += "<td>" + p.getVcfFile() + "</td>";
-      row += "<td>" + p.getVcfLengthMB() + " MB</td>";
-      row += "<td class=\"remove\"><a class=\"remove-patient center-block text-danger\"><span class=\"glyphicon glyphicon-remove\"></span></a></td>";
-      
-      return ok(row);
-    }
-  }
+		if (p == null)
+			return badRequest();
+
+		if (!p.isProcessed())
+			return ok("0");
+		else {
+			String row = "";
+
+			row += "<td>" + p.getId() + "</td>";
+			row += "<td>" + p.getName() + "</td>";
+			row += "<td>" + p.getSurname() + "</td>";
+			row += "<td>" + p.getVcfFile() + "</td>";
+			row += "<td>" + p.getVcfLengthMB() + " MB</td>";
+			row += "<td class=\"remove\"><a class=\"remove-patient center-block text-danger\"><span class=\"glyphicon glyphicon-remove\"></span></a></td>";
+
+			return ok(row);
+		}
+	}
 
 }

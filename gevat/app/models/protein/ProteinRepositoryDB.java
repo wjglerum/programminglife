@@ -61,13 +61,13 @@ public class ProteinRepositoryDB implements ProteinRepository {
 	 * @throws SQLException
 	 */
 	@Override
-	public void addConnectionsOfSnp(ProteinGraph pq, int snp, int limit,
-			int threshold) throws SQLException {
+	public void addConnectionsOfSnp(int snp, int limit, int threshold)
+			throws SQLException {
 		ArrayList<String> qResult = QueryProcessor
 				.findGenesAssociatedWithSNP(snp);
 		if (!qResult.isEmpty()) {
 			String protein = qResult.get(0);
-			addConnectionsOfProteine(pq, protein, limit, threshold);
+			addConnectionsOfProteine(protein, limit, threshold);
 		}
 	}
 
@@ -83,14 +83,13 @@ public class ProteinRepositoryDB implements ProteinRepository {
 	 * @throws SQLException
 	 */
 	@Override
-	public void addDistantConnectionsOfSnp(ProteinGraph pg, int snp, int limit,
-			int threshold, int distance) throws SQLException {
+	public void addDistantConnectionsOfSnp(int snp, int limit, int threshold,
+			int distance) throws SQLException {
 		ArrayList<String> qResult = QueryProcessor
 				.findGenesAssociatedWithSNP(snp);
 		if (!qResult.isEmpty()) {
 			String protein = qResult.get(0);
-			addDistantConnectionsOfProtein(pg, protein, limit, threshold,
-					distance);
+			addDistantConnectionsOfProtein(protein, limit, threshold, distance);
 		}
 	}
 
@@ -104,15 +103,15 @@ public class ProteinRepositoryDB implements ProteinRepository {
 	 * @throws SQLException
 	 */
 	@Override
-	public void addDistantConnectionsOfProtein(ProteinGraph pq, String protein,
-			int limit, int threshold, int distance) throws SQLException {
+	public void addDistantConnectionsOfProtein(String protein, int limit,
+			int threshold, int distance) throws SQLException {
 		Collection<Protein> currProteins = new HashSet<Protein>();
 		currProteins.add(ProteinGraph.getProtein(protein));
 		while (distance-- > 0) {
 			Collection<Protein> newProteins = new HashSet<Protein>();
 			for (Protein p : currProteins) {
-				newProteins.addAll(addConnectionsOfProteine(pq, p.getName(),
-						limit, threshold));
+				newProteins.addAll(addConnectionsOfProteine(p.getName(), limit,
+						threshold));
 			}
 			currProteins = newProteins;
 			Logger.info("ADCOP:\t" + distance + "\t" + currProteins.size());
@@ -128,10 +127,10 @@ public class ProteinRepositoryDB implements ProteinRepository {
 	 * @throws SQLException
 	 */
 	@Override
-	public Collection<Protein> addConnectionsOfProteine(ProteinGraph pg,
-			String protein, int limit, int threshold) throws SQLException {
-		return addConnections(protein, QueryProcessor.findGeneConnections(
-				protein, limit, threshold, pg));
+	public Collection<Protein> addConnectionsOfProteine(String protein,
+			int limit, int threshold) throws SQLException {
+		return addConnections(protein,
+				QueryProcessor.findGeneConnections(protein, limit, threshold));
 	}
 
 	/**

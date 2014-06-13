@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import models.reader.GeneDiseaseLinkReader;
-
 /**
  * The proteine class contains the name, disease and connections to other
  * proteines.

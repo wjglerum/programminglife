@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 import models.database.QueryProcessor;
@@ -41,7 +40,7 @@ public class ProteinGraph {
 	 * @throws SQLException
 	 */
 	public ProteinGraph(int snp, int limit, int threshold) throws SQLException {
-		proteinService.addConnectionsOfSnp(this, snp, limit, threshold);
+		proteinService.addConnectionsOfSnp(snp, limit, threshold);
 		connectAllProteines();
 	}
 
@@ -65,7 +64,7 @@ public class ProteinGraph {
 	 */
 	public ProteinGraph(int snp, int limit, int threshold, int distance)
 			throws SQLException {
-		proteinService.addDistantConnectionsOfSnp(this, snp, limit, threshold,
+		proteinService.addDistantConnectionsOfSnp(snp, limit, threshold,
 				distance);
 		connectAllProteines();
 	}

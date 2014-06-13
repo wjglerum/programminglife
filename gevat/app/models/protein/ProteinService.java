@@ -30,26 +30,26 @@ public class ProteinService {
 		return proteinRepository.getRelatedMutations(p, m);
 	}
 
-	public void addConnectionsOfSnp(ProteinGraph pq, int snp, int limit,
-			int threshold) throws SQLException {
-		proteinRepository.addConnectionsOfSnp(pq, snp, limit, threshold);
+	public void addConnectionsOfSnp(int snp, int limit, int threshold)
+			throws SQLException {
+		proteinRepository.addConnectionsOfSnp(snp, limit, threshold);
 	}
 
-	public void addDistantConnectionsOfSnp(ProteinGraph pg, int snp, int limit,
-			int threshold, int distance) throws SQLException {
-		proteinRepository.addDistantConnectionsOfSnp(pg, snp, limit, threshold,
+	public void addDistantConnectionsOfSnp(int snp, int limit, int threshold,
+			int distance) throws SQLException {
+		proteinRepository.addDistantConnectionsOfSnp(snp, limit, threshold,
 				distance);
 	}
 
-	public void addDistantConnectionsOfProtein(ProteinGraph pq, String protein,
-			int limit, int threshold, int distance) throws SQLException {
-		proteinRepository.addDistantConnectionsOfProtein(pq, protein, limit,
+	public void addDistantConnectionsOfProtein(String protein, int limit,
+			int threshold, int distance) throws SQLException {
+		proteinRepository.addDistantConnectionsOfProtein(protein, limit,
 				threshold, distance);
 	}
 
-	public Collection<Protein> addConnectionsOfProteine(ProteinGraph pg,
-			String protein, int limit, int threshold) throws SQLException {
-		return proteinRepository.addConnectionsOfProteine(pg, protein, limit,
+	public Collection<Protein> addConnectionsOfProteine(String protein,
+			int limit, int threshold) throws SQLException {
+		return proteinRepository.addConnectionsOfProteine(protein, limit,
 				threshold);
 	}
 

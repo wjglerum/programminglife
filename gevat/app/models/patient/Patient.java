@@ -1,5 +1,7 @@
 package models.patient;
 
+import models.reader.ReaderThread;
+
 /**
  * 
  * @author wjglerum
@@ -70,7 +72,15 @@ public class Patient {
 		this.id = id;
 	}
 
-  public final boolean isProcessed() {
-    return processed;
-  }
+	public final boolean isProcessed() {
+		return processed;
+	}
+
+	public void setupReaderThread(String filePath) {
+		// Setup a thread for processing the VCF
+		ReaderThread readerThread = new ReaderThread(this, filePath);
+
+		// Let the thread process the file in the background
+		readerThread.start();
+	}
 }

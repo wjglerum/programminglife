@@ -98,6 +98,6 @@ public class MutationRepositoryDB implements MutationRepository {
 	 */
 	@Override
 	public float getScore(Mutation m) throws SQLException {
-		return QueryProcessor.executeScoreQuery(m);
+		return QueryProcessor.executeScoreQuery(m.getChr(), m.getPositionGRCH37(), m.getUniqueBase());
 	}
 }
