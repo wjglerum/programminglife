@@ -39,8 +39,9 @@ public class PatientRepositoryDB implements PatientRepository {
 			String vcfFile = rs.getString("vcf_file");
 			Long vcfLength = rs.getLong("vcf_length");
 			boolean processed = rs.getBoolean("processed");
+			boolean female = rs.getBoolean("female");
 			
-			return new Patient(pId, name, surname, vcfFile, vcfLength, processed);
+			return new Patient(pId, name, surname, vcfFile, vcfLength, processed, female);
 		}
 		return null;
 	}
@@ -69,9 +70,10 @@ public class PatientRepositoryDB implements PatientRepository {
 			String surname = rs.getString("surname");
 			String vcfFile = rs.getString("vcf_file");
 			Long vcfLength = rs.getLong("vcf_length");
-      boolean processed = rs.getBoolean("processed");
+		    boolean processed = rs.getBoolean("processed");
+		    boolean female = rs.getBoolean("female");
       
-			patients.add(new Patient(id, name, surname, vcfFile, vcfLength, processed));
+			patients.add(new Patient(id, name, surname, vcfFile, vcfLength, processed, female));
 		}
 		return patients;
 	}
@@ -105,7 +107,6 @@ public class PatientRepositoryDB implements PatientRepository {
 		Database.insert("data", query);
 
 		// TODO get id of added patient efficiently
-		System.out.println(query);
 		List<Patient> patients = getAll(uId);
 		
 		return patients.get(patients.size() - 1);
