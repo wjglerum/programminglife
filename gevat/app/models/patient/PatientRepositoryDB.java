@@ -97,17 +97,17 @@ public class PatientRepositoryDB implements PatientRepository {
 	 */
 	@Override
 	public Patient add(final int uId, final String name, final String surname,
-			final String vcfFile, final Long vcfLength) throws SQLException {
+			final String vcfFile, final Long vcfLength, boolean female) throws SQLException {
 		String query = "INSERT INTO patient VALUES"
 				+ " (nextval('p_id_seq'::regclass)," + uId + ",'" + name
 				+ "', '" + surname + "', '" + vcfFile + "', " + vcfLength
-				+ ");";
+				+ "," + false + "," + female + ");";
 		Database.insert("data", query);
 
 		// TODO get id of added patient efficiently
-
+		System.out.println(query);
 		List<Patient> patients = getAll(uId);
-
+		
 		return patients.get(patients.size() - 1);
 	}
 

@@ -91,6 +91,8 @@ public class Patients extends Controller {
 
 		public String name;
 		public String surname;
+		public String sex;
+		
 
 		public String validate() {
 			if (name == null || name.length() < 3)
@@ -165,6 +167,13 @@ public class Patients extends Controller {
 		} else {
 			String name = addForm.get().name;
 			String surname = addForm.get().surname;
+			String sex = addForm.get().sex;
+			boolean female;
+			if (sex == "female") {
+				female = true;
+			} else {
+				female = false;
+			}
 
 			// Get VCF file data
 			MultipartFormData body = request().body().asMultipartFormData();
@@ -177,7 +186,7 @@ public class Patients extends Controller {
 
 			// Add Patient to database
 			Patient p = patientService.add(Authentication.getUser().id, name,
-					surname, fileName, fileSize);
+					surname, fileName, fileSize, female);
 			
 			// Setup a thread for processing the VCF
 			ReaderThread readerThread = new ReaderThread(p, filePath);
