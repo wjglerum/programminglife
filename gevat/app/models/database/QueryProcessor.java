@@ -7,6 +7,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.NavigableMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import play.Logger;
 import models.mutation.Mutation;
@@ -202,28 +206,61 @@ public final class QueryProcessor {
 	 * @return A ArrayList<Mutation> with all the mutations that had a frequency
 	 *         that is low enough.
 	 * @throws SQLException
+	 * @throws InterruptedException 
 	 */
 	public static ArrayList<Mutation> filterOnFrequency(
-			HashMap<Integer, Mutation> hm) throws SQLException {
-		String q = "SELECT DISTINCT * FROM snpallelefreq WHERE snp_id IN (";
-		int counter = 0;
-		int addCounter = 0;
+			HashMap<Integer, Mutation> hm) throws SQLException, InterruptedException {
 		ArrayList<Mutation> output = new ArrayList<Mutation>();
-		for (Entry<Integer, Mutation> entry : hm.entrySet()) {
-			counter++;
-			// Add 10000 mutation IDs per query, to speed up the result.
-			q += entry.getKey() + ",";
-			if (counter % 10000 == 0 || counter == hm.size()) {
-				q = q.substring(0, q.length() - 1);
-				q += ") AND freq < 0.001 AND freq > 0;";
-				ResultSet rs = Database.select("snp", q);
-				q = "SELECT DISTINCT * FROM snpallelefreq WHERE snp_id IN (";
-				while (rs.next()) {
-					addCounter++;
-					output.add(hm.get(Integer.parseInt(rs.getString("snp_id"))));
-				}
+		//SPLIT THE LIST INTO LISTS WITH A, T, C OR G!!!!!!
+		ArrayList<Mutation> mutationListPartA = new ArrayList<Mutation>();
+		ArrayList<Mutation> mutationListPartT = new ArrayList<Mutation>();
+		ArrayList<Mutation> mutationListPartC = new ArrayList<Mutation>();
+		ArrayList<Mutation> mutationListPartG = new ArrayList<Mutation>();
+		
+		for (Entry<Integer, Mutation> m : hm.entrySet()) {
+			switch (m.getValue().child().charAt(1)) {
+				case 'A': 	mutationListPartA.add(m.getValue());
+							break;
+				case 'T': 	mutationListPartT.add(m.getValue());
+							break;
+				case 'C': 	mutationListPartC.add(m.getValue());
+							break;
+				case 'G': 	mutationListPartG.add(m.getValue());
+							break;
 			}
 		}
+		int counter = 0;
+		int counter2 = 0;
+		int addCounter = 0;
+		char[] allele = {'A', 'T', 'C', 'G'};
+		ArrayList<ArrayList<Mutation>> list = new ArrayList<ArrayList<Mutation>>();
+		list.add(mutationListPartA);
+		list.add(mutationListPartT);
+		list.add(mutationListPartC);
+		list.add(mutationListPartG);
+		
+		for (ArrayList<Mutation> ml : list) {
+			System.out.println(counter2);
+			counter = 0;
+			String q = "SELECT DISTINCT snp_id, allele, chr_cnt, freq FROM snpallelefreq join allele ON snpallelefreq.allele_id = allele.allele_id WHERE snp_id IN (";
+			for (Mutation m : ml) {
+				String[] idAsString = m.getID().split(";");
+				int id = Integer.parseInt(idAsString[0].substring(2));
+				q += id + ",";
+				if (++counter % 10000 == 0 || counter == ml.size() - 1) {
+					q = q.substring(0, q.length() - 1);
+					q += ") AND allele = '" + allele[counter2] + "' AND freq < 0.01 AND freq > 0;";
+					ResultSet rs = Database.select("snp", q);
+					q = "SELECT DISTINCT snp_id, allele, chr_cnt, freq FROM snpallelefreq join allele ON snpallelefreq.allele_id = allele.allele_id WHERE snp_id IN (";
+					while (rs.next()) {
+						addCounter++;
+						output.add(hm.get(Integer.parseInt(rs.getString("snp_id"))));
+					}
+				}
+			}
+			counter2++;
+		}
+		
 		Logger.info("Added " + addCounter + " recessive homozygous mutations.");
 		return output;
 	}
