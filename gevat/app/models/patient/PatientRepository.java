@@ -18,5 +18,5 @@ public interface PatientRepository {
 
 	public List<Patient> getAll(final int uId) throws SQLException, IOException;
 
-	public void remove(final Patient patient);
+	public void remove(final Patient patient) throws SQLException;
 }

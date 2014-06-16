@@ -25,6 +25,7 @@ public class PatientRepositoryDB implements PatientRepository {
 	private static PreparedStatement getAll;
 	private static PreparedStatement get;
 	private static PreparedStatement add;
+	private static PreparedStatement remove;
 
 	/**
 	 * Lookup patient in the database by p_id.
@@ -159,15 +160,15 @@ public class PatientRepositoryDB implements PatientRepository {
 	 * 
 	 * @param patient
 	 *            The patient to be deleted
+	 * @throws SQLException 
 	 */
 	@Override
-	public void remove(final Patient patient) {
-		String queryDeletePatient = "DELETE FROM patient WHERE p_id = "
-				+ patient.getId();
+	public void remove(final Patient patient) throws SQLException {
+		remove.setInt(1, patient.getId());
 		String queryDeleteMutations = "DELETE FROM mutations"
 				+ " WHERE p_id = " + patient.getId();
 		Database.delete("data", queryDeleteMutations);
-		Database.delete("data", queryDeletePatient);
+		remove.executeUpdate();
 	}
 
 	/**
@@ -184,11 +185,13 @@ public class PatientRepositoryDB implements PatientRepository {
 				.get("public/sql/patients/get.sql")));
 		String addQuery = new String(Files.readAllBytes(Paths
 				.get("public/sql/patients/add.sql")));
+		String removeQuery = new String(Files.readAllBytes(Paths
+				.get("public/sql/patients/delete.sql")));
 		try (Connection connection = DB.getConnection(database);) {
 			getAll = connection.prepareStatement(getAllQuery);
 			get = connection.prepareStatement(getQuery);
 			add = connection.prepareStatement(addQuery);
-			System.out.println(add);
+			remove = connection.prepareStatement(removeQuery);
 		} catch (SQLException e) {
 			Logger.error((e.toString()));
 		}

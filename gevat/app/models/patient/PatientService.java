@@ -30,7 +30,7 @@ public class PatientService {
 		return patientRepository.getAll(uId);
 	}
 
-	public void remove(final Patient patient) {
+	public void remove(final Patient patient) throws SQLException {
 		patientRepository.remove(patient);
 	}
 }
