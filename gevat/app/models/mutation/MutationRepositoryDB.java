@@ -38,7 +38,7 @@ public class MutationRepositoryDB implements MutationRepository {
             e.printStackTrace();
         }
     }
-    
+
     /**
      * Retrieve a list of all the mutations of a patient.
      * 
@@ -52,7 +52,6 @@ public class MutationRepositoryDB implements MutationRepository {
      */
     @Override
     public final List<Mutation> getMutations(final int pId) throws SQLException {
-        //String query = "SELECT * FROM mutations WHERE p_id = '" + pId + "';";
         getAll.setInt(1, pId);
         ResultSet rs = getAll.executeQuery();
         List<Mutation> mutations = new ArrayList<Mutation>();
@@ -96,8 +95,6 @@ public class MutationRepositoryDB implements MutationRepository {
     @Override
     public final List<Mutation> getMutations(final int pId, final String cId)
             throws SQLException {
-//        String query = "SELECT * FROM mutations WHERE p_id = '" + pId
-//                + "' and chromosome = '" + cId + "';";
         get.setInt(1, pId);
         get.setString(2, cId);
         ResultSet rs = get.executeQuery();
@@ -139,14 +136,15 @@ public class MutationRepositoryDB implements MutationRepository {
     public final float getScore(final Mutation m) throws SQLException {
         return QueryProcessor.executeScoreQuery(m);
     }
-    
+//  void prepareQueries(String database) throws IOException;
     /**
      * 
-     * @param database The name of the database that the queries use.
-     * @throws IOException Gets thrown if the function isn't able to find the queries.
+     * @param database
+     *            The name of the database that the queries use.
+     * @throws IOException
+     *             Gets thrown if the function isn't able to find the queries.
      */
-    public static void prepareQueries(final String database)
-            throws IOException {
+    public void prepareQueries(final String database) throws IOException {
         String getAllQuery = new String(Files.readAllBytes(Paths
                 .get("public/sql/mutations/getAll.sql")));
         String getQuery = new String(Files.readAllBytes(Paths
