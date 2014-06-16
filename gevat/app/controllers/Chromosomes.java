@@ -16,18 +16,25 @@ import play.mvc.Result;
 import play.mvc.Security;
 import views.html.chromosome;
 
+/**
+ * Renders the chromosome view.
+ *
+ */
 public class Chromosomes extends Controller {
 
-	private static PatientRepositoryDB patientRepository = new PatientRepositoryDB();
-	private static PatientService patientService = new PatientService(
-			patientRepository);
-	private static MutationRepositoryDB mutationRepository = new MutationRepositoryDB();
-	private static MutationService mutationService = new MutationService(
-			mutationRepository);
+	private static PatientRepositoryDB patientRepository =
+			new PatientRepositoryDB();
+	private static PatientService patientService =
+			new PatientService(patientRepository);
+	private static MutationRepositoryDB mutationRepository =
+			new MutationRepositoryDB();
+	private static MutationService mutationService =
+			new MutationService(mutationRepository);
 
 	/**
 	 * Display all the mutations in a certain chromosome of a patient.
-	 * 
+	 * @param pId The ID of the patient
+	 * @param cId The ID of the chromosome
 	 * @throws SQLException
 	 * @throws IOException 
 	 */
@@ -39,13 +46,16 @@ public class Chromosomes extends Controller {
 		for(Mutation m : mutations){
 			map.put(m, (double) mutationService.getScore(m));
 		}
-		
-		models.chromosome.Chromosome c = new models.chromosome.Chromosome(c_id);
 
-		if (p == null)
+		models.chromosome.Chromosome c =
+				new models.chromosome.Chromosome(c_id);
+
+		if (p == null) {
 			return Patients.patientNotFound();
+		}
 
 		// Render the chromosome view if there are mutations in the view
-		return ok(chromosome.render(p, c, map, Authentication.getUser()));
+		return ok(chromosome.render(p,
+				c, map, Authentication.getUser()));
 	}
 }

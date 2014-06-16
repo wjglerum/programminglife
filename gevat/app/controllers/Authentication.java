@@ -12,24 +12,39 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.login;
 
+/**
+ * Provides the secure authentication.
+ *
+ */
 public class Authentication extends Controller {
 
-	private static UserRepositoryDB userRepository = new UserRepositoryDB();
-	private static UserService userService = new UserService(userRepository);
+	private static UserRepositoryDB userRepository =
+			new UserRepositoryDB();
+	private static UserService userService =
+			new UserService(userRepository);
 
 	/**
 	 * Login form class used for authentication.
 	 */
 	public static class Login {
 
-		public String username;
-		public String password;
+		private String username;
+		private String password;
 
-		public String validate() throws SQLException {
-			if (userService.authenticate(username, password) == null)
+		/**
+		 * Performs the validation.
+		 * @return Returns a string or null depending on
+		 * 			failure or succes
+		 * @throws SQLException
+		 */
+		public final String validate() throws SQLException {
+			if (userService.authenticate(this.username,
+					this.password) == null) {
 				return "Invalid username or password";
-			else
+			}
+			else {
 				return null;
+			}
 		}
 	}
 
@@ -69,15 +84,15 @@ public class Authentication extends Controller {
 	}
 
 	/**
-	 * Get the current session User
-	 * 
+	 * Get the current session User.
+	 *
 	 * @throws SQLException
 	 */
 	public static User getUser() throws SQLException {
 		String username = session("username");
-		if (username != null)
+		if (username != null) {
 			return userService.getUser(username);
-
+		}
 		return null;
 	}
 

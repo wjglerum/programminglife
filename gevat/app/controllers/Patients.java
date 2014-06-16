@@ -24,13 +24,21 @@ import views.html.patient;
 import views.html.patient_add;
 import views.html.patients;
 
+/**
+ * Procides the patient view.
+ *
+ */
 public class Patients extends Controller {
 
-	private static PatientRepositoryDB patientRepository = new PatientRepositoryDB();
-	private static PatientService patientService = new PatientService(
+	private static PatientRepositoryDB patientRepository =
+			new PatientRepositoryDB();
+	private static PatientService patientService =
+			new PatientService(
 			patientRepository);
-	private static MutationRepositoryDB mutationRepository = new MutationRepositoryDB();
-	private static MutationService mutationService = new MutationService(
+	private static MutationRepositoryDB mutationRepository =
+			new MutationRepositoryDB();
+	private static MutationService mutationService =
+			new MutationService(
 			mutationRepository);
 
 	/**
@@ -42,17 +50,21 @@ public class Patients extends Controller {
 	@Security.Authenticated(Secured.class)
 	public static Result showAll() throws SQLException, IOException {
 		return ok(patients.render(
-				patientService.getAll(Authentication.getUser().id),
+				patientService.getAll(Authentication.
+						getUser().id),
 				Authentication.getUser()));
 	}
 
 	/**
 	 * Display a patient.
-	 * 
+	 *
+	 * @param pId The id of the patient
+	 *
 	 * @throws SQLException
 	 * @throws IOException 
 	 */
 	@Security.Authenticated(Secured.class)
+//<<<<<<< HEAD
 	public static Result show(int p_id) throws SQLException, IOException {
 		Patient p = patientService.get(p_id, Authentication.getUser().id);
 		List<Mutation> mutations = mutationService.getMutations(p_id);
@@ -60,8 +72,9 @@ public class Patients extends Controller {
 		for (Mutation m : mutations) {
 			map.put(m, (double) mutationService.getScore(m));
 		}
-		if (p == null)
+		if (p == null) {
 			return patientNotFound();
+		}
 
 		// Render the patient otherwise
 		return ok(patient.render(p, map, Authentication.getUser()));
@@ -77,49 +90,71 @@ public class Patients extends Controller {
 	@Security.Authenticated(Secured.class)
 	public static Result patientNotFound() throws SQLException, IOException {
 		flash("patient-not-found",
-				"The requested patient could not be found. Please select another one below.");
+				"The requested patient could not be found. "
+				+ "Please select another one below.");
 
 		return notFound(patients.render(
-				patientService.getAll(Authentication.getUser().id),
-				Authentication.getUser()));
+				patientService.getAll(
+						Authentication.getUser().id),
+						Authentication.getUser()));
 	}
 
 	/**
-	 * Form class for adding new patients
+	 * Form class for adding new patients.
 	 */
 	public static class Add {
 
-		public String name;
-		public String surname;
-		public String sex;
+		private String name;
+		private String surname;
+		private String sex;
 
-		public String validate() {
-			if (name == null || name.length() < 3)
-				return "An invalid name is entered. Please fill in a name consisting of at least 3 characters";
-			else if (surname == null || surname.length() < 3)
-				return "An invalid surname is entered. Please fill in a surname consisting of at least 3 characters";
+		/**
+		 * Checks if the provided details are allowed.
+		 *
+		 * @return Returns a String with the result message
+		 */
+		public final String validate() {
+			final int minimumLength = 3;
+			if (name == null || name.length() < minimumLength) {
+				return "An invalid name is entered. "
+						+ "Please fill in "
+						+ "a name consisting of at "
+						+ "least 3 characters";
+			}
+			else if (surname == null
+					|| surname.length() < minimumLength) {
+				return "An invalid surname is entered. "
+						+ "Please fill in a "
+						+ "surname consisting of at "
+						+ "least 3 characters";
+			}
 			else {
-				MultipartFormData body = request().body().asMultipartFormData();
+				MultipartFormData body =
+						request().body().asMultipartFormData();
 				FilePart vcf = body.getFile("vcf");
 
 				if (vcf != null) {
 					String fileName = vcf.getFilename();
-					String contentType = vcf.getContentType();
+					String contentType =
+							vcf.getContentType();
 
-					// Check file extension
 					if (!checkFileExtension(fileName)) {
-						/*
-						 * ^^^^^^^^^^^ { || || } X \_______/
-						 * 
-						 * YEAH SIG WE FIXED THIS !!!
-						 */
-						return "The uploaded file hasn't the .vcf extension";
+						return "The uploaded "
+								+ "file doesn't"
+								+ " have the "
+								+ ".vcf "
+								+ "extension";
 					}
 
 					// Check content type
-					if (!contentType.equals("text/directory")
-							&& !contentType.equals("text/vcard"))
-						return "File has wrong content type";
+					if (!contentType.equals("text/"
+							+ "directory")
+							&& !contentType.equals(
+									"text/vcard")) {
+						return "File has wrong "
+								+ "content "
+								+ "type";
+					}
 				} else {
 					return "No VCF file provided";
 				}
@@ -128,30 +163,38 @@ public class Patients extends Controller {
 			return null;
 		}
 
-		/*
-		 * Whoohoo seperate method !!!
+		/**
+		 * Check if the file extension is .vcf.
+		 * @param fileName The name of the file
+		 *
+		 * @return Returns wether or not the extension is correct
 		 */
-		private boolean checkFileExtension(String fileName) {
-			if (fileName.length() < 4)
+		private boolean checkFileExtension(final String fileName) {
+			final int minimumLength = 4;
+			if (fileName.length() < minimumLength) {
 				return false;
+			}
 
-			return fileName.substring(fileName.length() - 4).equals(".vcf");
+			return fileName.substring(fileName.length()
+					- minimumLength)
+					.equals(".vcf");
 		}
 
 	}
 
 	/**
 	 * Render the form to add a patient.
-	 * 
+	 *
 	 * @throws SQLException
 	 */
 	public static Result add() throws SQLException {
-		return ok(patient_add.render(form(Add.class), Authentication.getUser()));
+		return ok(patient_add.render(form(Add.class),
+				Authentication.getUser()));
 	}
 
 	/**
-	 * Insert the newly added patient in the database
-	 * 
+	 * Insert the newly added patient in the database.
+	 *
 	 * @throws SQLException
 	 */
 	public static Result insert() throws SQLException {
@@ -164,10 +207,14 @@ public class Patients extends Controller {
 			String name = addForm.get().name;
 			String surname = addForm.get().surname;
 			String sex = addForm.get().sex;
-			boolean female = (sex.equals("female")) ? true : false;
+			boolean female = true;
+			if (!sex.equals("female")) {
+				female = false;
+			}
 
 			// Get VCF file data
-			MultipartFormData body = request().body().asMultipartFormData();
+			MultipartFormData body =
+					request().body().asMultipartFormData();
 			FilePart vcf = body.getFile("vcf");
 			File file = vcf.getFile();
 
@@ -176,7 +223,8 @@ public class Patients extends Controller {
 			String filePath = file.getAbsolutePath();
 
 			// Add Patient to database
-			Patient p = patientService.add(Authentication.getUser().id, name,
+			Patient p = patientService.add(
+					Authentication.getUser().id, name,
 					surname, fileName, fileSize, female);
 
 			p.setupReaderThread(filePath);
@@ -194,34 +242,40 @@ public class Patients extends Controller {
 	}
 
 	/**
-	 * Handle the ajax request for removing patients
-	 * 
-	 * @throws SQLException
+	 * Handle the ajax request for removing patients.
+	 *
+	 * @param pId The id of the patient
+	 * @throws SQLException In case SQL goes wrong
 	 */
-	public static Result remove(int p_id) throws SQLException {
-		Patient p = patientService.get(p_id, Authentication.getUser().id);
+	public static Result remove(final int pId) throws SQLException {
+		Patient p = patientService.get(pId,
+				Authentication.getUser().id);
 
-		if (p == null || !p.isProcessed())
+		if (p == null || !p.isProcessed()) {
 			return badRequest();
-
+		}
 		patientService.remove(p);
 
 		return ok();
 	}
 
 	/**
-	 * Handle the ajax request for removing patients
-	 * 
-	 * @throws SQLException
+	 * Handle the ajax request for removing patients.
+	 *
+	 * @param pId the id of the patient
+	 *
+	 * @throws SQLException In case SQL goes wrong
 	 */
-	public static Result isProcessed(int p_id) throws SQLException {
-		Patient p = patientService.get(p_id, Authentication.getUser().id);
+	public static Result isProcessed(int pId) throws SQLException {
+		Patient p = patientService.get(pId, Authentication.getUser().id);
 
-		if (p == null)
+		if (p == null) {
 			return badRequest();
+		}
 
-		if (!p.isProcessed())
+		if (!p.isProcessed()) {
 			return ok("0");
+		}
 		else {
 			String row = "";
 

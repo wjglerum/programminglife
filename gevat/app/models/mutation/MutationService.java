@@ -3,23 +3,62 @@ package models.mutation;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * Provides a service for mutation.
+ */
 public class MutationService {
 	private final MutationRepository mutationRepository;
 
-	public MutationService(final MutationRepository mutationRepository) {
-		this.mutationRepository = mutationRepository;
+	/**
+	 * The constructor.
+	 *
+	 * @param mutationRep The repository used
+	 */
+	public MutationService(final MutationRepository mutationRep) {
+		this.mutationRepository = mutationRep;
 	}
 
-	public List<Mutation> getMutations(final int pId) throws SQLException {
+	/**
+	 * Gets mutations.
+	 *
+	 * @param pId The id of the patient
+	 *
+	 * @return Returns a list of mutations
+	 *
+	 * @throws SQLException In case SQL goes wrong
+	 */
+	public final List<Mutation> getMutations(final int pId)
+			throws SQLException {
 		return this.mutationRepository.getMutations(pId);
 	}
 
-	public List<Mutation> getMutations(final int pId, final String cId)
+	/**
+	 * Gets mutations of a chromosome.
+	 *
+	 * @param pId The id of the patient
+	 *
+	 * @param cId The id of the chromosome
+	 *
+	 * @return Returns a list of mutations
+	 *
+	 * @throws SQLException In case SQL goes wrong
+	 */
+	public final List<Mutation> getMutations(
+			final int pId, final String cId)
 			throws SQLException {
 		return this.mutationRepository.getMutations(pId, cId);
 	}
 
-	public float getScore(Mutation m) throws SQLException {
+	/**
+	 * Gets the score of a mutation.
+	 *
+	 * @param m The mutation
+	 *
+	 * @return Returns the float score
+	 *
+	 * @throws SQLException in case SQL goes wrong
+	 */
+	public final float getScore(final Mutation m) throws SQLException {
 		return this.mutationRepository.getScore(m);
 	}
 }

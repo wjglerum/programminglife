@@ -28,6 +28,8 @@ public class MutationTest {
 	private static int startPoint = 1;
 	private static int endPoint = 2;
 	private static int position = 3;
+	private static float cadd = 2;
+	private static float frequency = 0;
 
 	private final MutationRepository repositoryMock = mock(MutationRepository.class);
 	private final MutationService mutationService = new MutationService(
@@ -36,7 +38,7 @@ public class MutationTest {
 	@Before
 	public void setUp() {
 		m = new Mutation(id, mutationType, rsID, chromosome, alleles,
-				startPoint, endPoint, position);
+				startPoint, endPoint, position, cadd, frequency);
 	}
 
 	@Test

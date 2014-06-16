@@ -12,22 +12,25 @@ import models.database.QueryProcessor;
 import org.broadinstitute.variant.variantcontext.Allele;
 import org.broadinstitute.variant.variantcontext.GenotypesContext;
 
+/**
+ * The repository containing all database related functions.
+ */
 public class MutationRepositoryDB implements MutationRepository {
 
 	/**
 	 * Retrieve a list of all the mutations of a patient.
-	 * 
-	 * @param pId
-	 *            The id
-	 * 
+	 *
+	 * @param pId The id
+	 *
 	 * @return Returns List<Mutation>, a list of all mutations
-	 * 
-	 * @throws SQLException
-	 *             In case SQL goes wrong
+	 *
+	 * @throws SQLException In case SQL goes wrong
 	 */
 	@Override
-	public List<Mutation> getMutations(final int pId) throws SQLException {
-		String query = "SELECT * FROM mutations WHERE p_id = '" + pId + "';";
+	public final List<Mutation> getMutations(final int pId)
+			throws SQLException {
+		String query = "SELECT * FROM mutations WHERE p_id = '"
+			+ pId + "';";
 		ResultSet rs = Database.select("data", query);
 		List<Mutation> mutations = new ArrayList<Mutation>();
 
@@ -36,15 +39,21 @@ public class MutationRepositoryDB implements MutationRepository {
 			String sort = rs.getString("sort");
 			String rsID = rs.getString("rsID");
 			String chromosome = rs.getString("chromosome");
-			Collection<Allele> alleles = Mutation.toAlleleCollection(rs
+			Collection<Allele> alleles =
+					Mutation.toAlleleCollection(rs
 					.getString("alleles"));
-			GenotypesContext genotypescontext = Mutation.toGenotypesContext(rs
+			GenotypesContext genotypescontext =
+					Mutation.toGenotypesContext(rs
 					.getString("alleles"));
 			int startPoint = rs.getInt("startpoint");
 			int endPoint = rs.getInt("endpoint");
 			int positionGRCH37 = rs.getInt("GRCH37_pos");
-			mutations.add(new Mutation(id, sort, rsID, chromosome, alleles,
-					startPoint, endPoint, genotypescontext, positionGRCH37));
+			float cadd = rs.getFloat("CADD_score");
+			float frequency = rs.getFloat("frequency");
+			mutations.add(new Mutation(id, sort, rsID, chromosome,
+					alleles, startPoint, endPoint,
+					genotypescontext, positionGRCH37,
+					cadd, frequency));
 		}
 		return mutations;
 	}
@@ -52,20 +61,18 @@ public class MutationRepositoryDB implements MutationRepository {
 	/**
 	 * Retrieve a list of all the mutations of a patient in a certain
 	 * chromosome.
-	 * 
-	 * @param pId
-	 *            The id
-	 * @param cId
-	 *            The chromosome number
-	 * 
+	 *
+	 * @param pId The id
+	 * @param cId The chromosome number
+	 *
 	 * @return Returns List<Mutation>, a list of all mutations in the
 	 *         chromosome.
-	 * 
-	 * @throws SQLException
-	 *             In case SQL goes wrong
+	 *
+	 * @throws SQLException In case SQL goes wrong
 	 */
 	@Override
-	public List<Mutation> getMutations(final int pId, final String cId)
+	public final List<Mutation> getMutations(
+			final int pId, final String cId)
 			throws SQLException {
 		String query = "SELECT * FROM mutations WHERE p_id = '" + pId
 				+ "' and chromosome = '" + cId + "';";
@@ -77,27 +84,36 @@ public class MutationRepositoryDB implements MutationRepository {
 			String sort = rs.getString("sort");
 			String rsID = rs.getString("rsID");
 			String chromosome = rs.getString("chromosome");
-			Collection<Allele> alleles = Mutation.toAlleleCollection(rs
+			Collection<Allele> alleles =
+					Mutation.toAlleleCollection(rs
 					.getString("alleles"));
-			GenotypesContext genotypescontext = Mutation.toGenotypesContext(rs
+			GenotypesContext genotypescontext =
+					Mutation.toGenotypesContext(rs
 					.getString("alleles"));
 			int startPoint = rs.getInt("startpoint");
 			int endPoint = rs.getInt("endpoint");
 			int positionGRCH37 = rs.getInt("GRCH37_pos");
-			mutations.add(new Mutation(id, sort, rsID, chromosome, alleles,
-					startPoint, endPoint, genotypescontext, positionGRCH37));
+			float cadd = rs.getFloat("CADD_score");
+			float frequency = rs.getFloat("frequency");
+			mutations.add(new Mutation(
+					id, sort, rsID, chromosome, alleles,
+					startPoint, endPoint, genotypescontext,
+					positionGRCH37, cadd, frequency));
 		}
 		return mutations;
 	}
-	
+
 	/**
-	 * Gets the mutation score
-	 * 
+	 * Gets the mutation score.
+	 *
+	 * @param m The mutation
+	 *
 	 * @return mutation score
-	 * @throws SQLException
+	 *
+	 * @throws SQLException In case SQL goes wrong
 	 */
 	@Override
-	public float getScore(Mutation m) throws SQLException {
+	public final float getScore(final Mutation m) throws SQLException {
 		return QueryProcessor.executeScoreQuery(m);
 	}
 }
