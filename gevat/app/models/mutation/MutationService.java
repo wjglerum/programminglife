@@ -1,6 +1,8 @@
 package models.mutation;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -60,5 +62,15 @@ public class MutationService {
 	 */
 	public final float getScore(final Mutation m) throws SQLException {
 		return this.mutationRepository.getScore(m);
+	}
+	
+	/**
+	 * Gets the positions on a gene.
+	 * @param m
+	 * @return Returns the list of positions
+	 * @throws SQLException
+	 */
+	public HashMap<String, ArrayList<Integer>> getPositions(Mutation m) throws SQLException {
+		return this.mutationRepository.getPositions(m);
 	}
 }
