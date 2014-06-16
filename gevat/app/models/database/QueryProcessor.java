@@ -5,24 +5,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
-import java.util.NavigableMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
-import org.broadinstitute.variant.variantcontext.Allele;
-
-import play.Logger;
 import models.mutation.Mutation;
-import models.protein.ProteinGraph;
+import play.Logger;
 /**
- * This class processes queries.
- * 
+ * This class processes queries and passes them on to Database.
+ *
  * @author rbes
- * 
+ *
  */
 public final class QueryProcessor {
 
@@ -34,10 +25,12 @@ public final class QueryProcessor {
 	}
 
 	/**
-	 * Execute a query on the string database to get the proteins interacting
-	 * with the given protein. The amount of results is limited to the parameter
-	 * limit and only those with with a likelihood greater than the threshold
-	 * 
+	 * Execute a query on the string database to get the proteins
+	 * interacting with the given protein. The amount of
+	 * results is limited to the parameter
+	 * limit and only those with with a likelihood
+	 * greater than the threshold
+	 *
 	 * @param proteine
 	 *            The codename of the protein to be looked up
 	 * @param limit
@@ -48,22 +41,28 @@ public final class QueryProcessor {
 	 * @throws SQLException
 	 *             In case SQL goes wrong
 	 */
-	public static ArrayList<String> executeStringQuery(final String proteine,
-			final int limit, final int threshold) throws SQLException {
+	public static ArrayList<String> executeStringQuery(
+			final String proteine,
+			final int limit, final int threshold)
+					throws SQLException {
 		ArrayList<String> list = new ArrayList<String>();
 		assert (limit > 0) : "Needs at least 1";
 		assert (threshold >= 0) : "Needs at least 0";
 		String q = "SELECT protein_b.preferred_name, combined_score "
 				+ "FROM network.node_node_links, "
 				+ "items.proteins AS protein_a, "
-				+ "items.proteins AS protein_b, items.species" + " WHERE "
-				+ "protein_a.species_id = " + "items.species.species_id"
-				+ " AND " + "official_name = 'Homo sapiens' AND "
-				+ "protein_a.preferred_name = '" + proteine + "' AND "
+				+ "items.proteins AS protein_b, items.species "
+				+ "WHERE "
+				+ "protein_a.species_id = "
+				+ "items.species.species_id "
+				+ "AND official_name = 'Homo sapiens' AND "
+				+ "protein_a.preferred_name = '" + proteine
+				+ "' AND "
 				+ "node_id_a = protein_a.protein_id" + " AND "
 				+ "node_id_b = protein_b.protein_id" + " AND"
 				+ " combined_score > " + threshold
-				+ "ORDER BY combined_score DESC" + " LIMIT " + limit + ";";
+				+ "ORDER BY combined_score DESC LIMIT "
+				+ limit + ";";
 
 		ResultSet rs = Database.select("string", q);
 		while (rs.next()) {
@@ -77,13 +76,13 @@ public final class QueryProcessor {
 	/**
 	 * Gets the connections and scores between all proteins in the
 	 * ArrayList<String>.
-	 * 
+	 *
 	 * @param proteins
 	 *            The ArraList<String> containing the protein names
-	 * 
-	 * @return Returns the list of connections that look like this: proteinA ->
-	 *         proteinB = score
-	 * 
+	 *
+	 * @return Returns the list of connections that look like this:
+	 * proteinA -> proteinB = score
+	 *
 	 * @throws SQLException
 	 *             In case SQL goes wrong
 	 */
@@ -102,9 +101,11 @@ public final class QueryProcessor {
 				+ "FROM network.node_node_links, "
 				+ "items.proteins AS protein_a, "
 				+ "items.proteins AS protein_b " + "WHERE "
-				+ "protein_a.preferred_name IN (" + formatted + ") AND "
+				+ "protein_a.preferred_name IN ("
+				+ formatted + ") AND "
 				+ "protein_a.species_id = 9606 AND "
-				+ "protein_b.preferred_name IN (" + formatted + ") AND "
+				+ "protein_b.preferred_name IN ("
+				+ formatted + ") AND "
 				+ "protein_b.species_id = 9606 AND "
 				+ "node_id_a = protein_a.protein_id AND "
 				+ "node_id_b = protein_b.protein_id "
@@ -117,7 +118,8 @@ public final class QueryProcessor {
 				int score = rs.getInt("combined_score");
 				String nameA = rs.getString("name_a");
 				String nameB = rs.getString("name_b");
-				list.add(nameA + " -> " + nameB + " = " + score);
+				list.add(nameA + " -> " + nameB
+						+ " = " + score);
 			}
 		}
 
@@ -126,10 +128,10 @@ public final class QueryProcessor {
 
 	/**
 	 * Formats the stringList to be used in a 'IN' query.
-	 * 
+	 *
 	 * @param proteins
 	 *            The list of strings to be formatted
-	 * 
+	 *
 	 * @return Returns the formatted String
 	 */
 	public static String formatForIN(final Collection<String> proteins) {
@@ -137,8 +139,9 @@ public final class QueryProcessor {
 		int i = 0;
 
 		for (String protein : proteins) {
-			if (i > 0)
+			if (i > 0) {
 				formatted += ",";
+			}
 
 			formatted += "'" + protein + "'";
 
@@ -149,24 +152,24 @@ public final class QueryProcessor {
 	}
 
 	/**
-	 * Finds the score. Not needed at the moment.
-	 * 
-	 * @param chrom
-	 *            Something
-	 * @param positionLow
-	 *            Something
-	 * @param positionHigh
-	 *            Something
+	 * Finds the score.
+	 *
+	 * @param mutation The mutation for which to find the score
+	 *
 	 * @return Returns a list containing the score
+	 *
 	 * @throws SQLException
 	 *             In case SQL goes wrong
 	 */
 	public static float executeScoreQuery(final Mutation mutation)
 			throws SQLException {
-		String q = "SELECT * FROM score WHERE chrom = '" + mutation.getChr()
-				+ "' AND position = " + mutation.getPositionGRCH37() + ";";
+		String q = "SELECT * FROM score WHERE chrom = '"
+			+ mutation.getChr()
+			+ "' AND position = " + mutation.getPositionGRCH37()
+			+ ";";
 
-		// Get all the records from database score that have mutations on the
+		// Get all the records from database score that have mutations
+		// on the
 		// same position as our position
 		ResultSet rs = Database.select("score", q);
 
@@ -174,9 +177,10 @@ public final class QueryProcessor {
 		while (rs.next()) {
 			String alt = rs.getString("alt");
 			float phred = rs.getFloat("phred");
-
-			if (alt.equals(mutation.getAlleles().get(0).getBaseString())
-					|| alt.equals(mutation.getAlleles().get(1).getBaseString())) {
+			String a = mutation.getAlleles().get(0).getBaseString();
+			String b = mutation.getAlleles().get(1).getBaseString();
+			if (alt.equals(a)
+					|| alt.equals(b)) {
 
 				return phred;
 			}
@@ -185,17 +189,24 @@ public final class QueryProcessor {
 	}
 	/**
 	 * Gets the snp allele frequency of a mutation.
-	 * 
-	 * @param mutation
-	 * @return float
-	 * @throws SQLException
+	 *
+	 * @param mutation The mutation for which to find the frequency
+	 *
+	 * @return float Returns the frequency
+	 *
+	 * @throws SQLException In case SQL goes wrong
 	 */
 	public static float getFrequency(final Mutation mutation)
 			throws SQLException {
 		String[] idAsString = mutation.getID().split(";");
 		int id = Integer.parseInt(idAsString[0].substring(2));
-		String q = "SELECT DISTINCT snp_id, allele, chr_cnt, freq FROM snpallelefreq join allele ON snpallelefreq.allele_id = allele.allele_id WHERE snp_id ="
-				+ id + " AND allele = '" + mutation.getAlleles().get(0).getBaseString() + "' AND freq < 0.005 AND freq > 0;";
+		String base = mutation.getAlleles().get(0).getBaseString();
+		String q = "SELECT DISTINCT snp_id, allele, chr_cnt, "
+				+ "freq FROM snpallelefreq join allele ON "
+				+ "snpallelefreq.allele_id = allele.allele_id "
+				+ "WHERE snp_id ="
+				+ id + " AND allele = '" + base
+				+ "' AND freq < 0.005 AND freq > 0;";
 		ResultSet rs = Database.select("snp", q);
 		while (rs.next()) {
 			return rs.getFloat("freq");
@@ -204,81 +215,113 @@ public final class QueryProcessor {
 	}
 
 	/**
-	 * Filters a hashmap with mutations, based on their snp allele frequency.
-	 * 
+	 * Filters a hashmap with mutations based on their snp allele frequency.
+	 *
 	 * @param hm
-	 *            A HashMap that has uses a mutation ID as key for a mutation
+	 *            HashMap that has uses a mutation ID as key for a mutation
 	 *            object.
-	 * @return A ArrayList<Mutation> with all the mutations that had a frequency
+	 * @return An ArrayList<Mutation> with mutations that had a frequency
 	 *         that is low enough.
-	 * @throws SQLException
-	 * @throws InterruptedException 
+	 * @throws SQLException In case SQL goes wrong
 	 */
 	public static ArrayList<Mutation> filterOnFrequency(
-			HashMap<Integer, Mutation> hm) throws SQLException, InterruptedException {
+			final HashMap<Integer, Mutation> hm)
+					throws SQLException {
 		ArrayList<Mutation> output = new ArrayList<Mutation>();
-		//SPLIT THE LIST INTO LISTS WITH A, T, C OR G!!!!!!
-		ArrayList<Mutation> mutationListPartA = new ArrayList<Mutation>();
-		ArrayList<Mutation> mutationListPartT = new ArrayList<Mutation>();
-		ArrayList<Mutation> mutationListPartC = new ArrayList<Mutation>();
-		ArrayList<Mutation> mutationListPartG = new ArrayList<Mutation>();
-		
+		//SPLIT THE LIST INTO LISTS WITH A, T, C OR G
+		ArrayList<Mutation> mutationListPartA =
+				new ArrayList<Mutation>();
+		ArrayList<Mutation> mutationListPartT =
+				new ArrayList<Mutation>();
+		ArrayList<Mutation> mutationListPartC =
+				new ArrayList<Mutation>();
+		ArrayList<Mutation> mutationListPartG =
+				new ArrayList<Mutation>();
+
 		for (Entry<Integer, Mutation> m : hm.entrySet()) {
 			switch (m.getValue().child().charAt(1)) {
-				case 'A': 	mutationListPartA.add(m.getValue());
+				case 'A': 	mutationListPartA
+				.add(m.getValue());
 							break;
-				case 'T': 	mutationListPartT.add(m.getValue());
+				case 'T': 	mutationListPartT
+				.add(m.getValue());
 							break;
-				case 'C': 	mutationListPartC.add(m.getValue());
+				case 'C': 	mutationListPartC
+				.add(m.getValue());
 							break;
-				case 'G': 	mutationListPartG.add(m.getValue());
+				case 'G': 	mutationListPartG
+				.add(m.getValue());
 							break;
+				default : break;
 			}
 		}
 		int counter = 0;
 		int counter2 = 0;
 		int addCounter = 0;
+		final int split = 10000;
 		char[] allele = {'A', 'T', 'C', 'G'};
-		ArrayList<ArrayList<Mutation>> list = new ArrayList<ArrayList<Mutation>>();
+		ArrayList<ArrayList<Mutation>> list =
+				new ArrayList<ArrayList<Mutation>>();
 		list.add(mutationListPartA);
 		list.add(mutationListPartT);
 		list.add(mutationListPartC);
 		list.add(mutationListPartG);
-		
+
 		for (ArrayList<Mutation> ml : list) {
-			System.out.println(counter2);
 			counter = 0;
-			String q = "SELECT DISTINCT snp_id, allele, chr_cnt, freq FROM snpallelefreq join allele ON snpallelefreq.allele_id = allele.allele_id WHERE snp_id IN (";
+			String q = "SELECT DISTINCT snp_id, allele, chr_cnt, "
+					+ "freq FROM snpallelefreq join allele "
+					+ "ON "
+					+ "snpallelefreq.allele_id = "
+					+ "allele.allele_id "
+					+ "WHERE snp_id IN (";
 			for (Mutation m : ml) {
 				String[] idAsString = m.getID().split(";");
-				int id = Integer.parseInt(idAsString[0].substring(2));
+				int id = Integer.parseInt(idAsString[0]
+						.substring(2));
 				q += id + ",";
-				if (++counter % 10000 == 0 || counter == ml.size() - 1) {
+				if (++counter % split == 0 || counter
+						== ml.size() - 1) {
 					q = q.substring(0, q.length() - 1);
-					q += ") AND allele = '" + allele[counter2] + "' AND freq < 0.005 AND freq > 0;";
-					ResultSet rs = Database.select("snp", q);
-					q = "SELECT DISTINCT snp_id, allele, chr_cnt, freq FROM snpallelefreq join allele ON snpallelefreq.allele_id = allele.allele_id WHERE snp_id IN (";
+					q += ") AND allele = '"
+							+ allele[counter2]
+							+ "' AND freq < 0.005 "
+							+ "AND freq > 0;";
+					ResultSet rs = Database.select(
+							"snp", q);
+					q = "SELECT DISTINCT snp_id, allele, "
+							+ "chr_cnt, freq FROM "
+							+ "snpallelefreq "
+							+ "join allele "
+							+ "ON snpallelefreq."
+							+ "allele_id "
+							+ "= allele.allele_id "
+							+ "WHERE "
+							+ "snp_id IN (";
 					while (rs.next()) {
 						addCounter++;
-						output.add(hm.get(Integer.parseInt(rs.getString("snp_id"))));
+						output.add(hm.get(Integer
+								.parseInt(
+								rs.getString(
+								"snp_id"))));
 					}
 				}
 			}
-			counter2++;
 		}
-		
-		Logger.info("Added " + addCounter + " recessive homozygous mutations.");
+
+		Logger.info("Added " + addCounter
+				+ " recessive homozygous mutations.");
 		return output;
 	}
 
 	/**
 	 * Gets the annotation of a protein.
-	 * 
+	 *
 	 * @param protein
 	 *            The preferred name of the protein
-	 * 
+	 *
 	 * @return Returns the annotation of the protein
-	 * 
+	 *
 	 * @throws SQLException
 	 *             In case SQL goes wrong
 	 */
@@ -286,7 +329,8 @@ public final class QueryProcessor {
 			throws SQLException {
 		String s = "";
 		String q = "SELECT annotation " + "FROM items.proteins "
-				+ "WHERE preferred_name = '" + protein + "' AND "
+				+ "WHERE preferred_name = '" + protein
+				+ "' AND "
 				+ "species_id = 9606";
 		ResultSet rs = Database.select("string", q);
 		while (rs.next()) {
@@ -298,7 +342,7 @@ public final class QueryProcessor {
 
 	/**
 	 * Finds genes associated with the given rs_id.
-	 * 
+	 *
 	 * @param id
 	 *            The id of the SNP
 	 * @return Returns an ArrayList<String> with all the found locus_symbols
@@ -309,7 +353,8 @@ public final class QueryProcessor {
 			throws SQLException {
 		ArrayList<String> list = new ArrayList<String>();
 		String q = "SELECT DISTINCT locus_symbol FROM "
-				+ "b138_SNPContigLocusId WHERE snp_id = " + id + ";";
+				+ "b138_SNPContigLocusId WHERE snp_id = "
+				+ id + ";";
 
 		ResultSet rs = Database.select("snp", q);
 		// go over all the results and print them
@@ -322,15 +367,17 @@ public final class QueryProcessor {
 
 	/**
 	 * Finds genes connected to the supplied SNP.
-	 * 
+	 *
 	 * @param limit
 	 *            The maximum amount of results
 	 * @param threshold
 	 *            The minimum score of two proteins
 	 * @param id
 	 *            The id of a SNP (without 'rs')
-	 * @return Returns an ArrayList<String> containing the gene name, with the
-	 *         names and scores of connected genes
+	 *
+	 * @return Returns an ArrayList<String> containing the gene name,
+	 * with the names and scores of connected genes
+	 *
 	 * @throws SQLException
 	 *             In case SQL goes wrong
 	 */
@@ -341,24 +388,49 @@ public final class QueryProcessor {
 				.findGenesAssociatedWithSNP(id);
 		for (String gene : qResult) {
 			list.add(gene);
-			list.add(QueryProcessor.executeStringQuery(gene, limit, threshold)
+			list.add(QueryProcessor.executeStringQuery(gene,
+					limit, threshold)
 					.toString());
 		}
 		return list;
 	}
 
+	/**
+	 * Finds the connections between genes, based on the SNP.
+	 *
+	 * @param id The id of the SNP
+	 * @param limit The maximum amount of genes retrieved
+	 * @param threshold The minimum value of the bonds
+	 *
+	 * @return Returns a String containing the connections
+	 *
+	 * @throws SQLException In case SQL goes wrong
+	 */
 	public static String findGeneConnections(final int id, final int limit,
 			final int threshold) throws SQLException {
 		ArrayList<String> qResult = QueryProcessor
 				.findGenesAssociatedWithSNP(id);
 		if (!qResult.isEmpty()) {
-			return findGeneConnections(qResult.get(0), limit, threshold);
+			return findGeneConnections(qResult.get(0),
+					limit, threshold);
 		}
 		return "";
 	}
 
-	public static String findGeneConnections(final String p1, final int limit,
-			final int threshold) throws SQLException {
+	/**
+	 * Finds the connections between genes.
+	 *
+	 * @param p1 The name of the gene
+	 * @param limit The maximum amount of genes retrieved
+	 * @param threshold The minimum value of the bonds
+	 *
+	 * @return Returns the String containing the connections
+	 *
+	 * @throws SQLException In case SQL goes wrong
+	 */
+	public static String findGeneConnections(final String p1,
+			final int limit, final int threshold)
+					throws SQLException {
 		return QueryProcessor.executeStringQuery(p1, limit, threshold)
 				.toString();
 	}

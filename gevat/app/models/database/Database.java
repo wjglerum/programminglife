@@ -8,11 +8,21 @@ import java.sql.Statement;
 import play.Logger;
 import play.db.DB;
 
-public class Database {
+/**
+ * Executes queries.
+ */
+public final class Database {
+
+	/**
+	 * Done because it is a utility-class.
+	 */
+	private Database() {
+		//not called
+	}
 
 	/**
 	 * Make connection and execute query, does not return results.
-	 * 
+	 *
 	 * @param database
 	 *            The name of the database
 	 * @param query
@@ -20,7 +30,8 @@ public class Database {
 	 */
 	private static void doQuery(final String database, final String query) {
 		try (Connection connection = DB.getConnection(database);) {
-			try (Statement statement = connection.createStatement();) {
+			try (Statement statement =
+					connection.createStatement();) {
 				statement.execute(query);
 			}
 		} catch (SQLException e) {
@@ -30,15 +41,16 @@ public class Database {
 
 	/**
 	 * Returns a ResultSet with the results from the SELECT query.
-	 * 
+	 *
 	 * @param database
 	 *            The name of the database
 	 * @param query
 	 *            The query to be executed, in string format
 	 * @return ResultSet ResultSet containing the results of the query
-	 * @throws SQLException
+	 * @throws SQLException In case SQL goes wrong
 	 */
-	public static ResultSet select(final String database, final String query)
+	public static ResultSet select(final String database,
+			final String query)
 			throws SQLException {
 		try (Connection connection = DB.getConnection(database);) {
 			return connection.createStatement().executeQuery(query);
@@ -47,7 +59,7 @@ public class Database {
 
 	/**
 	 * Execute insert statement.
-	 * 
+	 *
 	 * @param database
 	 *            The name of the database
 	 * @param query
@@ -59,7 +71,7 @@ public class Database {
 
 	/**
 	 * Execute delete statement.
-	 * 
+	 *
 	 * @param database
 	 *            The name of the database
 	 * @param query
