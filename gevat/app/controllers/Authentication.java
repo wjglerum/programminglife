@@ -4,13 +4,24 @@ import static play.data.Form.form;
 
 import java.sql.SQLException;
 
-import models.User;
+import models.user.User;
+import models.user.UserRepositoryDB;
+import models.user.UserService;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.login;
 
+/**
+ * Provides the secure authentication.
+ *
+ */
 public class Authentication extends Controller {
+
+	private static UserRepositoryDB userRepository =
+			new UserRepositoryDB();
+	private static UserService userService =
+			new UserService(userRepository);
 
 	/**
 	 * Login form class used for authentication.
@@ -20,13 +31,21 @@ public class Authentication extends Controller {
 		public String username;
 		public String password;
 
-		public String validate() throws SQLException {
-			if (User.authenticate(username, password) == null)
+		/**
+		 * Performs the validation.
+		 * @return Returns a string or null depending on
+		 * 			failure or succes
+		 * @throws SQLException
+		 */
+		public final String validate() throws SQLException {
+			if (userService.authenticate(this.username,
+					this.password) == null) {
 				return "Invalid username or password";
-			else
+			}
+			else {
 				return null;
+			}
 		}
-
 	}
 
 	/**
@@ -34,7 +53,6 @@ public class Authentication extends Controller {
 	 */
 	public static Result login() {
 		session().clear();
-
 		return ok(login.render(form(Login.class)));
 	}
 
@@ -66,15 +84,15 @@ public class Authentication extends Controller {
 	}
 
 	/**
-	 * Get the current session User
-	 * @throws SQLException 
+	 * Get the current session User.
+	 *
+	 * @throws SQLException
 	 */
 	public static User getUser() throws SQLException {
 		String username = session("username");
-
-		if (username != null)
-		  return User.getUser(username);
-		
+		if (username != null) {
+			return userService.getUser(username);
+		}
 		return null;
 	}
 

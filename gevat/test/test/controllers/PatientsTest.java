@@ -157,8 +157,8 @@ public class PatientsTest {
 	public void NameIsSmallerThan3() {
 		Add newAdd = new Add();
 		String warning = new String();
-		newAdd.name = "j";
-		newAdd.surname = "Doe";
+		newAdd.setName("j");
+		newAdd.setSurname("Doe");
 		warning = "An invalid name is entered. Please fill in a name consisting of at least 3 characters";
 		assertThat(warning).isEqualTo(newAdd.validate());
 	}
@@ -171,8 +171,8 @@ public class PatientsTest {
 	public void SurnameIsSmallerThan3() {
 		Add newAdd = new Add();
 		String warning = new String();
-		newAdd.name = "John";
-		newAdd.surname = "D";
+		newAdd.setName("John");
+		newAdd.setSurname("D");
 		warning = "An invalid surname is entered. Please fill in a surname consisting of at least 3 characters";
 		assertThat(warning).isEqualTo(newAdd.validate());
 	}
@@ -183,7 +183,7 @@ public class PatientsTest {
 	@Test
 	public void SurnameIsNull() {
 		Add newAdd = new Add();
-		newAdd.name = "John";
+		newAdd.setName("John");
 		String warning = new String();
 		warning = "An invalid surname is entered. Please fill in a surname consisting of at least 3 characters";
 		assertThat(warning).isEqualTo(newAdd.validate());

@@ -1,9 +1,10 @@
-@(patients: List[Patient], user: User)
+@(patients: List[models.patient.Patient], user: models.user.User)
 
 @import scala.collection.immutable.Map
 
 @scripts = {
-<script src="@routes.Assets.at("javascripts/patients.js")" type="text/javascript"></script>
+<script src="@routes.Assets.at("javascripts/views/patients/patients.js")" type="text/javascript"></script>
+<script src="@routes.Assets.at("javascripts/main.js")" type="text/javascript"></script>
         }
 @template_app("Patients overview", user, "patients", Map("/patients" -> "Patients"), scripts) {
 		
@@ -32,14 +33,23 @@
 		</thead>
 		<tbody>
 			@for(patient <- patients) {
-				<tr class="patient" data-patient="@patient.getId" href="/patients/@patient.getId">
-					<td>@patient.getId</td>
-					<td>@patient.getName</td>
-					<td>@patient.getSurname</td>
-					<td>@patient.getVcfFile</td>
-					<td>@patient.getVcfLengthMB() MB</td>
-					<td class="remove"><a class="remove-patient center-block text-danger"><span class="glyphicon glyphicon-remove"></span></a></td>
-				</tr>
+				@if(patient.isProcessed) {
+					<tr class="patient" data-patient="@patient.getId" href="/patients/@patient.getId">
+						<td>@patient.getId</td>
+						<td>@patient.getName</td>
+						<td>@patient.getSurname</td>
+						<td>@patient.getVcfFile</td>
+						<td>@patient.getVcfLengthMB() MB</td>
+						<td class="remove"><a class="remove-patient center-block text-danger"><span class="glyphicon glyphicon-remove"></span></a></td>
+					</tr>
+				} else {
+					<tr class="patient processing" data-patient="@patient.getId" href="/patients/@patient.getId">
+						<td>@patient.getId</td>
+						<td>@patient.getName</td>
+						<td>@patient.getSurname</td>
+						<td colspan="3">Processing...</td>
+					</tr>
+				}
 			}
 			<tr class="no-patients not-clickable" @if(patients.length > 0){ style="display:none" }><td colspan="6">No patients found...</td></tr>
 		</tbody>

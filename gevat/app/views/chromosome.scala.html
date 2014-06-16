@@ -1,10 +1,11 @@
-@(patient: Patient, chromosome: Chromosome, mutations: List[Mutation], user: User)
+@(patient: models.patient.Patient, chromosome: models.chromosome.Chromosome, mutations: Map[models.mutation.Mutation, Double], user: models.user.User)
 
 @import scala.collection.immutable.Map
 
 
 @scripts = {
-<script src="@routes.Assets.at("javascripts/chromosome.js")" type="text/javascript"></script>
+<script src="@routes.Assets.at("javascripts/views/chromosome/chromosome.js")" type="text/javascript"></script>
+<script src="@routes.Assets.at("javascripts/main.js")" type="text/javascript"></script>
 }
 
 @template_app("Mutations of patient " + patient.getName + " " + patient.getSurname + " in chromosome " + chromosome.getID(), user, "patients", Map("/patients" -> "Patients", ("/patients/" + patient.getId) -> (patient.getName + " " + patient.getSurname), ("/patients/" + patient.getId + "/chromosome/" + chromosome.getID()) -> ("Chromosome " + chromosome.getID())), scripts) {
@@ -23,13 +24,13 @@
     </tr>
     </thead>
     <tbody>
-		@if(mutations.length > 0){
-    @for(mutation <- mutations) {
+		@if(mutations.size() > 0){
+    @for(mutation <- mutations.keySet()) {
         <tr href="/patients/@patient.getId/mutation/@mutation.getId()" class="table-mutation" data-chr-id="@mutation.getChromosome()" data-mutation-id="@mutation.getId()">
                     <td>@mutation.getMutationType()</td>
             <td>@mutation.getRsID()</td>
             <td>@mutation.getChromosome()</td>
-            <td>@mutation.getScore()</td>
+            <td>@mutations.get(mutation)</td>
             <td>@mutation.child()</td>
             <td>@mutation.father()</td>
             <td>@mutation.mother()</td>
