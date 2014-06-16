@@ -1,3 +1,5 @@
+var patientTimers = {};
+
 $(document).ready(function () {
     // Start the table sorter
     $(".table-patients").tablesorter({
@@ -19,5 +21,22 @@ $(document).ready(function () {
                 }
             }
         });
+    });
+    
+    $(".table-patients .patient.processing").each(function() {
+    	var p_id = $(this).data('patient');
+    	
+    	// Check if processing finished every 3 seconds
+    	patientTimers[p_id] = setInterval(function(){
+    		jsRoutes.controllers.Patients.isProcessed(p_id).ajax({
+                success: function(data) {
+                    if (data != '0') {
+                    	$(".table-patients .patient[data-patient=" + p_id + "]").html(data);
+                    	
+                    	window.clearInterval(patientTimers[p_id]);
+                    }
+                }
+            });
+    	}, 3000);
     });
 });

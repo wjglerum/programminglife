@@ -2,28 +2,23 @@ package controllers;
 
 import static play.data.Form.form;
 
-import java.sql.SQLException;
 import java.io.File;
+import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 
-import org.broadinstitute.variant.variantcontext.Allele;
-
-import models.database.Database;
-import models.dna.Mutation;
+import models.mutation.Mutation;
+import models.mutation.MutationRepositoryDB;
+import models.mutation.MutationService;
 import models.patient.Patient;
-import models.patient.PatientRepository;
 import models.patient.PatientRepositoryDB;
 import models.patient.PatientService;
-import models.protein.ProteinConnection;
-import models.protein.ProteinGraph;
-import models.reader.VCFReader;
-import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
-import play.mvc.Result;
-import play.mvc.Security;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
+import play.mvc.Result;
+import play.mvc.Security;
 import views.html.patient;
 import views.html.patient_add;
 import views.html.patients;
@@ -33,6 +28,9 @@ public class Patients extends Controller {
 	private static PatientRepositoryDB patientRepository = new PatientRepositoryDB();
 	private static PatientService patientService = new PatientService(
 			patientRepository);
+	private static MutationRepositoryDB mutationRepository = new MutationRepositoryDB();
+	private static MutationService mutationService = new MutationService(
+			mutationRepository);
 
 	/**
 	 * List all patients.
@@ -54,13 +52,16 @@ public class Patients extends Controller {
 	@Security.Authenticated(Secured.class)
 	public static Result show(int p_id) throws SQLException {
 		Patient p = patientService.get(p_id, Authentication.getUser().id);
-		List<Mutation> mutations = Mutation.getMutations(p_id);
-
+		List<Mutation> mutations = mutationService.getMutations(p_id);
+		HashMap<Mutation, Double> map = new HashMap<Mutation, Double>();
+		for (Mutation m : mutations) {
+			map.put(m, (double) mutationService.getScore(m));
+		}
 		if (p == null)
 			return patientNotFound();
 
 		// Render the patient otherwise
-		return ok(patient.render(p, mutations, Authentication.getUser()));
+		return ok(patient.render(p, map, Authentication.getUser()));
 	}
 
 	/**
@@ -86,6 +87,7 @@ public class Patients extends Controller {
 
 		public String name;
 		public String surname;
+		public String sex;
 
 		public String validate() {
 			if (name == null || name.length() < 3)
@@ -157,6 +159,8 @@ public class Patients extends Controller {
 		} else {
 			String name = addForm.get().name;
 			String surname = addForm.get().surname;
+			String sex = addForm.get().sex;
+			boolean female = (sex.equals("female")) ? true : false;
 
 			// Get VCF file data
 			MultipartFormData body = request().body().asMultipartFormData();
@@ -169,55 +173,19 @@ public class Patients extends Controller {
 
 			// Add Patient to database
 			Patient p = patientService.add(Authentication.getUser().id, name,
-					surname, fileName, fileSize);
+					surname, fileName, fileSize, female);
 
-			// Process VCF file
-			List<Mutation> mutations = VCFReader.getMutations(filePath);
-
-			// Add each mutation to the database
-			for (Mutation m : mutations) {
-				String query = "INSERT INTO mutations VALUES (nextval('m_id_seq'::regclass),"
-						+ p.getId()
-						+ ",'"
-						+ m.getMutationType()
-						+ "','"
-						+ m.getRsID()
-						+ "',"
-						+ m.getChromosome()
-						+ ",'"
-						+ m.toAllelesString()
-						+ "',"
-						+ m.getStart()
-						+ ","
-						+ m.getEnd()
-						+ ","
-						+ m.getPositionGRCH37()
-						+ ");";
-				Logger.info(query);
-				Database.insert("data", query);
-			}
-			
-			findProteinConnections(mutations, p);
+			p.setupReaderThread(filePath);
 
 			// Make user happy
-			flash("patient-added", "The patient " + name + " " + surname
-					+ " is successfully added to the database.");
+			flash("patient-added",
+					"The patient "
+							+ name
+							+ " "
+							+ surname
+							+ " is successfully added to the database. The VCF file is now being processed. Please wait...");
 
 			return redirect(routes.Patients.showAll());
-		}
-	}
-	
-	public static void findProteinConnections(List<Mutation> mutations, Patient p)
-	{
-		Logger.info(p.getName() + " " + p.getSurname() + ": " + p.getId());
-		ProteinGraph pg = new ProteinGraph();
-		for(Mutation m: mutations)
-		{
-			pg.addConnectionsOfSnp(Integer.parseInt(m.getRsID().substring(2)), 10, 300);
-		}
-		for(ProteinConnection pc : pg.getConnections())
-		{
-			pc.insertIntoDB(p.getId());
 		}
 	}
 
@@ -229,12 +197,39 @@ public class Patients extends Controller {
 	public static Result remove(int p_id) throws SQLException {
 		Patient p = patientService.get(p_id, Authentication.getUser().id);
 
-		if (p == null)
+		if (p == null || !p.isProcessed())
 			return badRequest();
 
 		patientService.remove(p);
 
 		return ok();
+	}
+
+	/**
+	 * Handle the ajax request for removing patients
+	 * 
+	 * @throws SQLException
+	 */
+	public static Result isProcessed(int p_id) throws SQLException {
+		Patient p = patientService.get(p_id, Authentication.getUser().id);
+
+		if (p == null)
+			return badRequest();
+
+		if (!p.isProcessed())
+			return ok("0");
+		else {
+			String row = "";
+
+			row += "<td>" + p.getId() + "</td>";
+			row += "<td>" + p.getName() + "</td>";
+			row += "<td>" + p.getSurname() + "</td>";
+			row += "<td>" + p.getVcfFile() + "</td>";
+			row += "<td>" + p.getVcfLengthMB() + " MB</td>";
+			row += "<td class=\"remove\"><a class=\"remove-patient center-block text-danger\"><span class=\"glyphicon glyphicon-remove\"></span></a></td>";
+
+			return ok(row);
+		}
 	}
 
 }

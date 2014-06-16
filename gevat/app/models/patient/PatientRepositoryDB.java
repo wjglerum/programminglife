@@ -38,7 +38,10 @@ public class PatientRepositoryDB implements PatientRepository {
 			String surname = rs.getString("surname");
 			String vcfFile = rs.getString("vcf_file");
 			Long vcfLength = rs.getLong("vcf_length");
-			return new Patient(pId, name, surname, vcfFile, vcfLength);
+			boolean processed = rs.getBoolean("processed");
+			boolean female = rs.getBoolean("female");
+			
+			return new Patient(pId, name, surname, vcfFile, vcfLength, processed, female);
 		}
 		return null;
 	}
@@ -67,7 +70,10 @@ public class PatientRepositoryDB implements PatientRepository {
 			String surname = rs.getString("surname");
 			String vcfFile = rs.getString("vcf_file");
 			Long vcfLength = rs.getLong("vcf_length");
-			patients.add(new Patient(id, name, surname, vcfFile, vcfLength));
+		    boolean processed = rs.getBoolean("processed");
+		    boolean female = rs.getBoolean("female");
+      
+			patients.add(new Patient(id, name, surname, vcfFile, vcfLength, processed, female));
 		}
 		return patients;
 	}
@@ -93,17 +99,16 @@ public class PatientRepositoryDB implements PatientRepository {
 	 */
 	@Override
 	public Patient add(final int uId, final String name, final String surname,
-			final String vcfFile, final Long vcfLength) throws SQLException {
+			final String vcfFile, final Long vcfLength, boolean female) throws SQLException {
 		String query = "INSERT INTO patient VALUES"
 				+ " (nextval('p_id_seq'::regclass)," + uId + ",'" + name
 				+ "', '" + surname + "', '" + vcfFile + "', " + vcfLength
-				+ ");";
+				+ "," + false + "," + female + ");";
 		Database.insert("data", query);
 
 		// TODO get id of added patient efficiently
-
 		List<Patient> patients = getAll(uId);
-
+		
 		return patients.get(patients.size() - 1);
 	}
 

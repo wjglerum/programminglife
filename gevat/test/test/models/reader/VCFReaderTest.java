@@ -1,9 +1,9 @@
-package test.models;
+package test.models.reader;
 
 import static play.test.Helpers.*;
 import static org.fest.assertions.Assertions.*;
 import static org.junit.Assert.*;
-import models.dna.Mutation;
+import models.mutation.Mutation;
 import models.reader.VCFReader;
 
 import java.io.IOException;

@@ -2,9 +2,12 @@ package models.reader;
 
 import java.util.List;
 
+import play.Logger;
 import models.database.Database;
-import models.dna.Mutation;
+import models.mutation.Mutation;
 import models.patient.Patient;
+import models.protein.ProteinConnection;
+import models.protein.ProteinGraph;
 
 public class ReaderThread implements Runnable {
 
@@ -29,6 +32,8 @@ public class ReaderThread implements Runnable {
       List<Mutation> mutations = getMutations();
       
       addMutationsToDatabase(mutations);
+      
+      updatePatientToProcessed();
     }
     
     private List<Mutation> getMutations() {
@@ -59,5 +64,24 @@ public class ReaderThread implements Runnable {
         Database.insert("data", query);
       }
     }
+    
+    private void updatePatientToProcessed() {
+      String query = "UPDATE patient SET processed = 'true' WHERE p_id = " + patient.getId() + ";";
+      
+      Database.insert("data", query);
+    }
 
+	public static void findProteinConnections(List<Mutation> mutations, Patient p)
+	{
+		Logger.info(p.getName() + " " + p.getSurname() + ": " + p.getId());
+		ProteinGraph pg = new ProteinGraph();
+		for(Mutation m: mutations)
+		{
+			pg.addConnectionsOfSnp(Integer.parseInt(m.getRsID().substring(2)), 10, 300);
+		}
+		for(ProteinConnection pc : pg.getConnections())
+		{
+			pc.insertIntoDB(p.getId());
+		}
+	}
 }

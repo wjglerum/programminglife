@@ -21,8 +21,8 @@ public class PatientService {
 	}
 
 	public Patient add(final int uId, final String name, final String surname,
-			final String vcfFile, final Long vcfLength) throws SQLException {
-		return patientRepository.add(uId, name, surname, vcfFile, vcfLength);
+			final String vcfFile, final Long vcfLength, boolean female) throws SQLException {
+		return patientRepository.add(uId, name, surname, vcfFile, vcfLength, female);
 	}
 
 	public List<Patient> getAll(final int uId) throws SQLException {

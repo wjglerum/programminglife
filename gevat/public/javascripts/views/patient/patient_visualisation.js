@@ -1,8 +1,5 @@
 $(document).ready(function () {
-    var chromosomes = [];
-    for (var i = 1; i < 24; i++) {
-        chromosomes.push(i);
-    }
+
     var chromosomesWithMutations = [];
     var table = document.getElementById("table-mutations");
 
@@ -13,40 +10,64 @@ $(document).ready(function () {
         .append("tr")
         .attr("class", "chromosome-pair-table-row");
 
+    //If the patient is a man, 24 cells should be shown (23 should be an x and an y chromosome)
+    var numberOfCells = (female == "false") ? 25 : 24;
 
     // Add 2 chromosomes per div
     var tablerow = d3.select(".chromosome-pair-table-row");
-    for (var chromosomenr = 1; chromosomenr < 24; chromosomenr++) {
-        var tmp = tablerow.append("td");
+    for (var chromosomenr = 1; chromosomenr < numberOfCells; chromosomenr++) {
+        var tableCel = tablerow.append("td");
         for (var i = 1; i < 3; i++) {
-            tmp.attr("class", "chromosome-pair-table-cel")
-                .attr("data-chr-id", chromosomenr)
-                .append("svg")
-                .attr("width", 15)
-                .attr("height", 100)
-                .append("rect")
-                .attr("class", "chromosome-visualisation chromosome" + chromosomenr)
-                .attr("data-chr-id", chromosomenr)
-                .attr("x", 5)
-                .attr("rx", 10)
-                .attr("ry", 10)
-                .attr("width", 10)
-                .attr("height", 100);
+            if (chromosomenr == numberOfCells-2 && female == "false") {
+                appendChromosome(tableCel, 100, "X");
+                i++;
+            }
+            else if (chromosomenr == numberOfCells-1 && female == "false") {
+                appendChromosome(tableCel, 80, "Y");
+                i++;
+            }
+            else {
+                appendChromosome(tableCel, 100, chromosomenr);
+            }
         }
     }
+
+    function appendChromosome(tableCel, height, id) {
+        tableCel.attr("class", "chromosome-pair-table-cel")
+            .attr("data-chr-id", id)
+            .append("svg")
+            .attr("width", 15)
+            .attr("height", 100)
+            .append("rect")
+            .attr("class", "chromosome-visualisation chromosome" + id)
+            .attr("data-chr-id", id)
+            .attr("x", 5)
+            .attr("rx", 10)
+            .attr("ry", 10)
+            .attr("width", 10)
+            .attr("height", height);
+    }
+
     // Add numbers to the chromosomes
     var tableDescription = d3.select(".chromosome-pair-table")
         .append("tr")
         .attr("class", "chromosome-pair-table-description");
 
-    for (var n = 1; n < 24; n++) {
-        tableDescription.append("td")
-            .html(n);
+    for (var n = 1; n < numberOfCells; n++) {
+        if (n == numberOfCells-2 && female == "false") {
+            tableDescription.append("td").html("X");
+        }
+        else if (n == numberOfCells-1 && female == "false") {
+            tableDescription.append("td").html("Y");
+        }
+        else if (n == numberOfCells-1 && female == "true") {
+            tableDescription.append("td").html("X");
+        }
+        else
+            tableDescription.append("td").html(n);
     }
 
-    function redirectToChromosome() {
-        alert("Dit werkt.");
-    }
+
     getChromosomesWithMutations();
     markMutations();
     

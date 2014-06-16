@@ -13,7 +13,7 @@ public interface PatientRepository {
 	public Patient get(final int pId, final int uId) throws SQLException;
 
 	public Patient add(final int uId, final String name, final String surname,
-			final String vcfFile, final Long vcfLength) throws SQLException;
+			final String vcfFile, final Long vcfLength, boolean female) throws SQLException;
 
 	public List<Patient> getAll(final int uId) throws SQLException;
 
