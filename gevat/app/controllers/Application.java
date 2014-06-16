@@ -6,7 +6,6 @@ import play.Routes;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
-import views.html.about;
 import views.html.dashboard;
 import views.html.help;
 
