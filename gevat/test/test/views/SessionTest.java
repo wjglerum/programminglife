@@ -17,7 +17,7 @@ public class SessionTest {
     user = new User(1, "Foo", "Bar", "foobar");
   }
 
-  @Test
+  /*@Test
   public void aboutTemplateLoggedIn() {
     Content html = views.html.about.render(user);
     
@@ -31,6 +31,6 @@ public class SessionTest {
     
     assertThat(contentType(html)).isEqualTo("text/html");
     assertThat(contentAsString(html)).contains("Log in");
-  }
+  }*/
 
 }
