@@ -16,9 +16,9 @@ import models.database.Database;
 
 /**
  * Class for DB access for patients.
- * 
+ *
  * @author willem
- * 
+ *
  */
 public class PatientRepositoryDB implements PatientRepository {
 
