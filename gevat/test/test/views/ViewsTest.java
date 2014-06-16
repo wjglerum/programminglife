@@ -80,11 +80,10 @@ public class ViewsTest {
 	 */
 	@Test
 	public void dashboardTemplate() {
-		Content html = views.html.dashboard.render("Lorem ipsum", user);
+		Content html = views.html.dashboard.render(user);
 
 		assertThat(contentType(html)).isEqualTo("text/html");
 		assertThat(contentAsString(html)).contains("Dashboard");
-		assertThat(contentAsString(html)).contains("Lorem ipsum");
 	}
 
 	/**
