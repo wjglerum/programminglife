@@ -27,8 +27,7 @@ public class Application extends Controller {
 	 */
 	@Security.Authenticated(Secured.class)
 	public static Result dashboard() throws SQLException {
-		return ok(dashboard.render("Welcome to GEVATT!",
-				Authentication.getUser()));
+		return ok(dashboard.render(Authentication.getUser()));
 	}
 
 	/**
