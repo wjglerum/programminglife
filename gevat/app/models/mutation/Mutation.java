@@ -1,9 +1,12 @@
 package models.mutation;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
+
+import models.database.QueryProcessor;
 
 import org.broadinstitute.variant.variantcontext.Allele;
 import org.broadinstitute.variant.variantcontext.Genotype;
@@ -137,6 +140,20 @@ public class Mutation extends VariantContext {
 		return this.getStart();
 	}
 
+	/**
+	 * Gets the mutation score
+	 * 
+	 * @return mutation score
+	 * @throws SQLException
+	 */
+	public float getScore() throws SQLException {
+		return QueryProcessor.executeScoreQuery(this);
+	}
+	
+	public float getFrequency() throws SQLException {
+		return QueryProcessor.getFrequency(this);
+	}
+	
 	/**
 	 * Gets the endpoint of the mutation.
 	 * 
