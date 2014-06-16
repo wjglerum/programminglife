@@ -43,15 +43,6 @@ public class Application extends Controller {
 	}
 
 	/**
-	 * Render the about page (no authentication required).
-	 *
-	 * @throws SQLException
-	 */
-	public static Result about() throws SQLException {
-		return ok(about.render(Authentication.getUser()));
-	} // -- Javascript routing
-
-	/**
 	 * JavaScript routing for handling Ajax request.
 	 */
 	public static Result javascriptRoutes() {
