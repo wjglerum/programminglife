@@ -10,6 +10,9 @@ import views.html.about;
 import views.html.dashboard;
 import views.html.help;
 
+/**
+ * Performs the redirecting.
+ */
 public class Application extends Controller {
 
 	/**
@@ -21,7 +24,7 @@ public class Application extends Controller {
 
 	/**
 	 * Secure the dashboard page.
-	 * 
+	 *
 	 * @throws SQLException
 	 */
 	@Security.Authenticated(Secured.class)
@@ -32,7 +35,7 @@ public class Application extends Controller {
 
 	/**
 	 * Render the help page (no authentication required).
-	 * 
+	 *
 	 * @throws SQLException
 	 */
 	public static Result help() throws SQLException {
@@ -41,7 +44,7 @@ public class Application extends Controller {
 
 	/**
 	 * Render the about page (no authentication required).
-	 * 
+	 *
 	 * @throws SQLException
 	 */
 	public static Result about() throws SQLException {
@@ -49,17 +52,20 @@ public class Application extends Controller {
 	} // -- Javascript routing
 
 	/**
-	 * JavaScript routing for handling Ajax request
+	 * JavaScript routing for handling Ajax request.
 	 */
 	public static Result javascriptRoutes() {
 		response().setContentType("text/javascript");
 
 		// Routes for Projects
 		return ok(Routes.javascriptRouter("jsRoutes",
-        controllers.routes.javascript.Patients.remove(),
-        controllers.routes.javascript.Patients.isProcessed(),
-        controllers.routes.javascript.Mutations.proteinsJSON()
-		));
+				controllers.routes.javascript.
+				Patients.remove(),
+				controllers.routes.javascript.
+				Patients.isProcessed(),
+				controllers.routes.javascript.
+				Mutations.proteinsJSON()
+				));
 	}
 
 }
