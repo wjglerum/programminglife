@@ -76,29 +76,6 @@ public class ViewsTest {
 	}
 
 	/**
-	 * Test the about template
-	 */
-	@Test
-	public void aboutTemplate() {
-		Content html = views.html.about.render(user);
-
-		assertThat(contentType(html)).isEqualTo("text/html");
-		assertThat(contentAsString(html)).contains("About");
-	}
-
-	/**
-	 * Test the help template
-	 */
-	@Test
-	public void helpTemplate() {
-		Content html = views.html.help.render(user);
-
-		assertThat(contentType(html)).isEqualTo("text/html");
-		assertThat(contentAsString(html)).contains("Help");
-		assertThat(contentAsString(html)).contains("App documentation.");
-	}
-
-	/**
 	 * Test the dashboard template
 	 */
 	@Test
