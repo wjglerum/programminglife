@@ -83,41 +83,13 @@ public class Mutations extends Controller {
 		JSONArray connectionsJSON = new JSONArray();
 
 		for (Protein proteine : proteins) {
-			JSONObject proteinJSON = new JSONObject();
-
-			proteinJSON.put("name", proteine.getName());
-			proteinJSON.put("annotations",
-					proteinService.getAnnotations(proteine.getName()));
-			proteinJSON.put("disease", proteine.getDisease());
-
-			JSONArray mutationsJSON = new JSONArray();
-
-			ArrayList<Mutation> relatedMutations = proteinService
-					.getRelatedMutations(patient, mutation);
-
-			for (Mutation m : relatedMutations) {
-				JSONObject mutationJSON = new JSONObject();
-
-				mutationJSON.put("rsid", m.getRsID());
-				mutationJSON.put("id", m.getId());
-				mutationJSON.put("patient", patient.getId());
-
-				mutationsJSON.add(mutationJSON);
-			}
-
-			proteinJSON.put("related", mutationsJSON);
+			JSONObject proteinJSON = newProteinJSON(patient, mutation, proteine);
 
 			proteinsJSON.add(proteinJSON);
 		}
 
 		for (ProteinConnection connection : connections) {
-			JSONObject connectionJSON = new JSONObject();
-
-			connectionJSON.put("from", connection.getProteineFrom().getName());
-			connectionJSON.put("to", connection.getProteineTo().getName());
-			connectionJSON.put("score", connection.getCombinedScore());
-
-			connectionsJSON.add(connectionJSON);
+			connectionsJSON.add(newConnectionJSON(connection));
 		}
 
 		dataJSON.put("proteins", proteinsJSON);
@@ -126,6 +98,54 @@ public class Mutations extends Controller {
 		dataJSON.put("threshold", threshold);
 
 		return dataJSON.toJSONString();
+	}
+
+	private static JSONObject newConnectionJSON(ProteinConnection connection) {
+		JSONObject connectionJSON = new JSONObject();
+
+		connectionJSON.put("from", connection.getProteineFrom().getName());
+		connectionJSON.put("to", connection.getProteineTo().getName());
+		connectionJSON.put("score", connection.getCombinedScore());
+
+		return connectionJSON;
+	}
+
+	private static JSONArray makeMutationsJSONArray(Patient patient, Mutation mutation) throws SQLException {
+		JSONArray mutationsJSON = new JSONArray();
+
+		ArrayList<Mutation> relatedMutations = proteinService
+				.getRelatedMutations(patient, mutation);
+
+		for (Mutation m : relatedMutations) {
+			mutationsJSON.add(newMutationJSON(patient, m));
+		}
+		
+		return mutationsJSON;
+	}
+
+	private static JSONObject newMutationJSON(Patient p, Mutation m) {
+		JSONObject mutationJSON = new JSONObject();
+
+		mutationJSON.put("rsid", m.getRsID());
+		mutationJSON.put("id", m.getId());
+		mutationJSON.put("patient", p.getId());
+		
+		return mutationJSON;
+	}
+
+	private static JSONObject newProteinJSON(Patient patient, Mutation mutation, Protein proteine) throws SQLException {
+		JSONObject proteinJSON = new JSONObject();
+		
+		proteinJSON.put("name", proteine.getName());
+		proteinJSON.put("annotations",
+				proteinService.getAnnotations(proteine.getName()));
+		proteinJSON.put("disease", proteine.getDisease());
+
+		JSONArray mutationsJSON = makeMutationsJSONArray(patient, mutation);
+		
+		proteinJSON.put("related", mutationsJSON);
+		
+		return proteinJSON;
 	}
 
 	/**
