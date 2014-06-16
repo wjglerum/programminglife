@@ -1,5 +1,6 @@
 package controllers;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -43,9 +44,10 @@ public class Mutations extends Controller {
 	 * Display a mutation of a patient.
 	 * 
 	 * @throws SQLException
+	 * @throws IOException 
 	 */
 	@Security.Authenticated(Secured.class)
-	public static Result show(int p_id, int m_id) throws SQLException {
+	public static Result show(int p_id, int m_id) throws SQLException, IOException {
 		Patient p = patientService.get(p_id, Authentication.getUser().id);
 		List<Mutation> mutations = mutationService.getMutations(p_id);
 

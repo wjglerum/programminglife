@@ -1,18 +1,30 @@
 package models.patient;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import play.Logger;
+import play.db.DB;
 import models.database.Database;
 
 /**
  * Class for DB access for patients.
+ * 
  * @author willem
- *
+ * 
  */
 public class PatientRepositoryDB implements PatientRepository {
+
+	private static PreparedStatement getAll;
+	private static PreparedStatement get;
+	private static PreparedStatement add;
 
 	/**
 	 * Lookup patient in the database by p_id.
@@ -21,17 +33,28 @@ public class PatientRepositoryDB implements PatientRepository {
 	 *            The patient-id
 	 * @param uId
 	 *            The user-id
+	 * @return 
 	 * 
 	 * @return Patient Returns the patient
+	 * @throws IOException 
 	 * 
 	 * @throws SQLException
 	 *             In case SQL goes wrong
 	 */
+	public PatientRepositoryDB() {
+		// Initialize all queries
+		try {
+			prepareQueries("data");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	@Override
 	public Patient get(final int pId, final int uId) throws SQLException {
-		String query = "SELECT * FROM patient WHERE p_id=" + pId + " AND u_id="
-				+ uId + ";";
-		ResultSet rs = Database.select("data", query);
+		get.setInt(1, pId);
+		get.setInt(2, uId);
+		System.out.println("We gaan nu dit uitvoeren: " + get.toString());
+		ResultSet rs = get.executeQuery();
 
 		if (rs.next()) {
 			String name = rs.getString("name");
@@ -40,12 +63,13 @@ public class PatientRepositoryDB implements PatientRepository {
 			Long vcfLength = rs.getLong("vcf_length");
 			boolean processed = rs.getBoolean("processed");
 			boolean female = rs.getBoolean("female");
-			
-			return new Patient(pId, name, surname, vcfFile, vcfLength, processed, female);
+
+			return new Patient(pId, name, surname, vcfFile, vcfLength,
+					processed, female);
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Make a list of all the patients in the database.
 	 * 
@@ -56,11 +80,13 @@ public class PatientRepositoryDB implements PatientRepository {
 	 * 
 	 * @throws SQLException
 	 *             In case SQL goes wrong
+	 * @throws IOException 
 	 */
 	@Override
-	public List<Patient> getAll(final int uId) throws SQLException {
-		String query = "SELECT * FROM patient WHERE u_id = '" + uId + "';";
-		ResultSet rs = Database.select("data", query);
+	public List<Patient> getAll(final int uId) throws SQLException, IOException {
+		getAll.setInt(1, uId);
+		System.out.println("We gaan nu dit uitvoeren: " + getAll.toString());
+		ResultSet rs = getAll.executeQuery();
 
 		List<Patient> patients = new ArrayList<Patient>();
 
@@ -70,10 +96,11 @@ public class PatientRepositoryDB implements PatientRepository {
 			String surname = rs.getString("surname");
 			String vcfFile = rs.getString("vcf_file");
 			Long vcfLength = rs.getLong("vcf_length");
-		    boolean processed = rs.getBoolean("processed");
-		    boolean female = rs.getBoolean("female");
-      
-			patients.add(new Patient(id, name, surname, vcfFile, vcfLength, processed, female));
+			boolean processed = rs.getBoolean("processed");
+			boolean female = rs.getBoolean("female");
+
+			patients.add(new Patient(id, name, surname, vcfFile, vcfLength,
+					processed, female));
 		}
 		return patients;
 	}
@@ -99,16 +126,31 @@ public class PatientRepositoryDB implements PatientRepository {
 	 */
 	@Override
 	public Patient add(final int uId, final String name, final String surname,
-			final String vcfFile, final Long vcfLength, boolean female) throws SQLException {
-		String query = "INSERT INTO patient VALUES"
-				+ " (nextval('p_id_seq'::regclass)," + uId + ",'" + name
-				+ "', '" + surname + "', '" + vcfFile + "', " + vcfLength
-				+ "," + false + "," + female + ");";
-		Database.insert("data", query);
-
+			final String vcfFile, final Long vcfLength, boolean female)
+			throws SQLException {
+//		String query = "INSERT INTO patient VALUES"
+//				+ " (nextval('p_id_seq'::regclass)," + uId + ",'" + name
+//				+ "', '" + surname + "', '" + vcfFile + "', " + vcfLength + ","
+//				+ false + "," + female + ");";
+		add.setInt(1, uId);
+		add.setString(2, name);
+		add.setString(3, surname);
+		add.setString(4, vcfFile);
+		add.setLong(5, vcfLength);
+		add.setBoolean(6, female);
+		//Database.insert("data", query);
+		System.out.println("We gaan nu dit uitvoeren: " + add.toString());
+		int i = add.executeUpdate();
+		System.out.println("Dit ging goed: " + i);
 		// TODO get id of added patient efficiently
-		List<Patient> patients = getAll(uId);
-		
+		List<Patient> patients = null;
+		try {
+			patients = getAll(uId);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		return patients.get(patients.size() - 1);
 	}
 
@@ -128,4 +170,27 @@ public class PatientRepositoryDB implements PatientRepository {
 		Database.delete("data", queryDeletePatient);
 	}
 
+	/**
+	 * Initialize prepared queries
+	 * 
+	 * @throws IOException
+	 *             If the query is not accessible
+	 */
+	public static void prepareQueries(final String database)
+			throws IOException {
+		String getAllQuery = new String(Files.readAllBytes(Paths
+				.get("public/sql/patients/getAll.sql")));
+		String getQuery = new String(Files.readAllBytes(Paths
+				.get("public/sql/patients/get.sql")));
+		String addQuery = new String(Files.readAllBytes(Paths
+				.get("public/sql/patients/add.sql")));
+		try (Connection connection = DB.getConnection(database);) {
+			getAll = connection.prepareStatement(getAllQuery);
+			get = connection.prepareStatement(getQuery);
+			add = connection.prepareStatement(addQuery);
+			System.out.println(add);
+		} catch (SQLException e) {
+			Logger.error((e.toString()));
+		}
+	}
 }

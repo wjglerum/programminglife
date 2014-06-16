@@ -3,6 +3,7 @@ package controllers;
 import static play.data.Form.form;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
@@ -36,9 +37,10 @@ public class Patients extends Controller {
 	 * List all patients.
 	 * 
 	 * @throws SQLException
+	 * @throws IOException 
 	 */
 	@Security.Authenticated(Secured.class)
-	public static Result showAll() throws SQLException {
+	public static Result showAll() throws SQLException, IOException {
 		return ok(patients.render(
 				patientService.getAll(Authentication.getUser().id),
 				Authentication.getUser()));
@@ -48,9 +50,10 @@ public class Patients extends Controller {
 	 * Display a patient.
 	 * 
 	 * @throws SQLException
+	 * @throws IOException 
 	 */
 	@Security.Authenticated(Secured.class)
-	public static Result show(int p_id) throws SQLException {
+	public static Result show(int p_id) throws SQLException, IOException {
 		Patient p = patientService.get(p_id, Authentication.getUser().id);
 		List<Mutation> mutations = mutationService.getMutations(p_id);
 		HashMap<Mutation, Double> map = new HashMap<Mutation, Double>();
@@ -69,9 +72,10 @@ public class Patients extends Controller {
 	 * patient isn't found
 	 * 
 	 * @throws SQLException
+	 * @throws IOException 
 	 */
 	@Security.Authenticated(Secured.class)
-	public static Result patientNotFound() throws SQLException {
+	public static Result patientNotFound() throws SQLException, IOException {
 		flash("patient-not-found",
 				"The requested patient could not be found. Please select another one below.");
 
