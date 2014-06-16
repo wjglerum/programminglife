@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 import models.database.Database;
@@ -11,6 +12,8 @@ import models.database.QueryProcessor;
 
 import org.broadinstitute.variant.variantcontext.Allele;
 import org.broadinstitute.variant.variantcontext.GenotypesContext;
+
+import play.Logger;
 
 /**
  * The repository containing all database related functions.
@@ -115,5 +118,32 @@ public class MutationRepositoryDB implements MutationRepository {
 	@Override
 	public final float getScore(final Mutation m) throws SQLException {
 		return QueryProcessor.executeScoreQuery(m);
+	}
+	
+	/**
+	 * Gets the positions on a gene.
+	 *
+	 * @return Returns the list of positions
+	 */
+	@Override
+	public HashMap<String, ArrayList<Integer>> getPositions(Mutation m) throws SQLException {
+		HashMap<String, ArrayList<Integer>> map = new HashMap<String, ArrayList<Integer>>();
+		
+		String query = "SELECT * FROM genes WHERE chromosome='"
+				+ m.getChromosome()
+				+ "' ORDER BY ABS((endpoint + startpoint)/2 - "
+				+ m.getStart() + ") ASC LIMIT 5";
+		
+		Logger.info(query);
+		ResultSet rs = Database.select("data", query);
+		
+		while (rs.next()) {
+			ArrayList<Integer> list = new ArrayList<Integer>();
+			list.add(rs.getInt("startpoint"));
+			list.add(rs.getInt("endpoint"));
+			map.put(rs.getString("name"),list);
+		}
+
+		return map;
 	}
 }

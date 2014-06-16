@@ -1,6 +1,8 @@
 package models.mutation;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -43,4 +45,6 @@ public interface MutationRepository {
 	 * @throws SQLException in case SQL goes wrong
 	 */
 	float getScore(Mutation m) throws SQLException;
+
+	HashMap<String, ArrayList<Integer>> getPositions(Mutation m) throws SQLException;
 }

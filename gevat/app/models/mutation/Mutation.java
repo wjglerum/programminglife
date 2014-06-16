@@ -1,15 +1,21 @@
 package models.mutation;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
+
+import models.database.Database;
 
 import org.broadinstitute.variant.variantcontext.Allele;
 import org.broadinstitute.variant.variantcontext.Genotype;
 import org.broadinstitute.variant.variantcontext.GenotypeBuilder;
 import org.broadinstitute.variant.variantcontext.GenotypesContext;
 import org.broadinstitute.variant.variantcontext.VariantContext;
+
+import play.Logger;
 
 /**
  *
@@ -375,19 +381,5 @@ public class Mutation extends VariantContext {
 		alleles.add(toAllele(allelesString.substring(0, 1), false));
 		alleles.add(toAllele(allelesString.substring(1, 2), false));
 		return GenotypeBuilder.create(name, alleles);
-	}
-
-	/**
-	 * Gets the positions on a gene.
-	 *
-	 * @return Returns the list of positions
-	 */
-	public final ArrayList<Integer> getPositions() {
-		final int pos1 = 103843421;
-		final int pos2 = 186633831;
-		ArrayList<Integer> list = new ArrayList<Integer>();
-		list.add(pos1);
-		list.add(pos2);
-		return list;
 	}
 }
