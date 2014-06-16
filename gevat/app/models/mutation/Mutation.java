@@ -1,9 +1,12 @@
 package models.mutation;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
+
+import models.database.QueryProcessor;
 
 import org.broadinstitute.variant.variantcontext.Allele;
 import org.broadinstitute.variant.variantcontext.Genotype;
@@ -38,11 +41,11 @@ public class Mutation extends VariantContext {
 	 * @param positionGRCH37
 	 */
 	public Mutation(final int id, final String mutationType, final String rsID,
-			final int chromosome, final Collection<Allele> alleles,
+			final String chromosome, final Collection<Allele> alleles,
 			final int startPoint, final int endPoint,
 			final GenotypesContext genotypes, final int positionGRCH37) {
 
-		super(null, rsID, Integer.toString(chromosome), startPoint, endPoint,
+		super(null, rsID, chromosome, startPoint, endPoint,
 				alleles, genotypes, 0, null, null, false, EnumSet
 						.noneOf(Validation.class));
 
@@ -64,10 +67,10 @@ public class Mutation extends VariantContext {
 	 * @param positionGRCH37
 	 */
 	public Mutation(final int id, final String mutationType, final String rsID,
-			final int chromosome, final char[] alleles, final int startPoint,
+			final String chromosome, final char[] alleles, final int startPoint,
 			final int endPoint, final int positionGRCH37) {
 
-		super(null, rsID, Integer.toString(chromosome), startPoint, endPoint,
+		super(null, rsID, chromosome, startPoint, endPoint,
 				toAlleleCollection(new String(alleles)),
 				toGenotypesContext(new String(alleles)), 0, null, null, false,
 				EnumSet.noneOf(Validation.class));
@@ -124,8 +127,8 @@ public class Mutation extends VariantContext {
 	 * 
 	 * @return Returns the chromosome number.
 	 */
-	public final int getChromosome() {
-		return Integer.parseInt(this.contig);
+	public final String getChromosome() {
+		return this.contig;
 	}
 
 	/**
@@ -137,6 +140,20 @@ public class Mutation extends VariantContext {
 		return this.getStart();
 	}
 
+	/**
+	 * Gets the mutation score
+	 * 
+	 * @return mutation score
+	 * @throws SQLException
+	 */
+	public float getScore() throws SQLException {
+		return QueryProcessor.executeScoreQuery(this);
+	}
+	
+	public float getFrequency() throws SQLException {
+		return QueryProcessor.getFrequency(this);
+	}
+	
 	/**
 	 * Gets the endpoint of the mutation.
 	 * 

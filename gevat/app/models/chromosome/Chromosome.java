@@ -2,13 +2,13 @@ package models.chromosome;
 
 public class Chromosome {
 
-	private int id;
+	private String id;
 
-	public Chromosome(final int id) {
+	public Chromosome(final String id) {
 		this.id = id;
 	}
 
-	public final int getID() {
+	public final String getID() {
 		return this.id;
 	}
 }

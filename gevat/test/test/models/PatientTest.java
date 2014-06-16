@@ -32,7 +32,7 @@ public class PatientTest {
 
 	@Before
 	public void setUp() {
-		p = new Patient(id, name, surname, vcfFile, vcfLength, true);
+		p = new Patient(id, name, surname, vcfFile, vcfLength, true, true);
 	}
 
 	@Test
@@ -95,17 +95,17 @@ public class PatientTest {
 
 	@Test
 	public void addPatientTest() throws SQLException {
-		when(repositoryMock.add(id, name, surname, vcfFile, vcfLength))
+		when(repositoryMock.add(id, name, surname, vcfFile, vcfLength, true))
 				.thenReturn(p);
 
-		Patient x = patientService.add(id, name, surname, vcfFile, vcfLength);
+		Patient x = patientService.add(id, name, surname, vcfFile, vcfLength, true);
 		assertEquals(id, x.getId());
 		assertEquals(name, x.getName());
 		assertEquals(surname, x.getSurname());
 		assertEquals(vcfFile, x.getVcfFile());
 		assertTrue(1.0 == x.getVcfLengthMB());
 
-		verify(repositoryMock).add(id, name, surname, vcfFile, vcfLength);
+		verify(repositoryMock).add(id, name, surname, vcfFile, vcfLength, true);
 	}
 
 	@Test

@@ -30,7 +30,7 @@ public class Chromosomes extends Controller {
 	 * @throws SQLException
 	 */
 	@Security.Authenticated(Secured.class)
-	public static Result show(int p_id, int c_id) throws SQLException {
+	public static Result show(int p_id, String c_id) throws SQLException {
 		Patient p = patientService.get(p_id, Authentication.getUser().id);
 		List<Mutation> mutations = mutationService.getMutations(p_id, c_id);
 		HashMap<Mutation, Double> map =  new HashMap<Mutation, Double>();

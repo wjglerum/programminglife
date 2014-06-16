@@ -10,7 +10,7 @@ import models.chromosome.Chromosome;
 public class ChromosomeTest {
 
 	private Chromosome c;
-	private final int id = 1;
+	private final String id = "1";
 
 	@Before
 	public void setUp() {

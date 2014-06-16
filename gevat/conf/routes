@@ -22,7 +22,7 @@ POST    /patients/processed               controllers.Patients.isProcessed(p: In
 GET     /patients/:p                      controllers.Patients.show(p: Int)
 GET     /patients/:p/mutation/:m          controllers.Mutations.show(p: Int, m: Int)
 POST    /patients/mutation/ajax           controllers.Mutations.proteinsJSON(p: Int, m: Int, limit: Int, threshold: Int)
-GET		/patients/:p/chromosome/:c		  controllers.Chromosomes.show(p: Int, c: Int)
+GET		/patients/:p/chromosome/:c		  controllers.Chromosomes.show(p: Int, c: String)
 
 # Javascript routing
 GET     /assets/javascripts/routes        controllers.Application.javascriptRoutes()

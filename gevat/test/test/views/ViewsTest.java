@@ -130,7 +130,7 @@ public class ViewsTest {
 	@Test
 	public void patientsTemplate() {
 		Patient patient = new Patient(1, "name", "surname", "file", new Long(
-				12345), true);
+				12345), true, true);
 		List<Patient> patients = new ArrayList<Patient>();
 
 		patients.add(patient);
@@ -162,8 +162,8 @@ public class ViewsTest {
 	@Test
 	public void patientTemplate() throws SQLException {
 		Patient patient = new Patient(1, "name", "surname", "file", new Long(
-				12345), true);
-		Mutation mutation = new Mutation(1, "SNP", "rs12345", 1,
+				12345), true, true);
+		Mutation mutation = new Mutation(1, "SNP", "rs12345", "1",
 				"ATATAT".toCharArray(), 1, 2, 0);
 		List<Mutation> mutations = new ArrayList<Mutation>();
 
@@ -190,8 +190,8 @@ public class ViewsTest {
 	@Test
 	public void mutationTemplate() {
 		Patient patient = new Patient(1, "name", "surname", "file", new Long(
-				12345), true);
-		Mutation mutation = new Mutation(1, "SNP", "rs12345", 1,
+				12345), true, true);
+		Mutation mutation = new Mutation(1, "SNP", "rs12345", "1",
 				"ATATAT".toCharArray(), 1, 1, 0);
 
 		Content html = views.html.mutation.render(patient, mutation, user, "");

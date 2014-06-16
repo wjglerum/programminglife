@@ -35,7 +35,7 @@ public class MutationRepositoryDB implements MutationRepository {
 			int id = rs.getInt("m_id");
 			String sort = rs.getString("sort");
 			String rsID = rs.getString("rsID");
-			int chromosome = rs.getInt("chromosome");
+			String chromosome = rs.getString("chromosome");
 			Collection<Allele> alleles = Mutation.toAlleleCollection(rs
 					.getString("alleles"));
 			GenotypesContext genotypescontext = Mutation.toGenotypesContext(rs
@@ -65,7 +65,7 @@ public class MutationRepositoryDB implements MutationRepository {
 	 *             In case SQL goes wrong
 	 */
 	@Override
-	public List<Mutation> getMutations(final int pId, final int cId)
+	public List<Mutation> getMutations(final int pId, final String cId)
 			throws SQLException {
 		String query = "SELECT * FROM mutations WHERE p_id = '" + pId
 				+ "' and chromosome = '" + cId + "';";
@@ -76,7 +76,7 @@ public class MutationRepositoryDB implements MutationRepository {
 			int id = rs.getInt("m_id");
 			String sort = rs.getString("sort");
 			String rsID = rs.getString("rsID");
-			int chromosome = rs.getInt("chromosome");
+			String chromosome = rs.getString("chromosome");
 			Collection<Allele> alleles = Mutation.toAlleleCollection(rs
 					.getString("alleles"));
 			GenotypesContext genotypescontext = Mutation.toGenotypesContext(rs
@@ -98,6 +98,6 @@ public class MutationRepositoryDB implements MutationRepository {
 	 */
 	@Override
 	public float getScore(Mutation m) throws SQLException {
-		return QueryProcessor.executeScoreQuery(m.getChr(), m.getPositionGRCH37(), m.getUniqueBase());
+		return QueryProcessor.executeScoreQuery(m);
 	}
 }
