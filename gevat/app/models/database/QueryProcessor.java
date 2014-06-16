@@ -5,12 +5,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+
+import org.broadinstitute.variant.variantcontext.Allele;
 
 import play.Logger;
 import models.mutation.Mutation;
@@ -180,7 +183,6 @@ public final class QueryProcessor {
 		}
 		return 0;
 	}
-
 	/**
 	 * Gets the snp allele frequency of a mutation.
 	 * 
@@ -190,8 +192,10 @@ public final class QueryProcessor {
 	 */
 	public static float getFrequency(final Mutation mutation)
 			throws SQLException {
-		String q = "SELECT DISTINCT * FROM snpallelefreq WHERE snp_id ="
-				+ mutation.getID().substring(2) + " AND freq < 0.0001;";
+		String[] idAsString = mutation.getID().split(";");
+		int id = Integer.parseInt(idAsString[0].substring(2));
+		String q = "SELECT DISTINCT snp_id, allele, chr_cnt, freq FROM snpallelefreq join allele ON snpallelefreq.allele_id = allele.allele_id WHERE snp_id ="
+				+ id + " AND allele = '" + mutation.getAlleles().get(0).getBaseString() + "' AND freq < 0.005 AND freq > 0;";
 		ResultSet rs = Database.select("snp", q);
 		while (rs.next()) {
 			return rs.getFloat("freq");
@@ -251,7 +255,7 @@ public final class QueryProcessor {
 				q += id + ",";
 				if (++counter % 10000 == 0 || counter == ml.size() - 1) {
 					q = q.substring(0, q.length() - 1);
-					q += ") AND allele = '" + allele[counter2] + "' AND freq < 0.01 AND freq > 0;";
+					q += ") AND allele = '" + allele[counter2] + "' AND freq < 0.005 AND freq > 0;";
 					ResultSet rs = Database.select("snp", q);
 					q = "SELECT DISTINCT snp_id, allele, chr_cnt, freq FROM snpallelefreq join allele ON snpallelefreq.allele_id = allele.allele_id WHERE snp_id IN (";
 					while (rs.next()) {

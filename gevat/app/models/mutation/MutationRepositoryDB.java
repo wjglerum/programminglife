@@ -43,8 +43,10 @@ public class MutationRepositoryDB implements MutationRepository {
 			int startPoint = rs.getInt("startpoint");
 			int endPoint = rs.getInt("endpoint");
 			int positionGRCH37 = rs.getInt("GRCH37_pos");
+			float cadd = rs.getFloat("CADD_score");
+			float frequency = rs.getFloat("frequency");
 			mutations.add(new Mutation(id, sort, rsID, chromosome, alleles,
-					startPoint, endPoint, genotypescontext, positionGRCH37));
+					startPoint, endPoint, genotypescontext, positionGRCH37, cadd, frequency));
 		}
 		return mutations;
 	}
@@ -84,8 +86,10 @@ public class MutationRepositoryDB implements MutationRepository {
 			int startPoint = rs.getInt("startpoint");
 			int endPoint = rs.getInt("endpoint");
 			int positionGRCH37 = rs.getInt("GRCH37_pos");
+			float cadd = rs.getFloat("CADD_score");
+			float frequency = rs.getFloat("frequency");
 			mutations.add(new Mutation(id, sort, rsID, chromosome, alleles,
-					startPoint, endPoint, genotypescontext, positionGRCH37));
+					startPoint, endPoint, genotypescontext, positionGRCH37, cadd, frequency));
 		}
 		return mutations;
 	}

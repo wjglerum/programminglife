@@ -1,8 +1,10 @@
 package models.reader;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import models.database.Database;
+import models.database.QueryProcessor;
 import models.mutation.Mutation;
 import models.patient.Patient;
 
@@ -28,7 +30,12 @@ public class ReaderThread implements Runnable {
       // Process VCF file
       List<Mutation> mutations = getMutations();
       
-      addMutationsToDatabase(mutations);
+      try {
+		addMutationsToDatabase(mutations);
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
       
       updatePatientToProcessed();
     }
@@ -37,7 +44,7 @@ public class ReaderThread implements Runnable {
       return VCFReader.getMutations(filePath);
     }
     
-    private void addMutationsToDatabase(List<Mutation> mutations) {
+    private void addMutationsToDatabase(List<Mutation> mutations) throws SQLException {
       // Add each mutation to the database
       for (Mutation m : mutations) {
         String query = "INSERT INTO mutations VALUES (nextval('m_id_seq'::regclass),"
@@ -56,8 +63,12 @@ public class ReaderThread implements Runnable {
             + m.getEnd()
             + ","
             + m.getPositionGRCH37()
+            + ","
+            + QueryProcessor.executeScoreQuery(m)
+            + ","
+            + QueryProcessor.getFrequency(m)
             + ");";
-        
+        System.out.println(query);
         Database.insert("data", query);
       }
     }

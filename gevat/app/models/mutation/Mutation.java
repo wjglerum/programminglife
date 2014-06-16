@@ -26,6 +26,8 @@ public class Mutation extends VariantContext {
 	public String mutationType;
 	public int id;
 	private int positionGRCH37;
+	private float cadd;
+	private float frequency;
 
 	/**
 	 * Stores information about a mutation.
@@ -43,7 +45,7 @@ public class Mutation extends VariantContext {
 	public Mutation(final int id, final String mutationType, final String rsID,
 			final String chromosome, final Collection<Allele> alleles,
 			final int startPoint, final int endPoint,
-			final GenotypesContext genotypes, final int positionGRCH37) {
+			final GenotypesContext genotypes, final int positionGRCH37, final float cadd, final float frequency) {
 
 		super(null, rsID, chromosome, startPoint, endPoint,
 				alleles, genotypes, 0, null, null, false, EnumSet
@@ -52,6 +54,8 @@ public class Mutation extends VariantContext {
 		this.mutationType = mutationType;
 		this.id = id;
 		this.positionGRCH37 = positionGRCH37;
+		this.cadd = cadd;
+		this.frequency = frequency;
 	}
 
 	/**
@@ -68,7 +72,7 @@ public class Mutation extends VariantContext {
 	 */
 	public Mutation(final int id, final String mutationType, final String rsID,
 			final String chromosome, final char[] alleles, final int startPoint,
-			final int endPoint, final int positionGRCH37) {
+			final int endPoint, final int positionGRCH37, final float cadd, final float frequency) {
 
 		super(null, rsID, chromosome, startPoint, endPoint,
 				toAlleleCollection(new String(alleles)),
@@ -78,6 +82,8 @@ public class Mutation extends VariantContext {
 		this.mutationType = mutationType;
 		this.id = id;
 		this.positionGRCH37 = positionGRCH37;
+		this.cadd = cadd;
+		this.frequency = frequency;
 	}
 
 	/**
@@ -144,14 +150,22 @@ public class Mutation extends VariantContext {
 	 * Gets the mutation score
 	 * 
 	 * @return mutation score
-	 * @throws SQLException
 	 */
-	public float getScore() throws SQLException {
-		return QueryProcessor.executeScoreQuery(this);
+	public float getScore() {
+		//return QueryProcessor.executeScoreQuery(this);
+		return this.cadd;
 	}
 	
-	public float getFrequency() throws SQLException {
-		return QueryProcessor.getFrequency(this);
+	public final void setScore(final float score) {
+		this.cadd = score;
+	}
+	
+	public float getFrequency() {
+		return this.frequency;
+	}
+	
+	public final void setFrequency (final float frequency) {
+		this.frequency = frequency;
 	}
 	
 	/**
@@ -327,5 +341,5 @@ public class Mutation extends VariantContext {
 		list.add(103843421);
 		list.add(186633831);
 		return list;
-	}
+	}	
 }
