@@ -4,7 +4,6 @@
 
 # General pages
 GET     /                                 controllers.Application.index()
-GET     /help                             controllers.Application.help()
 
 # Authentication
 GET     /login                            controllers.Authentication.login()
