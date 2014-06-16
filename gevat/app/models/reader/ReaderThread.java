@@ -70,9 +70,11 @@ public class ReaderThread implements Runnable {
       
       Database.insert("data", query);
     }
-
+    
+/* Unused until protein package is updated 
 	public static void findProteinConnections(List<Mutation> mutations, Patient p)
 	{
+		Commented until package protein is updated
 		Logger.info(p.getName() + " " + p.getSurname() + ": " + p.getId());
 		ProteinGraph pg = new ProteinGraph();
 		for(Mutation m: mutations)
@@ -84,4 +86,5 @@ public class ReaderThread implements Runnable {
 			pc.insertIntoDB(p.getId());
 		}
 	}
+	*/
 }
