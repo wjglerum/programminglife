@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
+import models.database.QueryProcessor;
 import models.mutation.Mutation;
 import models.mutation.MutationRepositoryDB;
 import models.mutation.MutationService;
@@ -104,6 +105,11 @@ public class Mutations extends Controller {
 
 		ProteinGraph proteinGraph = new ProteinGraph(rsID,
 				limit, threshold);
+
+		for (String protein : QueryProcessor.
+				findGenesAssociatedWithSNP(rsID)) {
+			proteinGraph.putMutation(protein);
+		}
 
 		Collection<Protein> proteins = proteinGraph.getProteines();
 		Collection<ProteinConnection> connections = proteinGraph

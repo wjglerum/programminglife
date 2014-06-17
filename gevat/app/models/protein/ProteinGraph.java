@@ -239,4 +239,9 @@ public class ProteinGraph {
 			Logger.info(e.toString());
 		}
 	}
+	
+	public void putMutation(String protein)
+	{
+		this.getProtein(protein).setMutation(true);
+	}
 }
