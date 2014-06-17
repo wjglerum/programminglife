@@ -7,6 +7,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import org.broadinstitute.variant.variantcontext.VariantContext;
+
 import models.mutation.Mutation;
 import play.Logger;
 /**
@@ -22,6 +24,14 @@ public final class QueryProcessor {
 	 */
 	private QueryProcessor() {
 		// not called
+	}
+	
+	public static void getCadd(ArrayList<VariantContext> list) {
+	    VariantContext vc = list.get(0);
+	    String q = "SELECT * FROM WHERE chrom = '"
+            + vc.getChr()
+            + "' AND position = "
+            + ";";
 	}
 
 	/**
@@ -300,10 +310,16 @@ public final class QueryProcessor {
 							+ "snp_id IN (";
 					while (rs.next()) {
 						addCounter++;
-						output.add(hm.get(Integer
-								.parseInt(
-								rs.getString(
-								"snp_id"))));
+						ArrayList<String> geneList = QueryProcessor.findGenesAssociatedWithSNP(Integer
+                                .parseInt(
+                                rs.getString(
+                                "snp_id")));
+						if (!geneList.isEmpty()) {
+	                        output.add(hm.get(Integer
+	                                .parseInt(
+	                                rs.getString(
+	                                "snp_id"))));						    
+						}
 					}
 				}
 			}

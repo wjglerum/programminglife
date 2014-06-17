@@ -152,10 +152,12 @@ public class ProteinGraph {
 			return newProteins;
 		for (String s : connections.substring(1, connections.length() - 1)
 				.split(",")) {
-			String p2 = s.split("\t")[0].trim();
-			if (!hasProtein(p2))
-				newProteins.add(getProtein(p2));
-			add(p1, p2, Integer.parseInt(s.split("\t")[1].trim()));
+		    if (!s.isEmpty()) {
+	            String p2 = s.split("\t")[0].trim();
+	            if (!hasProtein(p2))
+	                newProteins.add(getProtein(p2));
+	            add(p1, p2, Integer.parseInt(s.split("\t")[1].trim()));		        
+		    }
 		}
 		return newProteins;
 	}
