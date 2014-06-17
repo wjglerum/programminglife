@@ -17,22 +17,19 @@ import play.Logger;
  * @author rhvanstaveren
  *
  */
-
 public class ProteinGraph {
 	/**
 	 * Maps the name of proteins to the protein object with that name.
 	 */
 	private Map<String, Protein> proteines = new HashMap<String, Protein>();
-	/**
-	 * A list of all connections between proteins in this graph.
-	 */
-	private Collection<ProteinConnection> connections =
-			new ArrayList<ProteinConnection>();
-
+	private Collection<ProteinConnection> connections = new ArrayList<ProteinConnection>();
+	private static QueryProcessor qp = new QueryProcessor();
+	
 	/**
 	 * Creates an empty ProteineGraph.
 	 */
 	public ProteinGraph() {
+	    qp = new QueryProcessor();
 	}
 
 	/**
@@ -44,10 +41,12 @@ public class ProteinGraph {
 	 *            the maximum amount of proteinConnection added per protein
 	 * @param threshold
 	 *            the minimum threshold for an added connection
+	 * @throws IOException 
 	 */
 	public ProteinGraph(final int snp, final int limit,
-			final int threshold) {
+			final int threshold) throws IOException {
 		addConnectionsOfSnp(snp, limit, threshold);
+
 		connectAllProteines();
 	}
 
@@ -63,9 +62,10 @@ public class ProteinGraph {
 	 *            the maximum amount of proteinConnection added per protein
 	 * @param threshold
 	 *            the minimum threshold for an added connection
+	 * @throws IOException 
 	 */
 	public ProteinGraph(final int snp, final int limit, final int threshold,
-			final int distance) {
+			final int distance) throws IOException {
 		addDistantConnectionsOfSnp(snp, limit, threshold, distance);
 		connectAllProteines();
 	}
@@ -77,18 +77,14 @@ public class ProteinGraph {
 	 *
 	 * @param snp
 	 *            the rsid of the location
-	 * @param limit
-	 *            the maximum amount of proteinConnection added per protein
-	 * @param threshold
-	 *            the minimum threshold for an added connection
+
+	 * @throws IOException 
 	 */
-	public void addConnectionsOfSnp(final int snp, final int limit,
-			final int threshold) {
+	public void addConnectionsOfSnp(int snp, int limit, int threshold) throws IOException {
 		try {
-			for (String protein : QueryProcessor
-					.findGenesAssociatedWithSNP(snp)) {
-				addConnectionsOfProteine(protein,
-						limit, threshold);
+			ArrayList<String> qResult = qp.findGenesAssociatedWithSNP(snp);
+			for (String protein : qp.findGenesAssociatedWithSNP(snp)) {
+				addConnectionsOfProteine(protein, limit, threshold);
 			}
 		} catch (SQLException e) {
 			Logger.info(e.toString());
@@ -103,20 +99,17 @@ public class ProteinGraph {
 	 * @param snp
 	 *            the rsid of the location
 	 * @param distance
-	 *            the maximum amount of connections of an protein added to
-	 *            the graph
-	 * @param limit
-	 *            the maximum amount of proteinConnection added per protein
-	 * @param threshold
-	 *            the minimum threshold for an added connection
+	 *            the maximum amount of connections of an protein added to the
+	 *            graph
+	 * @throws IOException 
 	 */
-	public void addDistantConnectionsOfSnp(final int snp, final int limit,
-			final int threshold, final int distance) {
+	public void addDistantConnectionsOfSnp(int snp, int limit, int threshold,
+			int distance) throws IOException {
 		try {
-			for (String protein : QueryProcessor
-					.findGenesAssociatedWithSNP(snp)) {
-				addDistantConnectionsOfProtein(protein, limit,
-						threshold, distance);
+			ArrayList<String> qResult = qp.findGenesAssociatedWithSNP(snp);
+			for (String protein : qp.findGenesAssociatedWithSNP(snp)) {
+				addDistantConnectionsOfProtein(protein, limit, threshold,
+						distance);
 			}
 		} catch (SQLException e) {
 			Logger.info(e.toString());
@@ -130,16 +123,12 @@ public class ProteinGraph {
 	 * @param protein
 	 *            A proteine to find neighbours of
 	 * @param distance
-	 *            the maximum amount of connections of an protein added to
-	 *            the graph
-	 * @param limit
-	 *            the maximum amount of proteinConnection added per protein
-	 * @param threshold
-	 *            the minimum threshold for an added connection
+	 *            the maximum amount of connections of an protein added to the
+	 *            graph
+	 * @throws IOException 
 	 */
-	public void addDistantConnectionsOfProtein(final String protein,
-			final int limit, final int threshold,
-			final int distance) {
+	public void addDistantConnectionsOfProtein(String protein, int limit,
+			int threshold, int distance) throws IOException {
 		Collection<Protein> currProteins = new HashSet<Protein>();
 		currProteins.add(getProtein(protein));
 		for (int d = 0; d < distance; d++) {
@@ -166,10 +155,11 @@ public class ProteinGraph {
 	 * @param threshold
 	 *            the minimum threshold for an added connection
 	 * @return gives back the proteins that have been added to the graph
+	 * @throws IOException 
 	 */
 	public Collection<Protein> addConnectionsOfProteine(
 			final String protein, final int limit,
-			final int threshold) {
+			final int threshold) throws IOException {
 		try {
 			return addConnections(protein, QueryProcessor.
 					findGeneConnections(protein, limit,
@@ -292,9 +282,7 @@ public class ProteinGraph {
 	 */
 	private void connectAllProteines() {
 		try {
-			ArrayList<String> connectedProteinScores =
-					QueryProcessor.getConnectedProteinScore(
-							getProteinesAsString());
+			ArrayList<String> connectedProteinScores = qp.getConnectedProteinScore(getProteinesAsString());
 
 			for (String connectedProteinScore
 					: connectedProteinScores) {

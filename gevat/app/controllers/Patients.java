@@ -3,6 +3,7 @@ package controllers;
 import static play.data.Form.form;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
@@ -42,11 +43,12 @@ public class Patients extends Controller {
 
 	/**
 	 * List all patients.
-	 *
-	 * @throws SQLException In case SQL goes wrong
+	 * 
+	 * @throws SQLException
+	 * @throws IOException 
 	 */
 	@Security.Authenticated(Secured.class)
-	public static Result showAll() throws SQLException {
+	public static Result showAll() throws SQLException, IOException {
 		return ok(patients.render(
 				patientService.getAll(Authentication.
 						getUser().id),
@@ -59,12 +61,13 @@ public class Patients extends Controller {
 	 * @param pId The id of the patient
 	 *
 	 * @throws SQLException
+	 * @throws IOException 
 	 */
 	@Security.Authenticated(Secured.class)
-	public static Result show(final int pId) throws SQLException {
-		Patient p = patientService.get(pId,
-				Authentication.getUser().id);
-		List<Mutation> mutations = mutationService.getMutations(pId);
+//<<<<<<< HEAD
+	public static Result show(int p_id) throws SQLException, IOException {
+		Patient p = patientService.get(p_id, Authentication.getUser().id);
+		List<Mutation> mutations = mutationService.getMutations(p_id);
 		HashMap<Mutation, Double> map = new HashMap<Mutation, Double>();
 		for (Mutation m : mutations) {
 			map.put(m, (double) mutationService.getScore(m));
@@ -79,12 +82,13 @@ public class Patients extends Controller {
 
 	/**
 	 * Return to the patients overview and display a message the requested
-	 * patient isn't found.
-	 *
-	 * @throws SQLException In case SQL goes wrong
+	 * patient isn't found
+	 * 
+	 * @throws SQLException
+	 * @throws IOException 
 	 */
 	@Security.Authenticated(Secured.class)
-	public static Result patientNotFound() throws SQLException {
+	public static Result patientNotFound() throws SQLException, IOException {
 		flash("patient-not-found",
 				"The requested patient could not be found. "
 				+ "Please select another one below.");

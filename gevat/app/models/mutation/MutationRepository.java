@@ -1,5 +1,6 @@
 package models.mutation;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -43,4 +44,12 @@ public interface MutationRepository {
 	 * @throws SQLException in case SQL goes wrong
 	 */
 	float getScore(Mutation m) throws SQLException;
+
+	/**
+	 * Prepares all the queries.
+	 * 
+	 * @param database The name of the database that we call to.
+	 * @throws IOException If the constructor isn't able to find the sql file.
+	 */
+//    void prepareQueries(String database) throws IOException;
 }
