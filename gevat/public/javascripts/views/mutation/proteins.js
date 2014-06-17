@@ -121,8 +121,6 @@ Proteins.table = function (proteins) {
 		var protein = proteins[i];
 		var related = "";
 		
-		console.log(protein.related);
-		
 		for (var j = 0; j < protein.related.length; j++) {
 			var mutation = protein.related[j];
 			
