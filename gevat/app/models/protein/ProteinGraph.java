@@ -60,8 +60,8 @@ public class ProteinGraph {
 		try {
 			ArrayList<String> qResult = QueryProcessor
 					.findGenesAssociatedWithSNP(snp);
-			if (!qResult.isEmpty()) {
-				String protein = qResult.get(0);
+			for (String protein : QueryProcessor.
+					findGenesAssociatedWithSNP(snp)) {
 				addConnectionsOfProteine(protein, limit, threshold);
 			}
 		} catch (SQLException e) {
@@ -84,8 +84,8 @@ public class ProteinGraph {
 		try {
 			ArrayList<String> qResult = QueryProcessor
 					.findGenesAssociatedWithSNP(snp);
-			if (!qResult.isEmpty()) {
-				String protein = qResult.get(0);
+			for (String protein : QueryProcessor.
+					findGenesAssociatedWithSNP(snp)) {
 				addDistantConnectionsOfProtein(protein, limit, threshold,
 						distance);
 			}
