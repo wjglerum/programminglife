@@ -32,6 +32,7 @@ public class QueryProcessor {
     private static PreparedStatement getAnnotationsOfProtein;
     private static PreparedStatement findGenesAssociatedWithSNP;
     private static PreparedStatement executeScoreQuery;
+    private static PreparedStatement getSNPFunction;
 
     /**
      * Done because it is a utility-class.
@@ -67,6 +68,7 @@ public class QueryProcessor {
             findGenesAssociatedWithSNP = prepareQuery(
                     "findGenesAssociatedWithSNP", connection2);
             getFrequency = prepareQuery("getFrequency", connection2);
+            getSNPFunction = prepareQuery("getSNPFunction", connection2);
         } catch (SQLException e) {
             Logger.error((e.toString()));
         }
@@ -482,5 +484,24 @@ public class QueryProcessor {
             final int threshold) throws SQLException, IOException {
         return QueryProcessor.findRelatedProteins(p1, limit, threshold)
                 .toString();
+    }
+
+    /**
+     * Gets the function of a SNP. Informs what it changes.
+     * @param id The id of the SNP
+     *
+     * @return Returns a list containing strings with information
+     *
+     * @throws SQLException In case SQL goes wrong
+     * @throws IOException In case the .sql cannot be found
+     */
+    public static ArrayList<String> getSNPFunction(final int id) throws SQLException, IOException {
+        ArrayList<String> list = new ArrayList<String>();
+        getSNPFunction.setInt(1, id);
+        ResultSet rs = findGenesAssociatedWithSNP.executeQuery();
+        while (rs.next()) {
+            list.add(rs.getInt("snp_id") + " " + rs.getString("abbrev") + " " + rs.getString("descrip") + " " + rs.getBoolean("is_coding") + " " + rs.getBoolean("is_exon"));
+        }
+        return list;
     }
 }
