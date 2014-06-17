@@ -66,8 +66,7 @@ public class ProteinGraph {
 	public void addConnectionsOfSnp(int snp, int limit, int threshold) throws IOException {
 		try {
 			ArrayList<String> qResult = qp.findGenesAssociatedWithSNP(snp);
-			if (!qResult.isEmpty()) {
-				String protein = qResult.get(0);
+			for (String protein : qp.findGenesAssociatedWithSNP(snp)) {
 				addConnectionsOfProteine(protein, limit, threshold);
 			}
 		} catch (SQLException e) {
@@ -90,8 +89,7 @@ public class ProteinGraph {
 			int distance) throws IOException {
 		try {
 			ArrayList<String> qResult = qp.findGenesAssociatedWithSNP(snp);
-			if (!qResult.isEmpty()) {
-				String protein = qResult.get(0);
+			for (String protein : qp.findGenesAssociatedWithSNP(snp)) {
 				addDistantConnectionsOfProtein(protein, limit, threshold,
 						distance);
 			}
@@ -160,10 +158,12 @@ public class ProteinGraph {
 			return newProteins;
 		for (String s : connections.substring(1, connections.length() - 1)
 				.split(",")) {
-			String p2 = s.split("\t")[0].trim();
-			if (!hasProtein(p2))
-				newProteins.add(getProtein(p2));
-			add(p1, p2, Integer.parseInt(s.split("\t")[1].trim()));
+		    if (!s.isEmpty()) {
+	            String p2 = s.split("\t")[0].trim();
+	            if (!hasProtein(p2))
+	                newProteins.add(getProtein(p2));
+	            add(p1, p2, Integer.parseInt(s.split("\t")[1].trim()));		        
+		    }
 		}
 		return newProteins;
 	}
@@ -229,8 +229,7 @@ public class ProteinGraph {
 
 	private void connectAllProteines() {
 		try {
-			ArrayList<String> connectedProteinScores = QueryProcessor
-					.getConnectedProteinScore(getProteinesAsString());
+			ArrayList<String> connectedProteinScores = qp.getConnectedProteinScore(getProteinesAsString());
 
 			for (String connectedProteinScore : connectedProteinScores) {
 				String[] proteinsAndScore = connectedProteinScore.split("=");
@@ -246,5 +245,10 @@ public class ProteinGraph {
 		} catch (SQLException e) {
 			Logger.info(e.toString());
 		}
+	}
+	
+	public void putMutation(String protein)
+	{
+		this.getProtein(protein).setMutation(true);
 	}
 }

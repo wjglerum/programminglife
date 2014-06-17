@@ -4,8 +4,13 @@ Proteins.graph = function (proteins, relations) {
 	var g = new Graph();
 
 	// Function to render the ellipses representing proteins
-	var render = function(r, node) {
-        var ellipse = r.ellipse(0, 0, 30, 20).attr({fill: "#67B3DD", stroke: "#4D9CC7", "stroke-width": 5});
+	var render = function(r, node, mutated) {
+		var fill = "#67B3DD";
+		
+		if (mutated)
+			fill = "#ff0000";
+		
+        var ellipse = r.ellipse(0, 0, 30, 20).attr({fill: fill, stroke: "#4D9CC7", "stroke-width": 5});
         
         ellipse.node.id = node.label || node.id;
         
@@ -16,11 +21,22 @@ Proteins.graph = function (proteins, relations) {
         return shape;
     }
 	
+	var renderEmpty = function(r, node) {
+		return render(r, node, false);
+	}
+	var renderMutated = function(r, node) {
+		return render(r, node, true);
+	}
+	
 	// Add the proteins to the graph
 	for (i = 0; i < proteins.length; i++) {
 		var protein = proteins[i];
 		
-		g.addNode(protein.name, {render: render});
+		// Commented, can be used if .hasMutation is given through JSON
+		if (protein.hasMutation)
+			g.addNode(protein.name, {render: renderMutated});
+		else
+			g.addNode(protein.name, {render: renderEmpty});
 	}
 	
 	// Determine the sum of all relations to get an average
@@ -92,7 +108,7 @@ Proteins.graph = function (proteins, relations) {
 		}
     };
     
-    // Doe initial drawing
+    // Do initial drawing
     Proteins.draw();
 }
 
@@ -104,8 +120,6 @@ Proteins.table = function (proteins) {
 	for (var i = 0; i < proteins.length; i++) {
 		var protein = proteins[i];
 		var related = "";
-		
-		console.log(protein.related);
 		
 		for (var j = 0; j < protein.related.length; j++) {
 			var mutation = protein.related[j];

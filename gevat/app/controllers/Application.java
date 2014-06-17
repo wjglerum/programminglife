@@ -6,9 +6,7 @@ import play.Routes;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
-import views.html.about;
 import views.html.dashboard;
-import views.html.help;
 
 /**
  * Performs the redirecting.
@@ -29,27 +27,8 @@ public class Application extends Controller {
 	 */
 	@Security.Authenticated(Secured.class)
 	public static Result dashboard() throws SQLException {
-		return ok(dashboard.render("Welcome to GEVATT!",
-				Authentication.getUser()));
+		return ok(dashboard.render(Authentication.getUser()));
 	}
-
-	/**
-	 * Render the help page (no authentication required).
-	 *
-	 * @throws SQLException
-	 */
-	public static Result help() throws SQLException {
-		return ok(help.render(Authentication.getUser()));
-	}
-
-	/**
-	 * Render the about page (no authentication required).
-	 *
-	 * @throws SQLException
-	 */
-	public static Result about() throws SQLException {
-		return ok(about.render(Authentication.getUser()));
-	} // -- Javascript routing
 
 	/**
 	 * JavaScript routing for handling Ajax request.

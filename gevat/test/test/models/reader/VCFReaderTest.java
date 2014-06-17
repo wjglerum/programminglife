@@ -57,14 +57,6 @@ public class VCFReaderTest {
 			reader.close();
 		} catch (IOException e) {fail("IOException");}
 	}
-	
-	@Test
-	public void testGetMutations() {
-		List<Mutation> mutations = VCFReader.getMutations(testFile);
-		assertEquals(mutations.size(),wrong.size());
-		for(int i=0; i<mutations.size(); i++)
-				assertEquals(mutations.get(i).toString(), wrong.get(i).toString());
-	}
 
 	@Test
 	public void testHasMutation() {

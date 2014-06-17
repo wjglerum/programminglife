@@ -54,9 +54,7 @@ public class PatientRepositoryDB implements PatientRepository {
     public Patient get(final int pId, final int uId) throws SQLException {
         get.setInt(1, pId);
         get.setInt(2, uId);
-        System.out.println("We gaan nu dit uitvoeren: " + get.toString());
         ResultSet rs = get.executeQuery();
-
         if (rs.next()) {
             String name = rs.getString("name");
             String surname = rs.getString("surname");
@@ -86,7 +84,6 @@ public class PatientRepositoryDB implements PatientRepository {
     @Override
     public List<Patient> getAll(final int uId) throws SQLException, IOException {
         getAll.setInt(1, uId);
-        System.out.println("We gaan nu dit uitvoeren: " + getAll.toString());
         ResultSet rs = getAll.executeQuery();
 
         List<Patient> patients = new ArrayList<Patient>();
@@ -129,18 +126,13 @@ public class PatientRepositoryDB implements PatientRepository {
     public Patient add(final int uId, final String name, final String surname,
             final String vcfFile, final Long vcfLength, boolean female)
             throws SQLException {
-        // String query = "INSERT INTO patient VALUES"
-        // + " (nextval('p_id_seq'::regclass)," + uId + ",'" + name
-        // + "', '" + surname + "', '" + vcfFile + "', " + vcfLength + ","
-        // + false + "," + female + ");";
+
         add.setInt(1, uId);
         add.setString(2, name);
         add.setString(3, surname);
         add.setString(4, vcfFile);
         add.setLong(5, vcfLength);
         add.setBoolean(6, female);
-        // Database.insert("data", query);
-        System.out.println("We gaan nu dit uitvoeren: " + add.toString());
         int i = add.executeUpdate();
         System.out.println("Dit ging goed: " + i);
         // TODO get id of added patient efficiently

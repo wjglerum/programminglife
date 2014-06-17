@@ -3,9 +3,7 @@ package models.patient;
 import models.reader.ReaderThread;
 
 /**
- * 
  * @author wjglerum
- * 
  */
 public class Patient {
 
@@ -19,12 +17,12 @@ public class Patient {
 
 	/**
 	 * Basic Patient information.
-	 * 
-	 * @param id
-	 * @param name
-	 * @param surname
-	 * @param vcfFile
-	 * @param vcfLength
+	 *
+	 * @param id The id of the patient
+	 * @param name The first name of the patient
+	 * @param surname The last name of the patient
+	 * @param vcfFile The vcf-file associated with the patient
+	 * @param vcfLength The lenght of the file
 	 */
 	public Patient(final int id, final String name, final String surname,
 			final String vcfFile, final Long vcfLength,
@@ -83,7 +81,7 @@ public class Patient {
 		return processed;
 	}
 
-	public void setupReaderThread(String filePath) {
+	public final void setupReaderThread(final String filePath) {
 		// Setup a thread for processing the VCF
 		ReaderThread readerThread = new ReaderThread(this, filePath);
 
