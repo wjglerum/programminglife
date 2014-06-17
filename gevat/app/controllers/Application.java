@@ -14,7 +14,8 @@ import views.html.dashboard;
 public class Application extends Controller {
 
 	/**
-	 * Redirect the index page to the dashboard
+	 * Redirect the index page to the dashboard.
+	 * @return action result
 	 */
 	public static Result index() {
 		return redirect("/dashboard");
@@ -23,7 +24,8 @@ public class Application extends Controller {
 	/**
 	 * Secure the dashboard page.
 	 *
-	 * @throws SQLException
+	 * @throws SQLException exception
+	 * @return action result
 	 */
 	@Security.Authenticated(Secured.class)
 	public static Result dashboard() throws SQLException {
@@ -32,6 +34,7 @@ public class Application extends Controller {
 
 	/**
 	 * JavaScript routing for handling Ajax request.
+	 * @return action result
 	 */
 	public static Result javascriptRoutes() {
 		response().setContentType("text/javascript");
