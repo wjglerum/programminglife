@@ -10,12 +10,11 @@
 @template_app("Mutation " + mutation.getRsID + " of patient " + patient.getName + " " + patient.getSurname, user, "patients", Map("/patients" -> "Patients", ("/patients/" + patient.getId) -> (patient.getName + " " + patient.getSurname), ("/patients/" + patient.getId + "/mutation/" + mutation.getId) -> ("Mutation " + mutation.getRsID)), scripts) {
 	
 	<h2>Position</h2>
-	<div class="position" gl1="0" data-right="1" data-marker="@mutation.getStartPoint()" data-id="@mutation.getRsID()">
+	<div class="position" data-mutation="@mutation.getStartPoint()" data-id="@mutation.getRsID()">
 		<script type="text/javascript">
 		var initPositionsData = @Html(positionsData);
-	</script>
+		</script>
 	</div>
-	@positionsData
 
 	<table class="table-mutation table">
 		<thead>

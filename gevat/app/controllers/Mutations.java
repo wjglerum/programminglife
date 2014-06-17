@@ -69,7 +69,7 @@ public class Mutations extends Controller {
 
 			if (m.getId() == mId) {
 				String jSON = mutationJSON(p, m, limit, threshold);
-				String positions = positionJSON(m);
+				String positions = positionJSON(m, 10);
 				return ok(mutation.render(p, m, Authentication.getUser(), jSON, positions));
 			}
 		}
@@ -231,9 +231,9 @@ public class Mutations extends Controller {
 	 * @return The JSON string
 	 */
 	@SuppressWarnings("unchecked")
-	public static String positionJSON(Mutation m) throws SQLException {
+	public static String positionJSON(Mutation m, int amount) throws SQLException {
 		HashMap<String, ArrayList<Integer>> map = mutationService
-				.getPositions(m);
+				.getPositions(m, amount);
 
 		JSONArray positionsJSON = new JSONArray();
 

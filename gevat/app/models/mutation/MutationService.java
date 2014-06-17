@@ -70,7 +70,7 @@ public class MutationService {
 	 * @return Returns the list of positions
 	 * @throws SQLException
 	 */
-	public HashMap<String, ArrayList<Integer>> getPositions(Mutation m) throws SQLException {
-		return this.mutationRepository.getPositions(m);
+	public HashMap<String, ArrayList<Integer>> getPositions(Mutation m, int amount) throws SQLException {
+		return this.mutationRepository.getPositions(m, amount);
 	}
 }

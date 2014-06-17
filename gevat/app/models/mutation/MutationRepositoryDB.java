@@ -126,13 +126,15 @@ public class MutationRepositoryDB implements MutationRepository {
 	 * @return Returns the list of positions
 	 */
 	@Override
-	public HashMap<String, ArrayList<Integer>> getPositions(Mutation m) throws SQLException {
+	public HashMap<String, ArrayList<Integer>> getPositions(Mutation m, int amount) throws SQLException {
 		HashMap<String, ArrayList<Integer>> map = new HashMap<String, ArrayList<Integer>>();
 		
 		String query = "SELECT * FROM genes WHERE chromosome='"
 				+ m.getChromosome()
 				+ "' ORDER BY ABS((endpoint + startpoint)/2 - "
-				+ m.getStart() + ") ASC LIMIT 5";
+				+ m.getStart() + ") ASC LIMIT "
+				+ amount
+				+ ";";
 		
 		Logger.info(query);
 		ResultSet rs = Database.select("data", query);

@@ -46,5 +46,6 @@ public interface MutationRepository {
 	 */
 	float getScore(Mutation m) throws SQLException;
 
-	HashMap<String, ArrayList<Integer>> getPositions(Mutation m) throws SQLException;
+	HashMap<String, ArrayList<Integer>> getPositions(Mutation m, int amount)
+			throws SQLException;
 }
