@@ -23,6 +23,8 @@ public class Patient {
 	 * @param surname The last name of the patient
 	 * @param vcfFile The vcf-file associated with the patient
 	 * @param vcfLength The lenght of the file
+	 * @param processed True if the vcf-file is processed
+	 * @param female True if the patient is female
 	 */
 	public Patient(final int id, final String name, final String surname,
 			final String vcfFile, final Long vcfLength,
@@ -36,9 +38,13 @@ public class Patient {
 		this.female = female;
 	}
 
-	public final Double getVcfLengthMB() {
-		return ((double) (Math
-				.round(vcfLength.doubleValue() / 1024 / 1024 * 10))) / 10;
+	/**
+	 * Gives the size of the VCF file in MB.
+	 * @return A string representation of the file size
+	 */
+	public final String getVcfLengthMB() {
+		final int megaSize = 1024 * 1024;
+		return String.format("%,1f", vcfLength.doubleValue() / megaSize);
 	}
 
 	public final String getName() {
@@ -81,6 +87,10 @@ public class Patient {
 		return processed;
 	}
 
+	/**
+	 * Sets up a separate thread to read the VCF file.
+	 * @param filePath The path of the VCF file
+	 */
 	public final void setupReaderThread(final String filePath) {
 		// Setup a thread for processing the VCF
 		ReaderThread readerThread = new ReaderThread(this, filePath);
