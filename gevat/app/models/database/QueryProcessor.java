@@ -57,7 +57,7 @@ public class QueryProcessor {
                     connection);
             getConnectedProteinScore = prepareQuery("getConnectedProteinScore",
                     connection);
-            getFrequency = prepareQuery("getFrequency", connection);
+            
             getAnnotationsOfProtein = prepareQuery("getAnnotationsOfProtein",
                     connection);
         } catch (SQLException e) {
@@ -66,6 +66,7 @@ public class QueryProcessor {
         try (Connection connection2 = DB.getConnection("snp");) {
             findGenesAssociatedWithSNP = prepareQuery(
                     "findGenesAssociatedWithSNP", connection2);
+            getFrequency = prepareQuery("getFrequency", connection2);
         } catch (SQLException e) {
             Logger.error((e.toString()));
         }
