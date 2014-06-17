@@ -1,10 +1,23 @@
 package models.protein;
 
+/**
+ * 
+ * @author robbertvs
+ *
+ * A connection between two proteins;
+ * 
+ */
 public class ProteinConnection {
-	protected Protein p1;
-	protected Protein p2;
+	private Protein p1;
+	private Protein p2;
 	private int combinedScore;
 
+	/**
+	 * Constructor of ProteinConnection also add itself to the list of connections of both proteins.
+	 * @param p1 first protein
+	 * @param p2 second protein
+	 * @param score the combined score of the proteins
+	 */
 	public ProteinConnection(Protein p1, Protein p2, int score) {
 		this.p1 = p1;
 		this.p2 = p2;
@@ -15,11 +28,18 @@ public class ProteinConnection {
 		}
 	}
 
+	/**
+	 * Gives the protein on the other end of the connection.
+	 * @param p The protein on one end
+	 * @return The protein on the other end, null if p is not one of the proteins of this connection
+	 */
 	public Protein getOtherProteine(Protein p) {
-		if (p == p1)
+		if (p == p1) {
 			return p2;
-		if (p == p2)
+		}
+		if (p == p2) {
 			return p1;
+		}
 		return null;
 	}
 
@@ -39,11 +59,10 @@ public class ProteinConnection {
 	public boolean equals(Object that) {
 		if (that instanceof ProteinConnection) {
 			ProteinConnection pc = (ProteinConnection) that;
-			{
-				if (this.p1.equals(pc.p1)) {
-					return this.p2.equals(pc.p2);
-				} else
-					return this.p1.equals(pc.p2) && this.p2.equals(pc.p1);
+			if (this.p1.equals(pc.p1)) {
+				return this.p2.equals(pc.p2);
+			} else {
+				return this.p1.equals(pc.p2) && this.p2.equals(pc.p1);
 			}
 		}
 		return false;
