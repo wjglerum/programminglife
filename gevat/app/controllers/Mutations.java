@@ -1,5 +1,6 @@
 package controllers;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -51,18 +52,14 @@ public class Mutations extends Controller {
 
 	/**
 	 * Display a mutation of a patient.
-	 *
-	 * @param pId The id of the patient
-	 * @param mId The id of the mutation
-	 *
-	 * @throws SQLException In case SQL goes wrong
-	 */
+	 * 
+	 * @throws SQLException
+	 * @throws IOException 
+	 **/
 	@Security.Authenticated(Secured.class)
-	public static Result show(final int pId, final int mId)
-			throws SQLException {
-		Patient p = patientService.get(pId,
-				Authentication.getUser().id);
-		List<Mutation> mutations = mutationService.getMutations(pId);
+	public static Result show(int p_id, int m_id) throws SQLException, IOException {
+		Patient p = patientService.get(p_id, Authentication.getUser().id);
+		List<Mutation> mutations = mutationService.getMutations(p_id);
 
 		if (p == null) {
 			return Patients.patientNotFound();
@@ -72,7 +69,7 @@ public class Mutations extends Controller {
 		final int limit = 10;
 		final int threshold = 700;
 		for (Mutation m : mutations) {
-			if (m.getId() == mId) {
+			if (m.getId() == m_id) {
 				String jSON = mutationJSON(p,
 						m, limit, threshold);
 

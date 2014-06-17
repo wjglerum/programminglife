@@ -40,12 +40,10 @@ import controllers.Authentication;
  * 
  */
 public class AuthenticationTest {
-
-	/**
-	 * Contains data for login form.
-	 */
-	private final Map<String, String> data = new HashMap<String, String>();
-
+/**
+ * Contains data for login form.
+ */
+private final Map<String, String> data = new HashMap<String, String>();
 	/**
 	 * Save the result of the called action to authenticate.
 	 */

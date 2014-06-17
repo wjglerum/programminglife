@@ -1,6 +1,10 @@
 package models.database;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -19,6 +23,7 @@ public final class Database {
 	private Database() {
 		//not called
 	}
+
 
 	/**
 	 * Make connection and execute query, does not return results.
@@ -80,5 +85,4 @@ public final class Database {
 	public static void delete(final String database, final String query) {
 		doQuery(database, query);
 	}
-
 }
