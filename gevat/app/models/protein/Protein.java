@@ -66,6 +66,11 @@ public class Protein {
 		connections.add(pc);
 	}
 
+	/**
+	 * Returns wether the graph contains the connection pc.
+	 * @param pc A proteinConnection
+	 * @return True when the ProteinGraph contains pc
+	 */
 	public final boolean hasConnection(final ProteinConnection pc) {
 		return connections.contains(pc);
 	}
@@ -95,13 +100,15 @@ public class Protein {
 		return this.disease;
 	}
 	
-	public final void setMutation(boolean mutation)
-	{
+	public final void setMutation(boolean mutation) {
 		hasMutation = mutation;
 	}
 	
-	public final boolean hasMutation()
-	{
+	/**
+	 * returns whether ProteinGraph contains this mutation.
+	 * @return True when ProteinGraph contains this mutation
+	 */
+	public final boolean hasMutation() {
 		return hasMutation;
 	}
 
