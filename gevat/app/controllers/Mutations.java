@@ -56,7 +56,8 @@ public class Mutations extends Controller {
 	 *             In case SQL goes wrong
 	 */
 	@Security.Authenticated(Secured.class)
-	public static Result show(int p_id, int m_id) throws SQLException, IOException {
+	public static Result show(int p_id, int m_id) throws SQLException,
+			IOException {
 		Patient p = patientService.get(p_id, Authentication.getUser().id);
 		List<Mutation> mutations = mutationService.getMutations(p_id);
 
@@ -70,8 +71,10 @@ public class Mutations extends Controller {
 		for (Mutation m : mutations) {
 			if (m.getId() == m_id) {
 				String jSON = mutationJSON(p, m, limit, threshold);
-				String positions = positionJSON(m, 10);
-				return ok(mutation.render(p, m, Authentication.getUser(), jSON, positions));
+				String positions = positionJSON(m, 20);
+				String nearby = nearbyMutationsJSON(m, 20, p_id);
+				return ok(mutation.render(p, m, Authentication.getUser(), jSON,
+						positions, nearby));
 			}
 		}
 
@@ -93,7 +96,7 @@ public class Mutations extends Controller {
 	 * 
 	 * @throws SQLException
 	 *             In case SQL goes wrong
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	@SuppressWarnings("unchecked")
 	private static String mutationJSON(final Patient patient,
@@ -104,8 +107,7 @@ public class Mutations extends Controller {
 
 		ProteinGraph proteinGraph = new ProteinGraph(rsID, limit, threshold);
 
-		for (String protein : QueryProcessor.
-				findGenesAssociatedWithSNP(rsID)) {
+		for (String protein : QueryProcessor.findGenesAssociatedWithSNP(rsID)) {
 			proteinGraph.putMutation(protein);
 		}
 
@@ -122,8 +124,8 @@ public class Mutations extends Controller {
 		for (Protein proteine : proteins) {
 			JSONObject proteinJSON = new JSONObject();
 
-      proteinJSON.put("name", proteine.getName());
-      proteinJSON.put("hasMutation", proteine.hasMutation());
+			proteinJSON.put("name", proteine.getName());
+			proteinJSON.put("hasMutation", proteine.hasMutation());
 			proteinJSON.put("annotations",
 					proteinService.getAnnotations(proteine.getName()));
 			proteinJSON.put("disease", proteine.getDisease());
@@ -180,10 +182,11 @@ public class Mutations extends Controller {
 	 * 
 	 * @throws SQLException
 	 *             In case SQL goes wrong
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public static Result proteinsJSON(final int pId, final int mId,
-			final int limit, final int threshold) throws SQLException, IOException {
+			final int limit, final int threshold) throws SQLException,
+			IOException {
 		Patient p = patientService.get(pId, Authentication.getUser().id);
 		List<Mutation> mutations = mutationService.getMutations(pId);
 
@@ -236,13 +239,15 @@ public class Mutations extends Controller {
 
 	/**
 	 * Make positions of the mutation and related genes a JSON string
+	 * 
 	 * @param m
 	 * @return The JSON string
 	 */
 	@SuppressWarnings("unchecked")
-	public static String positionJSON(Mutation m, int amount) throws SQLException {
-		HashMap<String, ArrayList<Integer>> map = mutationService
-				.getPositions(m, amount);
+	public static String positionJSON(Mutation m, int amount)
+			throws SQLException {
+		HashMap<String, ArrayList<Integer>> map = mutationService.getPositions(
+				m, amount);
 
 		JSONArray positionsJSON = new JSONArray();
 
@@ -255,6 +260,32 @@ public class Mutations extends Controller {
 		}
 
 		return positionsJSON.toString();
+	}
+
+	/**
+	 * Search for nearby mutations and make a JSON string out of it.
+	 * 
+	 * @param m
+	 * @param amount
+	 * @param pid
+	 * @return JSON string representation of a List<Mutation>
+	 * @throws SQLException
+	 */
+	@SuppressWarnings("unchecked")
+	public static String nearbyMutationsJSON(Mutation m, int amount, int pid)
+			throws SQLException {
+		List<Mutation> list = mutationService
+				.getNearbyMutations(m, amount, pid);
+
+		JSONArray nearbyMutationsJSON = new JSONArray();
+		for (Mutation mutation : list) {
+			JSONObject nearbyMutationJSON = new JSONObject();
+			nearbyMutationJSON.put("rdID", mutation.getRsID());
+			nearbyMutationJSON.put("sort", mutation.getType());
+			nearbyMutationJSON.put("position", mutation.getPositionGRCH37());
+			nearbyMutationsJSON.add(nearbyMutationJSON);
+		}
+		return nearbyMutationsJSON.toString();
 	}
 
 }

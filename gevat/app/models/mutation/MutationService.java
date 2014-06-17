@@ -73,4 +73,17 @@ public class MutationService {
 	public HashMap<String, ArrayList<Integer>> getPositions(Mutation m, int amount) throws SQLException {
 		return this.mutationRepository.getPositions(m, amount);
 	}
+	
+	/**
+	 * Get nearby Mutations.
+	 * @param m
+	 * @param amount
+	 * @param pid
+	 * @return
+	 * @throws SQLException
+	 */
+	public ArrayList<Mutation> getNearbyMutations(Mutation m, int amount,
+			int pid) throws SQLException {
+		return this.mutationRepository.getNearbyMutations(m, amount, pid);
+	}
 }

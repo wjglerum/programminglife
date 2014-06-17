@@ -1,4 +1,4 @@
-@(patient: models.patient.Patient, mutation: models.mutation.Mutation, user: models.user.User, proteinsData: String, positionsData: String)
+@(patient: models.patient.Patient, mutation: models.mutation.Mutation, user: models.user.User, proteinsData: String, positionsData: String, nearbyMutations: String)
 
 @import scala.collection.immutable.Map
 
@@ -16,6 +16,8 @@
 		var initPositionsData = @Html(positionsData);
 		</script>
 	</div>
+	
+	@nearbyMutations
         
 	<table class="table-mutation table">
 		<thead>

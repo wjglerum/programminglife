@@ -49,6 +49,14 @@ public interface MutationRepository {
 
 	HashMap<String, ArrayList<Integer>> getPositions(Mutation m, int amount)
 			throws SQLException;
+
+	/**
+	 * Gets nearby mutations
+	 * @param m
+	 * @return list of nearby mutations
+	 */
+	ArrayList<Mutation> getNearbyMutations(Mutation m, int amount, int pid)
+			throws SQLException;
 	
 	/**
 	 * Prepares all the queries.
