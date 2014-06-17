@@ -38,9 +38,11 @@ public final class GeneDiseaseLinkReader {
 		ArrayList<String> result = new ArrayList<String>();
 
 		while ((line = br.readLine()) != null) {
+			final int geneLocation = 3;
+			
 			String[] splitted = line.split("\t");
-			if (splitted[1].equals(gene) && !result.contains(splitted[3])) {
-				result.add(splitted[3]);
+			if (splitted[1].equals(gene) && !result.contains(splitted[geneLocation])) {
+				result.add(splitted[geneLocation]);
 			}
 		}
 		br.close();
