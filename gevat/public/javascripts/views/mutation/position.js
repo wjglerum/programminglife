@@ -29,18 +29,20 @@ var svgContainer = d3.select("div.position")
 	.attr("height", SVGheight + 100);
 
 // draw the line for the mutation
-var mutationLine = svgContainer.append("line")
+svgContainer.append("line")
 	.attr("x1", marker)
 	.attr("y1", 50)
 	.attr("x2", marker)
 	.attr("y2", SVGheight)
 	.attr("stroke", "red")
-	.attr("stroke-width", 2);
+	.attr("stroke-width", 2)
+	.attr("original-title", "mutation");
 
 // append a label to the mutation
-var text = svgContainer.append("svg:text") 
+svgContainer.append("svg:text") 
 	.attr("x", marker) 
 	.attr("y", 45) 
+	.attr("original-title", "mutation")
 	.text(id); 
 
 // add a line per gene
@@ -63,24 +65,37 @@ for(i in initPositionsData) {
 	middle += "%";
 
 	// add the line per gene
-	var line = svgContainer.append("line")
+	svgContainer.append("line")
 		.attr("x1", left)
 		.attr("y1", height)
 		.attr("x2", right)
 		.attr("y2", height)
 		.attr("stroke", "black")
-		.attr("stroke-width", 5);
+		.attr("stroke-width", 5)
+		.attr("id", "gene");
 
 	// append a text label per gene
-	var label = svgContainer.append("svg:text")
+	svgContainer.append("svg:text")
 		.attr("x", middle)
 		.attr("y", height - 5)
+		.attr("original-title",
+			initPositionsData[i].name 
+			+ "<br>Start: "
+			+ initPositionsData[i].start
+			+ "<br>End: "
+			+ initPositionsData[i].end)
 		.text(initPositionsData[i].name);
+
+	$('svg text').tipsy({
+		gravity: 'nw',
+		html: true,
+		fallback: "gene"
+	});
 }
 
 // draw a scale
 height += 50;
-var scale = svgContainer.append("line")
+svgContainer.append("line")
 	.attr("x1", "5%")
 	.attr("y1", height)
 	.attr("x2", "95%")
@@ -88,17 +103,17 @@ var scale = svgContainer.append("line")
 	.attr("stroke", "black")
 	.attr("stroke-width", 1);
 
-var scaleLeft = svgContainer.append("svg:text")
+svgContainer.append("svg:text")
 	.attr("x", "2.5%")
 	.attr("y", height + 20)
 	.text(low);
 
-var scaleRight = svgContainer.append("svg:text")
+svgContainer.append("svg:text")
 	.attr("x", "92.5%")
 	.attr("y", height + 20)
 	.text(high);
 
-var scaleLeftTick = svgContainer.append("line")
+svgContainer.append("line")
 	.attr("x1", "5%")
 	.attr("y1", height - 5)
 	.attr("x2", "5%")
@@ -106,7 +121,7 @@ var scaleLeftTick = svgContainer.append("line")
 	.attr("stroke", "black")
 	.attr("stroke-width", 1);
 
-var scaleRightTick = svgContainer.append("line")
+svgContainer.append("line")
 	.attr("x1", "95%")
 	.attr("y1", height - 5)
 	.attr("x2", "95%")
@@ -116,11 +131,11 @@ var scaleRightTick = svgContainer.append("line")
 
 // only draw tick when marker is not the same as left or right
 if(marker != "5%" && marker != "95%"){
-	var scaleMarker = svgContainer.append("svg:text")
+	svgContainer.append("svg:text")
 		.attr("x", marker)
 		.attr("y", height + 20)
 		.text(startPoint);
-	var scaleMarkerTick = svgContainer.append("line")
+	svgContainer.append("line")
 		.attr("x1", marker)
 		.attr("y1", height - 5)
 		.attr("x2", marker)
