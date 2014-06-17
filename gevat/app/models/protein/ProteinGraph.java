@@ -77,13 +77,13 @@ public class ProteinGraph {
 	 *
 	 * @param snp
 	 *            the rsid of the location
-
-	 * @throws IOException 
+	 * @param limit The maximum amount of connections to be added per query
+	 * @param threshold The minimum threshold of connections
+	 * @throws IOException IO Exception
 	 */
 	public void addConnectionsOfSnp(int snp, int limit, int threshold) throws IOException {
 		try {
-			ArrayList<String> qResult = qp.findGenesAssociatedWithSNP(snp);
-			for (String protein : qp.findGenesAssociatedWithSNP(snp)) {
+			for (String protein : QueryProcessor.findGenesAssociatedWithSNP(snp)) {
 				addConnectionsOfProteine(protein, limit, threshold);
 			}
 		} catch (SQLException e) {
@@ -101,13 +101,14 @@ public class ProteinGraph {
 	 * @param distance
 	 *            the maximum amount of connections of an protein added to the
 	 *            graph
-	 * @throws IOException 
+	 * @param limit The maximum amount of connections to be added per query
+	 * @param threshold The minimum threshold of connections
+	 * @throws IOException IO Exception
 	 */
 	public void addDistantConnectionsOfSnp(int snp, int limit, int threshold,
 			int distance) throws IOException {
 		try {
-			ArrayList<String> qResult = qp.findGenesAssociatedWithSNP(snp);
-			for (String protein : qp.findGenesAssociatedWithSNP(snp)) {
+			for (String protein : QueryProcessor.findGenesAssociatedWithSNP(snp)) {
 				addDistantConnectionsOfProtein(protein, limit, threshold,
 						distance);
 			}
@@ -125,7 +126,9 @@ public class ProteinGraph {
 	 * @param distance
 	 *            the maximum amount of connections of an protein added to the
 	 *            graph
-	 * @throws IOException 
+	 * @param limit The maximum amount of connections to be added per query
+	 * @param threshold The minimum threshold of connections
+	 * @throws IOException IO Exception
 	 */
 	public void addDistantConnectionsOfProtein(String protein, int limit,
 			int threshold, int distance) throws IOException {
@@ -282,7 +285,8 @@ public class ProteinGraph {
 	 */
 	private void connectAllProteines() {
 		try {
-			ArrayList<String> connectedProteinScores = qp.getConnectedProteinScore(getProteinesAsString());
+			ArrayList<String> connectedProteinScores =
+					QueryProcessor.getConnectedProteinScore(getProteinesAsString());
 
 			for (String connectedProteinScore
 					: connectedProteinScores) {
