@@ -152,7 +152,7 @@ public class MutationRepositoryDB implements MutationRepository {
 		String query = "SELECT * FROM genes WHERE chromosome='"
 				+ m.getChromosome()
 				+ "' ORDER BY ABS((endpoint + startpoint)/2 - "
-				+ m.getStart() + ") ASC LIMIT "
+				+ m.getPositionGRCH37() + ") ASC LIMIT "
 				+ amount
 				+ ";";
 		

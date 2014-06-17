@@ -1,6 +1,7 @@
 //retrieve data from html
-var mutation = $(".position").data("mutation");	
-var id = $(".position").data("id");
+var startPoint = $(".position").data("startpoint");
+var endPoint = $(".position").data("endpoint");
+var id = $(".position").data("mid");
 
 // lowest and highest value in the dataset
 var low = Number.MAX_VALUE;
@@ -12,12 +13,12 @@ for(i in initPositionsData) {
 	if(initPositionsData[i].end > high) high = initPositionsData[i].end;
 }
 
-// also check the location of the mutation
-if(mutation < low) low = mutation;
-if(mutation > high) high = mutation;
+// also check the location of the startPoint
+if(startPoint < low) low = startPoint;
+if(startPoint > high) high = startPoint;
 
 // convert to relative percentage
-var marker = (mutation - low)/(high - low)*100*0.9+5;
+var marker = (startPoint - low)/(high - low)*100*0.9+5;
 marker += "%";
 
 //make a container for svg
@@ -26,14 +27,6 @@ var svgContainer = d3.select("div.position")
 	.append("svg")
 	.attr("width", "100%")
 	.attr("height", SVGheight + 100);
-
-//draw the red mutation marker
-//var mutation = svgContainer.append("svg:image")
-//	.attr("x", markerBar)
-//	.attr("y", 50)
-//	.attr("width", 50)
-//	.attr("height", 50)
-//	.attr("xlink:href","/assets/images/marker.png");
 
 // draw the line for the mutation
 var mutationLine = svgContainer.append("line")
@@ -85,9 +78,6 @@ for(i in initPositionsData) {
 		.text(initPositionsData[i].name);
 }
 
-console.log(low);
-console.log(high);
-console.log(marker);
 // draw a scale
 height += 50;
 var scale = svgContainer.append("line")
@@ -124,11 +114,12 @@ var scaleRightTick = svgContainer.append("line")
 	.attr("stroke", "black")
 	.attr("stroke-width", 1);
 
+// only draw tick when marker is not the same as left or right
 if(marker != "5%" && marker != "95%"){
 	var scaleMarker = svgContainer.append("svg:text")
 		.attr("x", marker)
 		.attr("y", height + 20)
-		.text(mutation);
+		.text(startPoint);
 	var scaleMarkerTick = svgContainer.append("line")
 		.attr("x1", marker)
 		.attr("y1", height - 5)
