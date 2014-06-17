@@ -27,6 +27,9 @@ public class PatientRepositoryDB implements PatientRepository {
     private static PreparedStatement add;
     private static PreparedStatement remove;
 
+    /**
+     * Constructs a new PatientRepositoryDB.
+     */
     public PatientRepositoryDB() {
         // Initialize all queries
         try {
@@ -79,7 +82,7 @@ public class PatientRepositoryDB implements PatientRepository {
      * 
      * @throws SQLException
      *             In case SQL goes wrong
-     * @throws IOException
+     * @throws IOException IO Exception
      */
     @Override
     public List<Patient> getAll(final int uId) throws SQLException, IOException {
@@ -116,6 +119,7 @@ public class PatientRepositoryDB implements PatientRepository {
      *            The file
      * @param vcfLength
      *            The length of the VCF-file
+     * @param female True when patient is female
      * 
      * @return Return the patient
      * 
@@ -126,13 +130,14 @@ public class PatientRepositoryDB implements PatientRepository {
     public Patient add(final int uId, final String name, final String surname,
             final String vcfFile, final Long vcfLength, boolean female)
             throws SQLException {
-
-        add.setInt(1, uId);
-        add.setString(2, name);
-        add.setString(3, surname);
-        add.setString(4, vcfFile);
-        add.setLong(5, vcfLength);
-        add.setBoolean(6, female);
+    	int counter = 1;
+    	
+        add.setInt(counter++, uId);
+        add.setString(counter++, name);
+        add.setString(counter++, surname);
+        add.setString(counter++, vcfFile);
+        add.setLong(counter++, vcfLength);
+        add.setBoolean(counter++, female);
         int i = add.executeUpdate();
         System.out.println("Dit ging goed: " + i);
         // TODO get id of added patient efficiently
@@ -152,7 +157,7 @@ public class PatientRepositoryDB implements PatientRepository {
      * 
      * @param patient
      *            The patient to be deleted
-     * @throws SQLException
+     * @throws SQLException SQL Exception
      */
     @Override
     public void remove(final Patient patient) throws SQLException {
@@ -164,8 +169,9 @@ public class PatientRepositoryDB implements PatientRepository {
     }
 
     /**
-     * Initialize prepared queries
+     * Initialize prepared queries.
      * 
+     * @param database The database to query from
      * @throws IOException
      *             If the query is not accessible
      */
