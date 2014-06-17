@@ -280,8 +280,8 @@ public class Mutations extends Controller {
 		JSONArray nearbyMutationsJSON = new JSONArray();
 		for (Mutation mutation : list) {
 			JSONObject nearbyMutationJSON = new JSONObject();
-			nearbyMutationJSON.put("rdID", mutation.getRsID());
-			nearbyMutationJSON.put("sort", mutation.getType());
+			nearbyMutationJSON.put("rsID", mutation.getRsID());
+			nearbyMutationJSON.put("sort", mutation.getMutationType());
 			nearbyMutationJSON.put("position", mutation.getPositionGRCH37());
 			nearbyMutationsJSON.add(nearbyMutationJSON);
 		}

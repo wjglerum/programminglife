@@ -1,4 +1,4 @@
-@(patient: models.patient.Patient, mutation: models.mutation.Mutation, user: models.user.User, proteinsData: String, positionsData: String, nearbyMutations: String)
+@(patient: models.patient.Patient, mutation: models.mutation.Mutation, user: models.user.User, proteinsData: String, positionsData: String, nearbyData: String)
 
 @import scala.collection.immutable.Map
 
@@ -10,14 +10,14 @@
 @template_app("Mutation " + mutation.getRsID + " of patient " + patient.getName + " " + patient.getSurname, user, "patients", Map("/patients" -> "Patients", ("/patients/" + patient.getId) -> (patient.getName + " " + patient.getSurname), ("/patients/" + patient.getId + "/mutation/" + mutation.getId) -> ("Mutation " + mutation.getRsID)), scripts) {
 	
 	<h3>Position</h3>
-	<p class="example" original-title="Hello World">Hover over me</p>	
 	<div class="position" data-startpoint="@mutation.getPositionGRCH37()" data-endpoint="@mutation.getEndPoint()" data-mid="@mutation.getRsID()">
 		<script type="text/javascript">
-		var initPositionsData = @Html(positionsData);
+		var positionsData = @Html(positionsData);
+		var nearbyData = @Html(nearbyData);
 		</script>
 	</div>
 	
-	@nearbyMutations
+	@nearbyData
         
 	<table class="table-mutation table">
 		<thead>
