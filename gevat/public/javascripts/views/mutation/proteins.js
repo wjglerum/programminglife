@@ -108,7 +108,7 @@ Proteins.graph = function (proteins, relations) {
 		}
     };
     
-    // Doe initial drawing
+    // Do initial drawing
     Proteins.draw();
 }
 
