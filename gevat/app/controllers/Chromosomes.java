@@ -1,5 +1,6 @@
 package controllers;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
@@ -32,27 +33,22 @@ public class Chromosomes extends Controller {
 
 	/**
 	 * Display all the mutations in a certain chromosome of a patient.
-	 *
 	 * @param pId The ID of the patient
 	 * @param cId The ID of the chromosome
-	 *
-	 * @throws SQLException In case SQL goes wrong
+	 * @throws SQLException
+	 * @throws IOException 
 	 */
 	@Security.Authenticated(Secured.class)
-	public static Result show(final int pId, final String cId)
-			throws SQLException {
-		Patient p = patientService.get(pId,
-				Authentication.getUser().id);
-		List<Mutation> mutations =
-				mutationService.getMutations(pId, cId);
-		HashMap<Mutation, Double> map =
-				new HashMap<Mutation, Double>();
-		for (Mutation m : mutations) {
+	public static Result show(int p_id, String c_id) throws SQLException, IOException {
+		Patient p = patientService.get(p_id, Authentication.getUser().id);
+		List<Mutation> mutations = mutationService.getMutations(p_id, c_id);
+		HashMap<Mutation, Double> map =  new HashMap<Mutation, Double>();
+		for(Mutation m : mutations){
 			map.put(m, (double) mutationService.getScore(m));
 		}
 
 		models.chromosome.Chromosome c =
-				new models.chromosome.Chromosome(cId);
+				new models.chromosome.Chromosome(c_id);
 
 		if (p == null) {
 			return Patients.patientNotFound();

@@ -1,11 +1,13 @@
 package controllers;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
+import models.database.QueryProcessor;
 import models.mutation.Mutation;
 import models.mutation.MutationRepositoryDB;
 import models.mutation.MutationService;
@@ -54,9 +56,9 @@ public class Mutations extends Controller {
 	 *             In case SQL goes wrong
 	 */
 	@Security.Authenticated(Secured.class)
-	public static Result show(final int pId, final int mId) throws SQLException {
-		Patient p = patientService.get(pId, Authentication.getUser().id);
-		List<Mutation> mutations = mutationService.getMutations(pId);
+	public static Result show(int p_id, int m_id) throws SQLException, IOException {
+		Patient p = patientService.get(p_id, Authentication.getUser().id);
+		List<Mutation> mutations = mutationService.getMutations(p_id);
 
 		if (p == null) {
 			return Patients.patientNotFound();
@@ -66,8 +68,7 @@ public class Mutations extends Controller {
 		final int limit = 10;
 		final int threshold = 700;
 		for (Mutation m : mutations) {
-
-			if (m.getId() == mId) {
+			if (m.getId() == m_id) {
 				String jSON = mutationJSON(p, m, limit, threshold);
 				String positions = positionJSON(m, 10);
 				return ok(mutation.render(p, m, Authentication.getUser(), jSON, positions));
@@ -92,15 +93,21 @@ public class Mutations extends Controller {
 	 * 
 	 * @throws SQLException
 	 *             In case SQL goes wrong
+	 * @throws IOException 
 	 */
 	@SuppressWarnings("unchecked")
 	private static String mutationJSON(final Patient patient,
 			final Mutation mutation, final int limit, final int threshold)
-			throws SQLException {
+			throws SQLException, IOException {
 		// Remove the 'rs' part of the rsID
 		int rsID = Integer.parseInt(mutation.getRsID().substring(2));
 
 		ProteinGraph proteinGraph = new ProteinGraph(rsID, limit, threshold);
+
+		for (String protein : QueryProcessor.
+				findGenesAssociatedWithSNP(rsID)) {
+			proteinGraph.putMutation(protein);
+		}
 
 		Collection<Protein> proteins = proteinGraph.getProteines();
 		Collection<ProteinConnection> connections = proteinGraph
@@ -115,7 +122,8 @@ public class Mutations extends Controller {
 		for (Protein proteine : proteins) {
 			JSONObject proteinJSON = new JSONObject();
 
-			proteinJSON.put("name", proteine.getName());
+      proteinJSON.put("name", proteine.getName());
+      proteinJSON.put("hasMutation", proteine.hasMutation());
 			proteinJSON.put("annotations",
 					proteinService.getAnnotations(proteine.getName()));
 			proteinJSON.put("disease", proteine.getDisease());
@@ -172,9 +180,10 @@ public class Mutations extends Controller {
 	 * 
 	 * @throws SQLException
 	 *             In case SQL goes wrong
+	 * @throws IOException 
 	 */
 	public static Result proteinsJSON(final int pId, final int mId,
-			final int limit, final int threshold) throws SQLException {
+			final int limit, final int threshold) throws SQLException, IOException {
 		Patient p = patientService.get(pId, Authentication.getUser().id);
 		List<Mutation> mutations = mutationService.getMutations(pId);
 

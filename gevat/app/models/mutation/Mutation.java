@@ -115,8 +115,12 @@ public class Mutation extends VariantContext {
 	public Mutation(final VariantContext vc, final String typeOfMutation) {
 		super(vc);
 		this.mutationType = typeOfMutation;
-		String[] splitGP = ((String) vc.getAttribute("GP")).split(":");
-		this.positionGRCH37 = Integer.parseInt(splitGP[1]);
+		Object gp = vc.getAttribute("GP");
+		this.positionGRCH37 = 0;
+		if (gp != null) {
+	        String[] splitGP = ((String) vc.getAttribute("GP")).split(":");
+	        this.positionGRCH37 = Integer.parseInt(splitGP[1]);		    
+		}
 	}
 
 	/**

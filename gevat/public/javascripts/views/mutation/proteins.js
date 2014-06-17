@@ -33,9 +33,9 @@ Proteins.graph = function (proteins, relations) {
 		var protein = proteins[i];
 		
 		// Commented, can be used if .hasMutation is given through JSON
-		/*if (protein.hasMutation)
+		if (protein.hasMutation)
 			g.addNode(protein.name, {render: renderMutated});
-		else*/
+		else
 			g.addNode(protein.name, {render: renderEmpty});
 	}
 	
@@ -108,7 +108,7 @@ Proteins.graph = function (proteins, relations) {
 		}
     };
     
-    // Doe initial drawing
+    // Do initial drawing
     Proteins.draw();
 }
 
@@ -120,8 +120,6 @@ Proteins.table = function (proteins) {
 	for (var i = 0; i < proteins.length; i++) {
 		var protein = proteins[i];
 		var related = "";
-		
-		console.log(protein.related);
 		
 		for (var j = 0; j < protein.related.length; j++) {
 			var mutation = protein.related[j];

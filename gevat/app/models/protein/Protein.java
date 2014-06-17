@@ -26,6 +26,11 @@ public class Protein {
 	 * The matching diseases found in {@link GeneDiseaseLinkReader}.
 	 */
 	private String disease;
+	
+	/**
+	 * True if the proteine has a mutation of type defined by the mutation class.
+	 */
+	private boolean hasMutation;
 
 	/**
 	 * The constructor for Proteine.
@@ -88,6 +93,16 @@ public class Protein {
 
 	public final String getDisease() {
 		return this.disease;
+	}
+	
+	public final void setMutation(boolean mutation)
+	{
+		hasMutation = mutation;
+	}
+	
+	public final boolean hasMutation()
+	{
+		return hasMutation;
 	}
 
 }

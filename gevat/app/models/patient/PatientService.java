@@ -1,5 +1,6 @@
 package models.patient;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -25,11 +26,11 @@ public class PatientService {
 		return patientRepository.add(uId, name, surname, vcfFile, vcfLength, female);
 	}
 
-	public List<Patient> getAll(final int uId) throws SQLException {
+	public List<Patient> getAll(final int uId) throws SQLException, IOException {
 		return patientRepository.getAll(uId);
 	}
 
-	public void remove(final Patient patient) {
+	public void remove(final Patient patient) throws SQLException {
 		patientRepository.remove(patient);
 	}
 }
