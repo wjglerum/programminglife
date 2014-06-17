@@ -47,19 +47,21 @@ public class Mutations extends Controller {
 	/**
 	 * Display a mutation of a patient.
 	 * 
-	 * @param pId
+	 * @param patientId
 	 *            The id of the patient
-	 * @param mId
+	 * @param mutationId
 	 *            The id of the mutation
+	 *
+	 * @return action result
 	 * 
-	 * @throws SQLException
-	 *             In case SQL goes wrong
+	 * @throws SQLException SQL Exception
+	 * @throws IOException IO Exception
 	 */
 	@Security.Authenticated(Secured.class)
-	public static Result show(int p_id, int m_id) throws SQLException,
+	public static Result show(int patientId, int mutationId) throws SQLException,
 			IOException {
-		Patient p = patientService.get(p_id, Authentication.getUser().id);
-		List<Mutation> mutations = mutationService.getMutations(p_id);
+		Patient p = patientService.get(patientId, Authentication.getUser().id);
+		List<Mutation> mutations = mutationService.getMutations(patientId);
 
 		if (p == null) {
 			return Patients.patientNotFound();
@@ -68,11 +70,12 @@ public class Mutations extends Controller {
 		// mutations
 		final int limit = 10;
 		final int threshold = 700;
+		final int amount = 20;
 		for (Mutation m : mutations) {
-			if (m.getId() == m_id) {
+			if (m.getId() == mutationId) {
 				String jSON = mutationJSON(p, m, limit, threshold);
-				String positions = positionJSON(m, 20);
-				String nearby = nearbyMutationsJSON(m, 20, p_id);
+				String positions = positionJSON(m, amount);
+				String nearby = nearbyMutationsJSON(m, amount, patientId);
 				return ok(mutation.render(p, m, Authentication.getUser(), jSON,
 						positions, nearby));
 			}
@@ -102,14 +105,7 @@ public class Mutations extends Controller {
 	private static String mutationJSON(final Patient patient,
 			final Mutation mutation, final int limit, final int threshold)
 			throws SQLException, IOException {
-		// Remove the 'rs' part of the rsID
-		int rsID = Integer.parseInt(mutation.getRsID().substring(2));
-
-		ProteinGraph proteinGraph = new ProteinGraph(rsID, limit, threshold);
-
-		for (String protein : QueryProcessor.findGenesAssociatedWithSNP(rsID)) {
-			proteinGraph.putMutation(protein);
-		}
+		ProteinGraph proteinGraph = createProteinGraph(mutation, limit, threshold);
 
 		Collection<Protein> proteins = proteinGraph.getProteines();
 		Collection<ProteinConnection> connections = proteinGraph
@@ -121,42 +117,13 @@ public class Mutations extends Controller {
 		JSONArray proteinsJSON = new JSONArray();
 		JSONArray connectionsJSON = new JSONArray();
 
-		for (Protein proteine : proteins) {
-			JSONObject proteinJSON = new JSONObject();
-
-			proteinJSON.put("name", proteine.getName());
-			proteinJSON.put("hasMutation", proteine.hasMutation());
-			proteinJSON.put("annotations",
-					proteinService.getAnnotations(proteine.getName()));
-			proteinJSON.put("disease", proteine.getDisease());
-
-			JSONArray mutationsJSON = new JSONArray();
-
-			ArrayList<Mutation> relatedMutations = proteinService
-					.getRelatedMutations(patient, mutation);
-
-			for (Mutation m : relatedMutations) {
-				JSONObject mutationJSON = new JSONObject();
-
-				mutationJSON.put("rsid", m.getRsID());
-				mutationJSON.put("id", m.getId());
-				mutationJSON.put("patient", patient.getId());
-
-				mutationsJSON.add(mutationJSON);
-			}
-
-			proteinJSON.put("related", mutationsJSON);
-
+		for (Protein protein : proteins) {
+			JSONObject proteinJSON = createProteinJSON(patient, mutation,
+					protein);
 			proteinsJSON.add(proteinJSON);
 		}
-
 		for (ProteinConnection connection : connections) {
-			JSONObject connectionJSON = new JSONObject();
-
-			connectionJSON.put("from", connection.getProteineFrom().getName());
-			connectionJSON.put("to", connection.getProteineTo().getName());
-			connectionJSON.put("score", connection.getCombinedScore());
-
+			JSONObject connectionJSON = createConnectionJSON(connection);
 			connectionsJSON.add(connectionJSON);
 		}
 
@@ -166,6 +133,75 @@ public class Mutations extends Controller {
 		dataJSON.put("threshold", threshold);
 
 		return dataJSON.toJSONString();
+	}
+
+	@SuppressWarnings("unchecked")
+	private static JSONObject createConnectionJSON(ProteinConnection connection) {
+		JSONObject connectionJSON = new JSONObject();
+
+		connectionJSON.put("from", connection.getProteineFrom().getName());
+		connectionJSON.put("to", connection.getProteineTo().getName());
+		connectionJSON.put("score", connection.getCombinedScore());
+		return connectionJSON;
+	}
+
+	@SuppressWarnings("unchecked")
+	private static JSONObject createProteinJSON(final Patient patient,
+			final Mutation mutation, Protein protein) throws SQLException {
+		JSONObject proteinJSON = new JSONObject();
+
+		proteinJSON.put("name", protein.getName());
+		proteinJSON.put("hasMutation", protein.hasMutation());
+		proteinJSON.put("annotations",
+				proteinService.getAnnotations(protein.getName()));
+		proteinJSON.put("disease", protein.getDisease());
+
+		JSONArray mutationsJSON = new JSONArray();
+
+		ArrayList<Mutation> relatedMutations = proteinService
+				.getRelatedMutations(patient, mutation);
+
+		for (Mutation m : relatedMutations) {
+			JSONObject mutationJSON = createMutationJSON(patient, m);
+			mutationsJSON.add(mutationJSON);
+		}
+
+		proteinJSON.put("related", mutationsJSON);
+		return proteinJSON;
+	}
+
+	@SuppressWarnings("unchecked")
+	private static JSONObject createMutationJSON(final Patient patient,
+			Mutation m) {
+		JSONObject mutationJSON = new JSONObject();
+
+		mutationJSON.put("rsid", m.getRsID());
+		mutationJSON.put("id", m.getId());
+		mutationJSON.put("patient", patient.getId());
+		return mutationJSON;
+	}
+	
+	/**
+	 * Makes a proteinGraph for a mutation.
+	 *
+	 * @param mutation The mutation to make the graph for
+	 * @param limit The maximum amount of proteinConnection added per protein
+	 * @param threshold The minimum threshold for an added connection
+	 * @return a ProteinGraph with proteins on the location of the mutation and related proteins
+	 * @throws IOException IO Exception
+	 * @throws SQLException SQL Exception
+	 */
+	public static ProteinGraph createProteinGraph(final Mutation mutation,
+			final int limit, final int threshold) throws IOException, SQLException {
+		// Remove the 'rs' part of the rsID
+		int rsID = Integer.parseInt(mutation.getRsID().substring(2));
+
+		ProteinGraph proteinGraph = new ProteinGraph(rsID, limit, threshold);
+
+		for (String protein : QueryProcessor.findGenesAssociatedWithSNP(rsID)) {
+			proteinGraph.putMutation(protein);
+		}
+		return proteinGraph;
 	}
 
 	/**
@@ -179,10 +215,12 @@ public class Mutations extends Controller {
 	 *            The maximum amount of proteins
 	 * @param threshold
 	 *            The lowest value allowed
+	 *
+	 * @return action result
 	 * 
 	 * @throws SQLException
 	 *             In case SQL goes wrong
-	 * @throws IOException
+	 * @throws IOException IO Exception
 	 */
 	public static Result proteinsJSON(final int pId, final int mId,
 			final int limit, final int threshold) throws SQLException,
@@ -217,7 +255,9 @@ public class Mutations extends Controller {
 	 *            The patient
 	 * @param mutations
 	 *            The list of mutations
-	 * 
+	 *
+	 * @return action result
+	 *
 	 * @throws SQLException
 	 *             In case SQL goes wrong
 	 */
@@ -238,10 +278,12 @@ public class Mutations extends Controller {
 	}
 
 	/**
-	 * Make positions of the mutation and related genes a JSON string
+	 * Make positions of the mutation and related genes a JSON string.
 	 * 
-	 * @param m
+	 * @param m A mutation to find related genes for
+	 * @param amount The maximum amount of related genes
 	 * @return The JSON string
+	 * @throws SQLException SQL Exception
 	 */
 	@SuppressWarnings("unchecked")
 	public static String positionJSON(Mutation m, int amount)
@@ -265,11 +307,11 @@ public class Mutations extends Controller {
 	/**
 	 * Search for nearby mutations and make a JSON string out of it.
 	 * 
-	 * @param m
-	 * @param amount
-	 * @param pid
+	 * @param m The mutation which location is searched in
+	 * @param amount The maximum amount of nearby mutations
+	 * @param pid The id of the patient
 	 * @return JSON string representation of a List<Mutation>
-	 * @throws SQLException
+	 * @throws SQLException SQL Exception
 	 */
 	@SuppressWarnings("unchecked")
 	public static String nearbyMutationsJSON(Mutation m, int amount, int pid)
