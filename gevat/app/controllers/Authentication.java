@@ -28,14 +28,14 @@ public class Authentication extends Controller {
 	 */
 	public static class Login {
 
-		public String username;
-		public String password;
+		private String username;
+		private String password;
 
 		/**
 		 * Performs the validation.
 		 * @return Returns a string or null depending on
 		 * 			failure or succes
-		 * @throws SQLException
+		 * @throws SQLException exception
 		 */
 		public final String validate() throws SQLException {
 			if (userService.authenticate(this.username,
@@ -50,6 +50,7 @@ public class Authentication extends Controller {
 
 	/**
 	 * Render the login form.
+	 * @return action result
 	 */
 	public static Result login() {
 		session().clear();
@@ -58,6 +59,7 @@ public class Authentication extends Controller {
 
 	/**
 	 * Authenticate and start a new session.
+	 * @return action result
 	 */
 	public static Result authenticate() {
 		Form<Login> loginForm = form(Login.class).bindFromRequest();
@@ -74,6 +76,7 @@ public class Authentication extends Controller {
 
 	/**
 	 * Logout and clean the session.
+	 * @return action result
 	 */
 	public static Result logout() {
 		session().clear();
@@ -86,7 +89,8 @@ public class Authentication extends Controller {
 	/**
 	 * Get the current session User.
 	 *
-	 * @throws SQLException
+	 * @return action result
+	 * @throws SQLException exception
 	 */
 	public static User getUser() throws SQLException {
 		String username = session("username");
