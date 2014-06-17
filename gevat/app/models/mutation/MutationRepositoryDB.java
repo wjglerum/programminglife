@@ -143,7 +143,10 @@ public class MutationRepositoryDB implements MutationRepository {
 	/**
 	 * Gets the positions on a gene.
 	 * 
+	 * @param m The mutation to find nearby mutations of
+	 * @param amount The amount of mutations to find
 	 * @return Returns the list of positions
+	 * @throws SQLException SQL Exception
 	 */
 	@Override
 	public HashMap<String, ArrayList<Integer>> getPositions(Mutation m,
@@ -168,10 +171,13 @@ public class MutationRepositoryDB implements MutationRepository {
 	}
 
 	/**
-	 * Gets nearby mutations
+	 * Gets nearby mutations.
 	 * 
-	 * @throws SQLException
-	 * 
+	 * @param m The mutation to find nearby mutations of
+	 * @param amount The amount of mutations to find
+	 * @param pid The patient id
+	 * @return list of nearby mutations
+	 * @throws SQLException SQL Exception
 	 */
 	@Override
 	public ArrayList<Mutation> getNearbyMutations(Mutation m, int amount,
@@ -183,10 +189,12 @@ public class MutationRepositoryDB implements MutationRepository {
 		int low = Integer.MAX_VALUE;
 		int high = 0;
 		for (String s : map.keySet()) {
-			if (map.get(s).get(0) < low)
+			if (map.get(s).get(0) < low) {
 				low = map.get(s).get(0);
-			if (map.get(s).get(1) > high)
+			}
+			if (map.get(s).get(1) > high) {
 				high = map.get(s).get(0);
+			}
 		}
 
 		for (Mutation mutation : list) {

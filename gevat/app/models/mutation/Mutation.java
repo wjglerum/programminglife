@@ -1,21 +1,15 @@
 package models.mutation;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
-
-import models.database.Database;
 
 import org.broadinstitute.variant.variantcontext.Allele;
 import org.broadinstitute.variant.variantcontext.Genotype;
 import org.broadinstitute.variant.variantcontext.GenotypeBuilder;
 import org.broadinstitute.variant.variantcontext.GenotypesContext;
 import org.broadinstitute.variant.variantcontext.VariantContext;
-
-import play.Logger;
 
 /**
  *
@@ -363,10 +357,13 @@ public class Mutation extends VariantContext {
 	 * @return Returns as a GenotypesContext
 	 */
 	public static GenotypesContext toGenotypesContext(final String s) {
+		final int dstart = 0;
+		final int fstart = 2;
+		final int mstart = 4;
 		GenotypesContext gc = GenotypesContext.create();
-		gc.add(toGenotype(s.substring(0, 2), "DAUGHTER"));
-		gc.add(toGenotype(s.substring(2, 4), "FATHER"));
-		gc.add(toGenotype(s.substring(4, 6), "MOTHER"));
+		gc.add(toGenotype(s.substring(dstart, dstart + 2), "DAUGHTER"));
+		gc.add(toGenotype(s.substring(fstart, fstart + 2), "FATHER"));
+		gc.add(toGenotype(s.substring(mstart, mstart + 2), "MOTHER"));
 		return gc;
 	}
 

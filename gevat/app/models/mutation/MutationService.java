@@ -65,22 +65,25 @@ public class MutationService {
 	}
 	
 	/**
-	 * Gets the positions on a gene.
-	 * @param m
+	 * Gets the positions of nearby genes of a mutation.
+	 * 
+	 * @param m The mutation
+	 * @param amount The amount of genes to find
 	 * @return Returns the list of positions
-	 * @throws SQLException
+	 * @throws SQLException SQL Exception
 	 */
-	public HashMap<String, ArrayList<Integer>> getPositions(Mutation m, int amount) throws SQLException {
+	public HashMap<String, ArrayList<Integer>> getPositions(Mutation m,
+			int amount) throws SQLException {
 		return this.mutationRepository.getPositions(m, amount);
 	}
 	
 	/**
 	 * Get nearby Mutations.
-	 * @param m
-	 * @param amount
-	 * @param pid
-	 * @return
-	 * @throws SQLException
+	 * @param m The mutation
+	 * @param amount The amount of mutations to find
+	 * @param pid The patient ID
+	 * @return A list of nearby mutations
+	 * @throws SQLException SQL Exception
 	 */
 	public ArrayList<Mutation> getNearbyMutations(Mutation m, int amount,
 			int pid) throws SQLException {

@@ -1,6 +1,5 @@
 package models.mutation;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,13 +46,25 @@ public interface MutationRepository {
 	 */
 	float getScore(Mutation m) throws SQLException;
 
+	/**
+	 * Gets the positions of close genes.
+	 * 
+	 * @param m A mutation to find the position of
+	 * @param amount The maximum amount of genes to evaluate
+	 * @return Returns the list of positions
+	 * @throws SQLException SQL Exception
+	 */
 	HashMap<String, ArrayList<Integer>> getPositions(Mutation m, int amount)
 			throws SQLException;
 
 	/**
-	 * Gets nearby mutations
-	 * @param m
+	 * Gets nearby mutations.
+	 * 
+	 * @param m The mutation to find nearby mutations of
+	 * @param amount The amount of mutations to find
+	 * @param pid The patient id
 	 * @return list of nearby mutations
+	 * @throws SQLException SQL Exception
 	 */
 	ArrayList<Mutation> getNearbyMutations(Mutation m, int amount, int pid)
 			throws SQLException;
