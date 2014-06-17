@@ -33,22 +33,23 @@ public class Chromosomes extends Controller {
 
 	/**
 	 * Display all the mutations in a certain chromosome of a patient.
-	 * @param pId The ID of the patient
-	 * @param cId The ID of the chromosome
-	 * @throws SQLException
-	 * @throws IOException 
+	 * @param patientId The ID of the patient
+	 * @param chromosomeId The ID of the chromosome
+	 * @return action result
+	 * @throws SQLException exception
+	 * @throws IOException exception
 	 */
 	@Security.Authenticated(Secured.class)
-	public static Result show(int p_id, String c_id) throws SQLException, IOException {
-		Patient p = patientService.get(p_id, Authentication.getUser().id);
-		List<Mutation> mutations = mutationService.getMutations(p_id, c_id);
+	public static Result show(int patientId, String chromosomeId) throws SQLException, IOException {
+		Patient p = patientService.get(patientId, Authentication.getUser().id);
+		List<Mutation> mutations = mutationService.getMutations(patientId, chromosomeId);
 		HashMap<Mutation, Double> map =  new HashMap<Mutation, Double>();
-		for(Mutation m : mutations){
+		for (Mutation m : mutations) {
 			map.put(m, (double) mutationService.getScore(m));
 		}
 
 		models.chromosome.Chromosome c =
-				new models.chromosome.Chromosome(c_id);
+				new models.chromosome.Chromosome(chromosomeId);
 
 		if (p == null) {
 			return Patients.patientNotFound();
