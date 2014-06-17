@@ -13,8 +13,22 @@ import models.patient.Patient;
  * 
  */
 public interface ProteinRepository {
-	public String getAnnotations(String name) throws SQLException;
+	/**
+	 * Gets the annotations of the protein.
+	 * 
+	 * @param protein The name of the protein
+	 * @return Returns the annotations associated with the protein.
+	 * @throws SQLException SQL Exception
+	 */
+	String getAnnotations(String protein) throws SQLException;
 
-	public ArrayList<Mutation> getRelatedMutations(Patient p, Mutation m)
+	/**
+	 * 
+	 * @param p The patient
+	 * @param m The mutation
+	 * @return A list of related mutations
+	 * @throws SQLException SQL Exception
+	 */
+	ArrayList<Mutation> getRelatedMutations(Patient p, Mutation m)
 			throws SQLException;
 }

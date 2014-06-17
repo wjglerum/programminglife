@@ -21,22 +21,16 @@ public class ProteinRepositoryDB implements ProteinRepository {
 	private MutationRepositoryDB mutationRepository = new MutationRepositoryDB();
 	private MutationService mutationService = new MutationService(
 			mutationRepository);
-	private ProteinGraph pg;
 
-	/**
-	 * Gets the annotations of the protein.
-	 * 
-	 * @return Returns the annotations associated with the protein.
-	 * @throws SQLException
-	 */
 	@Override
-	public final String getAnnotations(String name) throws SQLException {
-		return QueryProcessor.getAnnotationsOfProtein(name);
+	public final String getAnnotations(String protein) throws SQLException {
+		return QueryProcessor.getAnnotationsOfProtein(protein);
 	}
 
 	@Override
 	public ArrayList<Mutation> getRelatedMutations(Patient p, Mutation m)
 			throws SQLException {
+//		TODO getRelatedMutations
 		List<Mutation> mutations = mutationService.getMutations(p.getId());
 		ArrayList<Mutation> related = new ArrayList<Mutation>();
 
@@ -44,6 +38,7 @@ public class ProteinRepositoryDB implements ProteinRepository {
 		for (Mutation mutation : mutations) {
 			if (mutation.getId() != m.getId()) {
 				// TODO add related proteins found in mutation
+				assert (true);
 			}
 		}
 
