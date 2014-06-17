@@ -9,7 +9,11 @@
 		These visualization form three big parts of the architecture. Every part is dividable into two sub-parts; visualization itself and the database information retrieval. Our team members can work independently on these three parts, specifically on database or visualization.\\		
 		Furthermore the system features a server to client with model view controller architecture, which is used by the Play framework. Play handles request from users.
 	\subsection{Subsystem decomposition}
+	\begin{figure}
+		\centering
 		\includegraphics[scale=0.5]{schema1-improvedv2.png}
+		\caption{Subsystem decomposition of GEVATT}
+	\end{figure}
 		\begin{itemize}
 			\item Watson server
 				\subitem The Watson server owned by the TU Delft hosts the databases STRING\cite{franceschini2013string}, dbSNP\cite{sherry2001dbsnp} and CADD\cite{kircher2014general} and processes queries given by the Java server and returns the results.
@@ -38,7 +42,11 @@
 				Each user can have multiple patients which are linked through the id of the user.
 				Some basic information is stored per user including the uploaded VCF-file.
 				For every patient the mutations found in the VCF-file are stored as a single mutation, which is linked to each patient with the patients id.\\
-				\includegraphics[scale=0.55]{erd.png}
+				\begin{figure}
+					\centering
+					\includegraphics[scale=0.55]{erd.png}
+					\caption{Programming Life database design}
+				\end{figure}
 		\end{itemize}
 	\subsection{Concurrency }
 		At the moment we have no indication how computationally intense our calculations are, thus we cannot say for sure whether or not we will use multiple threads. Until we know more, our program will run on a single thread.
