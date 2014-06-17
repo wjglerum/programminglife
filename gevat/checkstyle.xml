@@ -105,6 +105,7 @@
     <module name="MethodLength">
       <property name="max" value="30"/>
     </module>
+  	<module name="ExecutableStatementCount"/>
   </module>
   <module name="NewlineAtEndOfFile">
     <property name="severity" value="ignore"/>

@@ -1,47 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<class-diagram version="1.1.6" icons="true" always-add-relationships="true" generalizations="true" realizations="true" 
-  associations="true" dependencies="true" nesting-relationships="true">  
-  <package id="1" language="java" name="models.database" project="programminglife2" 
-    file="/programminglife2/app/models/database" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="580" y="572"/>    
+<class-diagram version="1.1.6" icons="true" automaticImage="PNG" always-add-relationships="true" generalizations="true" 
+  realizations="true" associations="true" dependencies="true" nesting-relationships="true">  
+  <package id="1" language="java" name="models.protein" project="GEVAT" file="/GEVAT/app/models/protein" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="329" y="352"/>    
     <display autosize="true" stereotype="true" accessors="true"/>  
   </package>  
-  <package id="2" language="java" name="models.patient" project="programminglife2" 
-    file="/programminglife2/app/models/patient" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="818" y="279"/>    
+  <package id="2" language="java" name="controllers" project="GEVAT" file="/GEVAT/app/controllers" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="503" y="125"/>    
     <display autosize="true" stereotype="true" accessors="true"/>  
   </package>  
-  <package id="3" language="java" name="models.mutation" project="programminglife2" 
-    file="/programminglife2/app/models/mutation" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1016" y="352"/>    
+  <package id="3" language="java" name="models.patient" project="GEVAT" file="/GEVAT/app/models/patient" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="478" y="275"/>    
     <display autosize="true" stereotype="true" accessors="true"/>  
   </package>  
-  <package id="4" language="java" name="models.security" project="programminglife2" 
-    file="/programminglife2/app/models/security" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="247" y="242"/>    
+  <package id="4" language="java" name="models.reader" project="GEVAT" file="/GEVAT/app/models/reader" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="544" y="422"/>    
     <display autosize="true" stereotype="true" accessors="true"/>  
   </package>  
-  <package id="5" language="java" name="models.reader" project="programminglife2" 
-    file="/programminglife2/app/models/reader" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="847" y="585"/>    
-    <display autosize="true" stereotype="true" accessors="true"/>  
-  </package>  
-  <package id="6" language="java" name="models.user" project="programminglife2" file="/programminglife2/app/models/user" 
+  <package id="5" language="java" name="models.security" project="GEVAT" file="/GEVAT/app/models/security" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="386" y="330"/>    
+    <position height="-1" width="-1" x="80" y="155"/>    
     <display autosize="true" stereotype="true" accessors="true"/>  
   </package>  
-  <package id="7" language="java" name="models.protein" project="programminglife2" 
-    file="/programminglife2/app/models/protein" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="589" y="323"/>    
+  <package id="6" language="java" name="models.user" project="GEVAT" file="/GEVAT/app/models/user" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="259" y="152"/>    
     <display autosize="true" stereotype="true" accessors="true"/>  
   </package>  
-  <package id="8" language="java" name="controllers" project="programminglife2" file="/programminglife2/app/controllers" 
+  <package id="7" language="java" name="models.mutation" project="GEVAT" file="/GEVAT/app/models/mutation" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="687" y="57"/>    
+    <position height="-1" width="-1" x="681" y="573"/>    
+    <display autosize="true" stereotype="true" accessors="true"/>  
+  </package>  
+  <package id="8" language="java" name="models.database" project="GEVAT" file="/GEVAT/app/models/database" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="115" y="355"/>    
     <display autosize="true" stereotype="true" accessors="true"/>  
   </package>  
   <dependency id="9">    
+<<<<<<< HEAD
     <end type="SOURCE" refId="3"/>    
     <end type="TARGET" refId="1"/>  
   </dependency>  
@@ -64,16 +65,41 @@
   <dependency id="14">    
     <end type="SOURCE" refId="8"/>    
     <end type="TARGET" refId="1"/>  
+=======
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <dependency id="10">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <dependency id="11">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <dependency id="12">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <dependency id="13">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <dependency id="14">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="8"/>  
+>>>>>>> master
   </dependency>  
   <dependency id="15">    
     <end type="SOURCE" refId="7"/>    
     <end type="TARGET" refId="5"/>  
   </dependency>  
   <dependency id="16">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="1"/>  
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="8"/>  
   </dependency>  
   <dependency id="17">    
+<<<<<<< HEAD
     <end type="SOURCE" refId="8"/>    
     <end type="TARGET" refId="2"/>  
   </dependency>  
@@ -112,6 +138,38 @@
   <dependency id="26">    
     <end type="SOURCE" refId="7"/>    
     <end type="TARGET" refId="2"/>  
+=======
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <dependency id="18">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="8"/>  
+  </dependency>  
+  <dependency id="19">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <dependency id="20">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="8"/>  
+  </dependency>  
+  <dependency id="21">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <dependency id="22">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <dependency id="23">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <dependency id="24">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="8"/>  
+>>>>>>> master
   </dependency>  
   <dependency id="27">    
     <end type="SOURCE" refId="2"/>    
