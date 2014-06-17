@@ -25,8 +25,7 @@ import views.html.patient_add;
 import views.html.patients;
 
 /**
- * Procides the patient view.
- *
+ * Provides the patient view.
  */
 public class Patients extends Controller {
 
@@ -43,9 +42,10 @@ public class Patients extends Controller {
 
 	/**
 	 * List all patients.
-	 * 
-	 * @throws SQLException
-	 * @throws IOException 
+	 *
+	 * @return action result
+	 * @throws SQLException SQL Exception
+	 * @throws IOException IO Exception
 	 */
 	@Security.Authenticated(Secured.class)
 	public static Result showAll() throws SQLException, IOException {
@@ -58,16 +58,17 @@ public class Patients extends Controller {
 	/**
 	 * Display a patient.
 	 *
-	 * @param pId The id of the patient
+	 * @param patientId The id of the patient
 	 *
-	 * @throws SQLException
-	 * @throws IOException 
+	 * @return action result
+	 *
+	 * @throws SQLException SQL Exception
+	 * @throws IOException IO Exception
 	 */
 	@Security.Authenticated(Secured.class)
-//<<<<<<< HEAD
-	public static Result show(int p_id) throws SQLException, IOException {
-		Patient p = patientService.get(p_id, Authentication.getUser().id);
-		List<Mutation> mutations = mutationService.getMutations(p_id);
+	public static Result show(int patientId) throws SQLException, IOException {
+		Patient p = patientService.get(patientId, Authentication.getUser().id);
+		List<Mutation> mutations = mutationService.getMutations(patientId);
 		HashMap<Mutation, Double> map = new HashMap<Mutation, Double>();
 		for (Mutation m : mutations) {
 			map.put(m, (double) mutationService.getScore(m));
@@ -82,10 +83,12 @@ public class Patients extends Controller {
 
 	/**
 	 * Return to the patients overview and display a message the requested
-	 * patient isn't found
+	 * patient isn't found.
 	 * 
-	 * @throws SQLException
-	 * @throws IOException 
+	 * @return action result
+	 *
+	 * @throws SQLException SQL Exception
+	 * @throws IOException IO Exception
 	 */
 	@Security.Authenticated(Secured.class)
 	public static Result patientNotFound() throws SQLException, IOException {
@@ -138,52 +141,50 @@ public class Patients extends Controller {
 		 * @return Returns a String with the result message
 		 */
 		public final String validate() {
+			String checkName = checkName();
+			if (checkName == null) {
+				return checkVCF();
+			} else {
+				return checkName;
+			}
+		}
+
+		private String checkName() {
 			final int minimumLength = 3;
 			if (name == null || name.length() < minimumLength) {
-				return "An invalid name is entered. "
-						+ "Please fill in "
-						+ "a name consisting of at "
-						+ "least 3 characters";
+				return Errors.errorType.INVALID_NAME.getMessage();
 			}
 			else if (surname == null
 					|| surname.length() < minimumLength) {
-				return "An invalid surname is entered. "
-						+ "Please fill in a "
-						+ "surname consisting of at "
-						+ "least 3 characters";
+				return Errors.errorType.INVALID_SURNAME.getMessage();
 			}
-			else {
-				MultipartFormData body =
-						request().body().asMultipartFormData();
-				FilePart vcf = body.getFile("vcf");
+			return null;
+		}
 
-				if (vcf != null) {
-					String fileName = vcf.getFilename();
-					String contentType =
-							vcf.getContentType();
+		private String checkVCF() {
+			MultipartFormData body =
+					request().body().asMultipartFormData();
+			FilePart vcf = body.getFile("vcf");
 
-					if (!checkFileExtension(fileName)) {
-						return "The uploaded "
-								+ "file doesn't"
-								+ " have the "
-								+ ".vcf "
-								+ "extension";
-					}
+			if (vcf != null) {
+				String fileName = vcf.getFilename();
+				String contentType =
+						vcf.getContentType();
 
-					// Check content type
-					if (!contentType.equals("text/"
-							+ "directory")
-							&& !contentType.equals(
-									"text/vcard")) {
-						return "File has wrong "
-								+ "content "
-								+ "type";
-					}
-				} else {
-					return "No VCF file provided";
+				if (!checkFileExtension(fileName)) {
+					return Errors.errorType.INVALID_EXTENSION.getMessage();
 				}
-			}
 
+				// Check content type
+				if (!contentType.equals("text/"
+						+ "directory")
+						&& !contentType.equals(
+								"text/vcard")) {
+					return Errors.errorType.WRONG_CONTENT_TYPE.getMessage();
+				}
+			} else {
+				return Errors.errorType.NO_VCF.getMessage();
+			}
 			return null;
 		}
 
@@ -209,7 +210,8 @@ public class Patients extends Controller {
 	/**
 	 * Render the form to add a patient.
 	 *
-	 * @throws SQLException
+	 * @return action result
+	 * @throws SQLException SQL Exception
 	 */
 	public static Result add() throws SQLException {
 		return ok(patient_add.render(form(Add.class),
@@ -219,7 +221,8 @@ public class Patients extends Controller {
 	/**
 	 * Insert the newly added patient in the database.
 	 *
-	 * @throws SQLException
+	 * @return action result
+	 * @throws SQLException SQL Exception
 	 */
 	public static Result insert() throws SQLException {
 		Form<Add> addForm = form(Add.class).bindFromRequest();
@@ -228,47 +231,62 @@ public class Patients extends Controller {
 			return badRequest(patient_add.render(addForm,
 					Authentication.getUser()));
 		} else {
-			String name = addForm.get().name;
-			String surname = addForm.get().surname;
-			String sex = addForm.get().sex;
-			boolean female = true;
-			if (!sex.equals("female")) {
-				female = false;
-			}
-
-			// Get VCF file data
-			MultipartFormData body =
-					request().body().asMultipartFormData();
-			FilePart vcf = body.getFile("vcf");
-			File file = vcf.getFile();
-
-			Long fileSize = file.length();
-			String fileName = vcf.getFilename();
-			String filePath = file.getAbsolutePath();
-
-			// Add Patient to database
-			Patient p = patientService.add(
-					Authentication.getUser().id, name,
-					surname, fileName, fileSize, female);
-
-			p.setupReaderThread(filePath);
+			Patient p = importPatientToDatabase(addForm);
 
 			// Make user happy
 			flash("patient-added",
 					"The patient "
-							+ name
+							+ p.getName()
 							+ " "
-							+ surname
-							+ " is successfully added to the database. The VCF file is now being processed. Please wait...");
+							+ p.getSurname()
+							+ " is successfully added to the database."
+							+ "The VCF file is now being processed."
+							+ "Please wait...");
 
 			return redirect(routes.Patients.showAll());
 		}
+	}
+
+	private static Patient importPatientToDatabase(Form<Add> addForm)
+			throws SQLException {
+		// Get VCF file data
+		MultipartFormData body =
+				request().body().asMultipartFormData();
+		FilePart vcf = body.getFile("vcf");
+		File file = vcf.getFile();
+
+		Long fileSize = file.length();
+		String fileName = vcf.getFilename();
+		String filePath = file.getAbsolutePath();
+
+		// Add Patient to database
+		Patient p = makePatient(addForm, fileSize, fileName);
+
+		p.setupReaderThread(filePath);
+		return p;
+	}
+
+	private static Patient makePatient(Form<Add> addForm,
+		Long fileSize, String fileName) throws SQLException {
+		String name = addForm.get().name;
+		String surname = addForm.get().surname;
+		String sex = addForm.get().sex;
+		boolean female = true;
+		if (!sex.equals("female")) {
+			female = false;
+		}
+		
+		Patient p = patientService.add(
+				Authentication.getUser().id, name,
+				surname, fileName, fileSize, female);
+		return p;
 	}
 
 	/**
 	 * Handle the ajax request for removing patients.
 	 *
 	 * @param pId The id of the patient
+	 * @return action result
 	 * @throws SQLException In case SQL goes wrong
 	 */
 	public static Result remove(final int pId) throws SQLException {
@@ -287,7 +305,7 @@ public class Patients extends Controller {
 	 * Handle the ajax request for removing patients.
 	 *
 	 * @param pId the id of the patient
-	 *
+	 * @return action result
 	 * @throws SQLException In case SQL goes wrong
 	 */
 	public static Result isProcessed(int pId) throws SQLException {
@@ -308,10 +326,48 @@ public class Patients extends Controller {
 			row += "<td>" + p.getSurname() + "</td>";
 			row += "<td>" + p.getVcfFile() + "</td>";
 			row += "<td>" + p.getVcfLengthMB() + " MB</td>";
-			row += "<td class=\"remove\"><a class=\"remove-patient center-block text-danger\"><span class=\"glyphicon glyphicon-remove\"></span></a></td>";
+			row += "<td class=\"remove\">"
+					+ "<a class=\"remove-patient center-block text-danger\">"
+					+ "<span class=\"glyphicon glyphicon-remove\">"
+					+ "</span></a></td>";
 
 			return ok(row);
 		}
 	}
+	
+	/**
+	 * A container for error messages.
+	 */
+	private static class Errors {
+		/**
+		 * Enumeration with error messages.
+		 */
+		private enum errorType {
+		  INVALID_NAME("An invalid name is entered. "
+					+ "Please fill in "
+					+ "a name consisting of at "
+					+ "least 3 characters"),
+		  INVALID_SURNAME("An invalid surname is entered. "
+					+ "Please fill in a "
+					+ "surname consisting of at "
+					+ "least 3 characters"),
+		  INVALID_EXTENSION("The uploaded "
+					+ "file doesn't"
+					+ " have the "
+					+ ".vcf "
+					+ "extension"),
+		  WRONG_CONTENT_TYPE("File has wrong "
+								+ "content "
+								+ "type"),
+		  NO_VCF("No VCF file provided");
 
+		  private final String message;
+
+		  errorType(String message) {
+		     this.message = message;
+		  }
+
+		  public String getMessage() { return message; }
+		}
+	}
 }
