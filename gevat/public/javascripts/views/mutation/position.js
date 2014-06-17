@@ -8,9 +8,9 @@ var low = Number.MAX_VALUE;
 var high = 0;
 
 // compute lowest and highest value
-for(i in initPositionsData) {
-	if(initPositionsData[i].start < low) low = initPositionsData[i].start;
-	if(initPositionsData[i].end > high) high = initPositionsData[i].end;
+for(i in positionsData) {
+	if(positionsData[i].start < low) low = positionsData[i].start;
+	if(positionsData[i].end > high) high = positionsData[i].end;
 }
 
 // also check the location of the startPoint
@@ -22,7 +22,7 @@ var marker = (startPoint - low)/(high - low)*100*0.9+5;
 marker += "%";
 
 //make a container for svg
-var SVGheight = 100 + initPositionsData.length*20
+var SVGheight = 100 + positionsData.length*20
 var svgContainer = d3.select("div.position")
 	.append("svg")
 	.attr("width", "100%")
@@ -47,13 +47,13 @@ svgContainer.append("svg:text")
 
 // add a line per gene
 var height = 75;
-for(i in initPositionsData) {
+for(i in positionsData) {
 	// increment the height for each new line
 	height += 20;
 
 	// compute the relative position to the lowest and highest value
-	var left = (initPositionsData[i].start - low)/(high - low)*100*0.9+5;
-	var right = (initPositionsData[i].end - low)/(high - low)*100*0.9+5;
+	var left = (positionsData[i].start - low)/(high - low)*100*0.9+5;
+	var right = (positionsData[i].end - low)/(high - low)*100*0.9+5;
 	var middle = (left + right)/2;
 
 	// make the visualisation larger for very small genes
@@ -79,12 +79,12 @@ for(i in initPositionsData) {
 		.attr("x", middle)
 		.attr("y", height - 5)
 		.attr("original-title",
-			initPositionsData[i].name 
+			positionsData[i].name 
 			+ "<br>Start: "
-			+ initPositionsData[i].start
+			+ positionsData[i].start
 			+ "<br>End: "
-			+ initPositionsData[i].end)
-		.text(initPositionsData[i].name);
+			+ positionsData[i].end)
+		.text(positionsData[i].name);
 
 	$('svg text').tipsy({
 		gravity: 'nw',
@@ -142,4 +142,33 @@ if(marker != "5%" && marker != "95%"){
 		.attr("y2", height + 5)
 		.attr("stroke", "black")
 		.attr("stroke-width", 1);
+}
+
+for(i in nearbyData) {
+	// compute the relative position
+	marker = (nearbyData[i].position - low)/(high - low)*100*0.9+5;
+	marker += "%";
+
+	// draw the line for the mutation
+	svgContainer.append("line")
+		.attr("x1", marker)
+		.attr("y1", 50)
+		.attr("x2", marker)
+		.attr("y2", SVGheight)
+		.attr("stroke", "red")
+		.attr("stroke-width", 1)
+		.attr("original-title", nearbyData[i].rsID);
+
+	// append a label to the mutation
+	svgContainer.append("svg:text") 
+		.attr("x", marker) 
+		.attr("y", 45) 
+		.attr("original-title", nearbyData[i].rsID)
+		.text(nearbyData[i].rsID);
+
+	$('svg text').tipsy({
+		gravity: 'nw',
+		html: true,
+		fallback: "gene"
+	});
 }
