@@ -179,7 +179,7 @@ public class ViewsTest {
         Mutation mutation = new Mutation(1, "SNP", "rs12345", "1",
                 "ATATAT".toCharArray(), 1, 1, 0, 2, 0);
 
-        Content html = views.html.mutation.render(patient, mutation, user, "", "");
+        Content html = views.html.mutation.render(patient, mutation, user, "", "", "");
 
         assertThat(contentType(html)).isEqualTo("text/html");
         assertThat(contentAsString(html)).contains(
