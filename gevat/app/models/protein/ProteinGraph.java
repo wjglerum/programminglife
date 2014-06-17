@@ -13,15 +13,16 @@ import play.Logger;
  * @author rhvanstaveren
  * 
  */
-
 public class ProteinGraph {
 	private Map<String, Protein> proteines = new HashMap<String, Protein>();
 	private Collection<ProteinConnection> connections = new ArrayList<ProteinConnection>();
-
+	private static QueryProcessor qp = new QueryProcessor();
+	
 	/**
 	 * Creates an empty ProteineGraph
 	 */
 	public ProteinGraph() {
+	    qp = new QueryProcessor();
 	}
 
 	/**
@@ -31,7 +32,11 @@ public class ProteinGraph {
 	 *            the rsid of the location
 	 */
 	public ProteinGraph(int snp, int limit, int threshold) {
-		addConnectionsOfSnp(snp, limit, threshold);
+		try {
+            addConnectionsOfSnp(snp, limit, threshold);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 		connectAllProteines();
 	}
 
@@ -43,8 +48,9 @@ public class ProteinGraph {
 	 * @param distance
 	 *            defines the allowed distance to the protein on the snp
 	 *            location
+	 * @throws IOException 
 	 */
-	public ProteinGraph(int snp, int limit, int threshold, int distance) {
+	public ProteinGraph(int snp, int limit, int threshold, int distance) throws IOException {
 		addDistantConnectionsOfSnp(snp, limit, threshold, distance);
 		connectAllProteines();
 	}
@@ -55,11 +61,11 @@ public class ProteinGraph {
 	 * 
 	 * @param snp
 	 *            the rsid of the location
+	 * @throws IOException 
 	 */
-	public void addConnectionsOfSnp(int snp, int limit, int threshold) {
+	public void addConnectionsOfSnp(int snp, int limit, int threshold) throws IOException {
 		try {
-			ArrayList<String> qResult = QueryProcessor
-					.findGenesAssociatedWithSNP(snp);
+			ArrayList<String> qResult = qp.findGenesAssociatedWithSNP(snp);
 			if (!qResult.isEmpty()) {
 				String protein = qResult.get(0);
 				addConnectionsOfProteine(protein, limit, threshold);
@@ -78,12 +84,12 @@ public class ProteinGraph {
 	 * @param distance
 	 *            the maximum amount of connections of an protein added to the
 	 *            graph
+	 * @throws IOException 
 	 */
 	public void addDistantConnectionsOfSnp(int snp, int limit, int threshold,
-			int distance) {
+			int distance) throws IOException {
 		try {
-			ArrayList<String> qResult = QueryProcessor
-					.findGenesAssociatedWithSNP(snp);
+			ArrayList<String> qResult = qp.findGenesAssociatedWithSNP(snp);
 			if (!qResult.isEmpty()) {
 				String protein = qResult.get(0);
 				addDistantConnectionsOfProtein(protein, limit, threshold,
@@ -101,9 +107,10 @@ public class ProteinGraph {
 	 * @param distance
 	 *            the maximum amount of connections of an protein added to the
 	 *            graph
+	 * @throws IOException 
 	 */
 	public void addDistantConnectionsOfProtein(String protein, int limit,
-			int threshold, int distance) {
+			int threshold, int distance) throws IOException {
 		Collection<Protein> currProteins = new HashSet<Protein>();
 		currProteins.add(getProtein(protein));
 		while (distance-- > 0) {
@@ -123,9 +130,10 @@ public class ProteinGraph {
 	 * @param proteine
 	 *            A proteine to find neighbours of
 	 * @return gives back the proteins that have been added to the graph
+	 * @throws IOException 
 	 */
 	public Collection<Protein> addConnectionsOfProteine(String protein,
-			int limit, int threshold) {
+			int limit, int threshold) throws IOException {
 		try {
 			return addConnections(protein, QueryProcessor.findGeneConnections(
 					protein, limit, threshold));

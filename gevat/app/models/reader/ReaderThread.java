@@ -13,6 +13,7 @@ public class ReaderThread implements Runnable {
     private Thread thread;
     private Patient patient;
     private String filePath;    
+    private static QueryProcessor qp;
   
     public ReaderThread(Patient patient, String filePath) {
       this.patient = patient;
@@ -20,6 +21,7 @@ public class ReaderThread implements Runnable {
     }
     
     public void start () {
+        qp = new QueryProcessor();
        if (thread == null) {
           thread = new Thread (this);
           thread.start ();
@@ -64,7 +66,7 @@ public class ReaderThread implements Runnable {
             + ","
             + m.getPositionGRCH37()
             + ","
-            + QueryProcessor.executeScoreQuery(m)
+            + qp.executeScoreQuery(m)
             + ","
             + QueryProcessor.getFrequency(m)
             + ");";

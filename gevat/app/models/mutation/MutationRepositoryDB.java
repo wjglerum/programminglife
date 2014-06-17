@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import models.database.Database;
 import models.database.QueryProcessor;
 
 import org.broadinstitute.variant.variantcontext.Allele;
@@ -27,11 +26,13 @@ public class MutationRepositoryDB implements MutationRepository {
 
     private static PreparedStatement getAll;
     private static PreparedStatement get;
+    private static QueryProcessor qp;
 
     /**
      * Constructor.
      */
     public MutationRepositoryDB() {
+        qp = new QueryProcessor();
         try {
             prepareQueries("data");
         } catch (IOException e) {
@@ -134,7 +135,7 @@ public class MutationRepositoryDB implements MutationRepository {
      */
     @Override
     public final float getScore(final Mutation m) throws SQLException {
-        return QueryProcessor.executeScoreQuery(m);
+        return qp.executeScoreQuery(m);
     }
 //  void prepareQueries(String database) throws IOException;
     /**
