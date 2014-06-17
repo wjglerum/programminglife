@@ -124,7 +124,8 @@ public class Mutations extends Controller {
 		for (Protein proteine : proteins) {
 			JSONObject proteinJSON = new JSONObject();
 
-			proteinJSON.put("name", proteine.getName());
+      proteinJSON.put("name", proteine.getName());
+      proteinJSON.put("hasMutation", proteine.hasMutation());
 			proteinJSON.put("annotations",
 					proteinService.getAnnotations(
 							proteine.getName()));

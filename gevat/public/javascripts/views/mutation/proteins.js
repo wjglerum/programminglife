@@ -33,9 +33,9 @@ Proteins.graph = function (proteins, relations) {
 		var protein = proteins[i];
 		
 		// Commented, can be used if .hasMutation is given through JSON
-		/*if (protein.hasMutation)
+		if (protein.hasMutation)
 			g.addNode(protein.name, {render: renderMutated});
-		else*/
+		else
 			g.addNode(protein.name, {render: renderEmpty});
 	}
 	
