@@ -8,6 +8,9 @@ import models.database.QueryProcessor;
 import models.mutation.Mutation;
 import models.patient.Patient;
 
+/**
+ * Separate thread for reading VCF files.
+ */
 public class ReaderThread implements Runnable {
 
     private Thread thread;
@@ -15,19 +18,29 @@ public class ReaderThread implements Runnable {
     private String filePath;    
     private static QueryProcessor qp;
 
+    /**
+     * @param patient The patient
+     * @param filePath The filepath
+     */
     public ReaderThread(Patient patient, String filePath) {
         this.patient = patient;
         this.filePath = filePath;
     }
 
-    public void start () {
+    /**
+     * Starts the thread.
+     */
+    public void start() {
         qp = new QueryProcessor();
        if (thread == null) {
-          thread = new Thread (this);
-          thread.start ();
+          thread = new Thread(this);
+          thread.start();
        }
     }
 
+    /**
+     * runs the thread.
+     */
     public void run() {
         // Process VCF file
         List<Mutation> mutations = getMutations();
@@ -68,7 +81,7 @@ public class ReaderThread implements Runnable {
                     + ","
                     + qp.executeScoreQuery(m)
                     + ","
-                    + qp.getFrequency(m)
+                    + QueryProcessor.getFrequency(m)
                     + ");";
             System.out.println(query);
             Database.insert("data", query);
@@ -76,7 +89,8 @@ public class ReaderThread implements Runnable {
     }
 
     private void updatePatientToProcessed() {
-        String query = "UPDATE patient SET processed = 'true' WHERE p_id = " + patient.getId() + ";";
+        String query = "UPDATE patient SET processed = 'true' WHERE p_id = "
+        		+ patient.getId() + ";";
 
         Database.insert("data", query);
     }
