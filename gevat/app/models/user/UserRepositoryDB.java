@@ -18,9 +18,9 @@ public class UserRepositoryDB implements UserRepository {
 	/**
 	 * Returns a new user with data from the database, based on the username.
 	 * 
-	 * @param username
+	 * @param username username
 	 * @return User
-	 * @throws SQLException
+	 * @throws SQLException SQL Exception
 	 */
 	@Override
 	public User getUser(String username) throws SQLException {
@@ -28,10 +28,10 @@ public class UserRepositoryDB implements UserRepository {
 				+ username + "';";
 		try (ResultSet rs = Database.select("data", query);) {
 			if (rs.next()) {
-				int u_id = rs.getInt("u_id");
+				int userId = rs.getInt("u_id");
 				String name = rs.getString("name");
 				String surname = rs.getString("surname");
-				return new User(u_id, name, surname, username);
+				return new User(userId, name, surname, username);
 			}
 		}
 		return null;
@@ -52,7 +52,7 @@ public class UserRepositoryDB implements UserRepository {
 				+ "';";
 		try (ResultSet rs = Database.select("data", query);) {
 			if (rs.next()) {
-				int u_id = rs.getInt("u_id");
+				int userId = rs.getInt("u_id");
 				String name = rs.getString("name");
 				String surname = rs.getString("surname");
 				String pw = rs.getString("password");
@@ -60,7 +60,7 @@ public class UserRepositoryDB implements UserRepository {
 
 				// check with BCrypt if hashed pw matches password
 				if (BCrypt.checkpw(password, pw)) {
-					return new User(u_id, name, surname, username);
+					return new User(userId, name, surname, username);
 				}
 			}
 		}

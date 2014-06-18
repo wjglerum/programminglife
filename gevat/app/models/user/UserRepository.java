@@ -8,8 +8,20 @@ import java.sql.SQLException;
  *
  */
 public interface UserRepository {
-	public User getUser(String username) throws SQLException;
+	/**
+	 * @param username Username
+	 * @return The User
+	 * @throws SQLException SQL Exception
+	 */
+	User getUser(String username) throws SQLException;
 
-	public User authenticate(String username, String password)
+	/**
+	 * Authenticates the user.
+	 * @param username username.
+	 * @param password password
+	 * @return the User
+	 * @throws SQLException SQL Exception
+	 */
+	User authenticate(String username, String password)
 			throws SQLException;
 }
