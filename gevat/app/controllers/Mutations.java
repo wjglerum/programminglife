@@ -19,6 +19,7 @@ import models.protein.ProteinConnection;
 import models.protein.ProteinGraph;
 import models.protein.ProteinRepositoryDB;
 import models.protein.ProteinService;
+import models.reader.GeneDiseaseLinkReader;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -51,16 +52,19 @@ public class Mutations extends Controller {
 	 *            The id of the patient
 	 * @param mutationId
 	 *            The id of the mutation
-	 *
+	 * 
 	 * @return action result
 	 * 
-	 * @throws SQLException SQL Exception
-	 * @throws IOException IO Exception
+	 * @throws SQLException
+	 *             SQL Exception
+	 * @throws IOException
+	 *             IO Exception
 	 */
 	@Security.Authenticated(Secured.class)
-	public static Result show(int patientId, int mutationId) throws SQLException,
-			IOException {
-		Patient p = patientService.get(patientId, Authentication.getUser().getId());
+	public static Result show(int patientId, int mutationId)
+			throws SQLException, IOException {
+		Patient p = patientService.get(patientId, Authentication.getUser()
+				.getId());
 		List<Mutation> mutations = mutationService.getMutations(patientId);
 
 		if (p == null) {
@@ -105,7 +109,8 @@ public class Mutations extends Controller {
 	private static String mutationJSON(final Patient patient,
 			final Mutation mutation, final int limit, final int threshold)
 			throws SQLException, IOException {
-		ProteinGraph proteinGraph = createProteinGraph(mutation, limit, threshold);
+		ProteinGraph proteinGraph = createProteinGraph(mutation, limit,
+				threshold);
 
 		Collection<Protein> proteins = proteinGraph.getProteines();
 		Collection<ProteinConnection> connections = proteinGraph
@@ -180,19 +185,26 @@ public class Mutations extends Controller {
 		mutationJSON.put("patient", patient.getId());
 		return mutationJSON;
 	}
-	
+
 	/**
 	 * Makes a proteinGraph for a mutation.
-	 *
-	 * @param mutation The mutation to make the graph for
-	 * @param limit The maximum amount of proteinConnection added per protein
-	 * @param threshold The minimum threshold for an added connection
-	 * @return a ProteinGraph with proteins on the location of the mutation and related proteins
-	 * @throws IOException IO Exception
-	 * @throws SQLException SQL Exception
+	 * 
+	 * @param mutation
+	 *            The mutation to make the graph for
+	 * @param limit
+	 *            The maximum amount of proteinConnection added per protein
+	 * @param threshold
+	 *            The minimum threshold for an added connection
+	 * @return a ProteinGraph with proteins on the location of the mutation and
+	 *         related proteins
+	 * @throws IOException
+	 *             IO Exception
+	 * @throws SQLException
+	 *             SQL Exception
 	 */
 	public static ProteinGraph createProteinGraph(final Mutation mutation,
-			final int limit, final int threshold) throws IOException, SQLException {
+			final int limit, final int threshold) throws IOException,
+			SQLException {
 		// Remove the 'rs' part of the rsID
 		int rsID = Integer.parseInt(mutation.getRsID().substring(2));
 
@@ -215,12 +227,13 @@ public class Mutations extends Controller {
 	 *            The maximum amount of proteins
 	 * @param threshold
 	 *            The lowest value allowed
-	 *
+	 * 
 	 * @return action result
 	 * 
 	 * @throws SQLException
 	 *             In case SQL goes wrong
-	 * @throws IOException IO Exception
+	 * @throws IOException
+	 *             IO Exception
 	 */
 	public static Result proteinsJSON(final int pId, final int mId,
 			final int limit, final int threshold) throws SQLException,
@@ -255,9 +268,9 @@ public class Mutations extends Controller {
 	 *            The patient
 	 * @param mutations
 	 *            The list of mutations
-	 *
+	 * 
 	 * @return action result
-	 *
+	 * 
 	 * @throws SQLException
 	 *             In case SQL goes wrong
 	 */
@@ -280,24 +293,35 @@ public class Mutations extends Controller {
 	/**
 	 * Make positions of the mutation and related genes a JSON string.
 	 * 
-	 * @param m A mutation to find related genes for
-	 * @param amount The maximum amount of related genes
+	 * @param m
+	 *            A mutation to find related genes for
+	 * @param amount
+	 *            The maximum amount of related genes
 	 * @return The JSON string
-	 * @throws SQLException SQL Exception
+	 * @throws SQLException
+	 *             SQL Exception
+	 * @throws IOException
 	 */
 	@SuppressWarnings("unchecked")
 	public static String positionJSON(Mutation m, int amount)
-			throws SQLException {
+			throws SQLException, IOException {
 		HashMap<String, ArrayList<Integer>> map = mutationService.getPositions(
 				m, amount);
 
 		JSONArray positionsJSON = new JSONArray();
 
 		for (String name : map.keySet()) {
+			ArrayList<String> diseases = GeneDiseaseLinkReader
+					.findGeneDiseaseAssociation(name);
+			String disease = diseases.toString().substring(1, diseases.toString().length() - 1);
+			System.out.println(disease);
+			
 			JSONObject positionJSON = new JSONObject();
 			positionJSON.put("name", name);
 			positionJSON.put("start", map.get(name).get(0));
 			positionJSON.put("end", map.get(name).get(1));
+			positionJSON.put("annotation", proteinService.getAnnotations(name));
+			positionJSON.put("disease", disease);
 			positionsJSON.add(positionJSON);
 		}
 
@@ -307,11 +331,15 @@ public class Mutations extends Controller {
 	/**
 	 * Search for nearby mutations and make a JSON string out of it.
 	 * 
-	 * @param m The mutation which location is searched in
-	 * @param amount The maximum amount of nearby mutations
-	 * @param pid The id of the patient
+	 * @param m
+	 *            The mutation which location is searched in
+	 * @param amount
+	 *            The maximum amount of nearby mutations
+	 * @param pid
+	 *            The id of the patient
 	 * @return JSON string representation of a List<Mutation>
-	 * @throws SQLException SQL Exception
+	 * @throws SQLException
+	 *             SQL Exception
 	 */
 	@SuppressWarnings("unchecked")
 	public static String nearbyMutationsJSON(Mutation m, int amount, int pid)
@@ -322,9 +350,11 @@ public class Mutations extends Controller {
 		JSONArray nearbyMutationsJSON = new JSONArray();
 		for (Mutation mutation : list) {
 			JSONObject nearbyMutationJSON = new JSONObject();
-			nearbyMutationJSON.put("rsID", mutation.getRsID());
+			nearbyMutationJSON.put("rsid", mutation.getRsID());
 			nearbyMutationJSON.put("sort", mutation.getMutationType());
 			nearbyMutationJSON.put("position", mutation.getPositionGRCH37());
+			nearbyMutationJSON.put("mid", mutation.getId());
+			nearbyMutationJSON.put("pid", pid);
 			nearbyMutationsJSON.add(nearbyMutationJSON);
 		}
 		return nearbyMutationsJSON.toString();

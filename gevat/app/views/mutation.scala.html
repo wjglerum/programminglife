@@ -8,16 +8,6 @@
 }
 
 @template_app("Mutation " + mutation.getRsID + " of patient " + patient.getName + " " + patient.getSurname, user, "patients", Map("/patients" -> "Patients", ("/patients/" + patient.getId) -> (patient.getName + " " + patient.getSurname), ("/patients/" + patient.getId + "/mutation/" + mutation.getId) -> ("Mutation " + mutation.getRsID)), scripts) {
-	
-	<h3>Position</h3>
-	<div class="position" data-startpoint="@mutation.getPositionGRCH37()" data-endpoint="@mutation.getEndPoint()" data-mid="@mutation.getRsID()">
-		<script type="text/javascript">
-		var positionsData = @Html(positionsData);
-		var nearbyData = @Html(nearbyData);
-		</script>
-	</div>
-	
-	@nearbyData
         
 	<table class="table-mutation table">
 		<thead>
@@ -41,6 +31,14 @@
 			</tr>
 		</tbody>
 	</table>
+	
+	<h3>Position</h3>
+	<div class="position" data-startpoint="@mutation.getPositionGRCH37()" data-mid="@mutation.getRsID()" data-sort="@mutation.getMutationType()">
+		<script type="text/javascript">
+		var positionsData = @Html(positionsData);
+		var nearbyData = @Html(nearbyData);
+		</script>
+	</div>
 	
 	<h3>Protein relationships</h3>
 	

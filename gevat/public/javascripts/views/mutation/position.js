@@ -1,7 +1,8 @@
 //retrieve data from html
 var startPoint = $(".position").data("startpoint");
-var endPoint = $(".position").data("endpoint");
 var id = $(".position").data("mid");
+var mutationType = $(".position").data("sort");
+
 
 // lowest and highest value in the dataset
 var low = Number.MAX_VALUE;
@@ -35,15 +36,57 @@ svgContainer.append("line")
 	.attr("x2", marker)
 	.attr("y2", SVGheight)
 	.attr("stroke", "red")
-	.attr("stroke-width", 2)
-	.attr("original-title", "mutation");
+	.attr("stroke-width", 3)
+	.attr("original-title", 
+		id
+		+ "<br>Position: "
+		+ startPoint
+		+ "<br>Sort: "
+		+ mutationType
+	);
 
 // append a label to the mutation
 svgContainer.append("svg:text") 
 	.attr("x", marker) 
 	.attr("y", 45) 
 	.attr("original-title", "mutation")
-	.text(id); 
+	.text(id);
+
+// add nearby mutations
+for(i in nearbyData) {
+	// compute the relative position
+	var mark = (nearbyData[i].position - low)/(high - low)*100*0.9+5;
+	mark += "%";
+
+	// draw the line for the mutation and add href to the mutation
+	svgContainer.append("svg:a")
+		.attr("xlink:href",
+			"/patients/"
+			+ nearbyData[i].pid
+			+ "/mutation/"
+			+ nearbyData[i].mid)
+		.append("line")
+		.attr("x1", mark)
+		.attr("y1", 50)
+		.attr("x2", mark)
+		.attr("y2", SVGheight)
+		.attr("stroke", "red")
+		.attr("stroke-width", 2)
+		.attr("original-title",
+			nearbyData[i].rsid
+			+ "<br>Position: "
+			+ nearbyData[i].position
+			+ "<br>Sort: "
+			+ nearbyData[i].sort
+		);
+
+	// append a hoverbox with basic info
+	$('svg line').tipsy({
+		gravity: 'w',
+		html: true,
+		fallback: "gene"
+	});
+}
 
 // add a line per gene
 var height = 75;
@@ -83,9 +126,14 @@ for(i in positionsData) {
 			+ "<br>Start: "
 			+ positionsData[i].start
 			+ "<br>End: "
-			+ positionsData[i].end)
+			+ positionsData[i].end
+			+ "<br>Annotation: "
+			+ positionsData[i].annotation
+			+ "<br>Disease: "
+			+ positionsData[i].disease)
 		.text(positionsData[i].name);
 
+	// append a hoverbox with basic info
 	$('svg text').tipsy({
 		gravity: 'nw',
 		html: true,
@@ -142,33 +190,4 @@ if(marker != "5%" && marker != "95%"){
 		.attr("y2", height + 5)
 		.attr("stroke", "black")
 		.attr("stroke-width", 1);
-}
-
-for(i in nearbyData) {
-	// compute the relative position
-	marker = (nearbyData[i].position - low)/(high - low)*100*0.9+5;
-	marker += "%";
-
-	// draw the line for the mutation
-	svgContainer.append("line")
-		.attr("x1", marker)
-		.attr("y1", 50)
-		.attr("x2", marker)
-		.attr("y2", SVGheight)
-		.attr("stroke", "red")
-		.attr("stroke-width", 1)
-		.attr("original-title", nearbyData[i].rsID);
-
-	// append a label to the mutation
-	svgContainer.append("svg:text") 
-		.attr("x", marker) 
-		.attr("y", 45) 
-		.attr("original-title", nearbyData[i].rsID)
-		.text(nearbyData[i].rsID);
-
-	$('svg text').tipsy({
-		gravity: 'nw',
-		html: true,
-		fallback: "gene"
-	});
 }

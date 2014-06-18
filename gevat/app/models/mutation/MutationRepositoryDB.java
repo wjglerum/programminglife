@@ -200,7 +200,8 @@ public class MutationRepositoryDB implements MutationRepository {
 		for (Mutation mutation : list) {
 			if (mutation.getPositionGRCH37() >= low
 					&& mutation.getPositionGRCH37() <= high
-					&& mutation.getChromosome().equals(m.getChromosome())) {
+					&& mutation.getChromosome().equals(m.getChromosome())
+					&& !mutation.getRsID().equals(m.getRsID())) {
 				result.add(mutation);
 			}
 		}
