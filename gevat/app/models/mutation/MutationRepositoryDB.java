@@ -137,7 +137,20 @@ public class MutationRepositoryDB implements MutationRepository {
 	 */
 	@Override
 	public final float getScore(final Mutation m) throws SQLException {
-		return qp.executeScoreQuery(m);
+		ResultSet rs = qp.executeScoreQuery(m.getChr(), m.getPositionGRCH37());
+
+        // If the mutation is the same value as the reference, return 0
+        while (rs.next()) {
+            String alt = rs.getString("alt");
+            float phred = rs.getFloat("phred");
+            String a = m.getAlleles().get(0).getBaseString();
+            String b = m.getAlleles().get(1).getBaseString();
+            if (alt.equals(a) || alt.equals(b)) {
+
+                return phred;
+            }
+        }
+        return 0;
 	}
 
 	/**
