@@ -1,10 +1,15 @@
 package models.security;
 
+/**
+ * Generates a hash.
+ */
+public final class GenerateHash {
 
-public class GenerateHash {
-
+	private GenerateHash() {
+	}
+	
 	/**
-	 * Class to manually hash and salt passwords for user logins
+	 * Class to manually hash and salt passwords for user logins.
 	 *
 	 * @param args Possible aguments given
 	 */
