@@ -44,7 +44,7 @@ public class Patient {
 	 */
 	public final String getVcfLengthMB() {
 		final int megaSize = 1024 * 1024;
-		return String.format("%,1f", vcfLength.doubleValue() / megaSize);
+		return String.format("%.1f", vcfLength.doubleValue() / megaSize);
 	}
 
 	public final String getName() {
