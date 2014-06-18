@@ -231,9 +231,9 @@ public class MutationRepositoryDB implements MutationRepository {
 	 */
 	public void prepareQueries(final String database) throws IOException {
 		String getAllQuery = new String(Files.readAllBytes(Paths
-				.get("public/sql/mutations/getAll.sql")));
+				.get("private/sql/mutations/getAll.sql")));
 		String getQuery = new String(Files.readAllBytes(Paths
-				.get("public/sql/mutations/get.sql")));
+				.get("private/sql/mutations/get.sql")));
 		try (Connection connection = DB.getConnection(database);) {
 			getAll = connection.prepareStatement(getAllQuery);
 			get = connection.prepareStatement(getQuery);

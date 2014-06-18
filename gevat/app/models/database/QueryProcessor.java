@@ -88,7 +88,7 @@ public class QueryProcessor {
      */
     public static PreparedStatement prepareQuery(String queryName,
             Connection connection) throws IOException, SQLException {
-        String path = "public/sql/queryprocessor/" + queryName + ".sql";
+        String path = "private/sql/queryprocessor/" + queryName + ".sql";
         return connection.prepareStatement(new String(Files.readAllBytes(Paths
                 .get(path))));
     }

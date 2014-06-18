@@ -177,13 +177,13 @@ public class PatientRepositoryDB implements PatientRepository {
      */
     public static void prepareQueries(final String database) throws IOException {
         String getAllQuery = new String(Files.readAllBytes(Paths
-                .get("public/sql/patients/getAll.sql")));
+                .get("private/sql/patients/getAll.sql")));
         String getQuery = new String(Files.readAllBytes(Paths
-                .get("public/sql/patients/get.sql")));
+                .get("private/sql/patients/get.sql")));
         String addQuery = new String(Files.readAllBytes(Paths
-                .get("public/sql/patients/add.sql")));
+                .get("private/sql/patients/add.sql")));
         String removeQuery = new String(Files.readAllBytes(Paths
-                .get("public/sql/patients/delete.sql")));
+                .get("private/sql/patients/delete.sql")));
         try (Connection connection = DB.getConnection(database);) {
             getAll = connection.prepareStatement(getAllQuery);
             get = connection.prepareStatement(getQuery);
