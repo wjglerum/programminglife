@@ -29,7 +29,7 @@ public class MutationRepositoryDB implements MutationRepository {
 	private static PreparedStatement getAll;
 	private static PreparedStatement get;
 	private static QueryProcessor qp;
-
+	private static PreparedStatement getPosition;
 	/**
 	 * Constructor.
 	 */
@@ -166,12 +166,15 @@ public class MutationRepositoryDB implements MutationRepository {
 			int amount) throws SQLException {
 		HashMap<String, ArrayList<Integer>> map = new HashMap<String, ArrayList<Integer>>();
 
-		String query = "SELECT * FROM genes WHERE chromosome='"
-				+ m.getChromosome()
-				+ "' ORDER BY ABS((endpoint + startpoint)/2 - "
-				+ m.getPositionGRCH37() + ") ASC LIMIT " + amount + ";";
-
-		ResultSet rs = Database.select("data", query);
+//		String query = "SELECT * FROM genes WHERE chromosome='"
+//				+ m.getChromosome()
+//				+ "' ORDER BY ABS((endpoint + startpoint)/2 - "
+//				+ m.getPositionGRCH37() + ") ASC LIMIT " + amount + ";";
+		getPosition.setString(1, m.getChromosome());
+		getPosition.setInt(2, m.getPositionGRCH37());
+		getPosition.setInt(3, amount);
+//		ResultSet rs = Database.select("data", query);
+		ResultSet rs = getPosition.executeQuery();
 
 		while (rs.next()) {
 			ArrayList<Integer> list = new ArrayList<Integer>();
@@ -234,9 +237,12 @@ public class MutationRepositoryDB implements MutationRepository {
 				.get("private/sql/mutations/getAll.sql")));
 		String getQuery = new String(Files.readAllBytes(Paths
 				.get("private/sql/mutations/get.sql")));
+		String getPositionQuery = new String(Files.readAllBytes(Paths
+                .get("private/sql/mutations/getPosition.sql")));
 		try (Connection connection = DB.getConnection(database);) {
 			getAll = connection.prepareStatement(getAllQuery);
 			get = connection.prepareStatement(getQuery);
+			getPosition = connection.prepareStatement(getPositionQuery);
 		} catch (SQLException e) {
 			Logger.error((e.toString()));
 		}
