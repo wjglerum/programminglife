@@ -8,7 +8,6 @@ import models.database.QueryProcessor;
 import models.mutation.Mutation;
 import models.mutation.MutationRepositoryDB;
 import models.mutation.MutationService;
-import models.patient.Patient;
 
 /**
  * Repository for protein.
@@ -28,10 +27,10 @@ public class ProteinRepositoryDB implements ProteinRepository {
 	}
 
 	@Override
-	public ArrayList<Mutation> getRelatedMutations(Patient p, Mutation m)
+	public ArrayList<Mutation> getRelatedMutations(int patientId, Mutation m)
 			throws SQLException {
 //		TODO getRelatedMutations
-		List<Mutation> mutations = mutationService.getMutations(p.getId());
+		List<Mutation> mutations = mutationService.getMutations(patientId);
 		ArrayList<Mutation> related = new ArrayList<Mutation>();
 
 		// Find mutation related to this protein (should be faster)
