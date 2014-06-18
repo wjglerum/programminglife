@@ -41,7 +41,7 @@ public class Chromosomes extends Controller {
 	 */
 	@Security.Authenticated(Secured.class)
 	public static Result show(int patientId, String chromosomeId) throws SQLException, IOException {
-		Patient p = patientService.get(patientId, Authentication.getUser().id);
+		Patient p = patientService.get(patientId, Authentication.getUser().getId());
 		List<Mutation> mutations = mutationService.getMutations(patientId, chromosomeId);
 		HashMap<Mutation, Double> map =  new HashMap<Mutation, Double>();
 		for (Mutation m : mutations) {

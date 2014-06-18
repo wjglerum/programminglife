@@ -60,7 +60,7 @@ public class Mutations extends Controller {
 	@Security.Authenticated(Secured.class)
 	public static Result show(int patientId, int mutationId) throws SQLException,
 			IOException {
-		Patient p = patientService.get(patientId, Authentication.getUser().id);
+		Patient p = patientService.get(patientId, Authentication.getUser().getId());
 		List<Mutation> mutations = mutationService.getMutations(patientId);
 
 		if (p == null) {
@@ -225,7 +225,7 @@ public class Mutations extends Controller {
 	public static Result proteinsJSON(final int pId, final int mId,
 			final int limit, final int threshold) throws SQLException,
 			IOException {
-		Patient p = patientService.get(pId, Authentication.getUser().id);
+		Patient p = patientService.get(pId, Authentication.getUser().getId());
 		List<Mutation> mutations = mutationService.getMutations(pId);
 
 		if (p == null) {

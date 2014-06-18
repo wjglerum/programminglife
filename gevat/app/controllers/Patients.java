@@ -51,7 +51,7 @@ public class Patients extends Controller {
 	public static Result showAll() throws SQLException, IOException {
 		return ok(patients.render(
 				patientService.getAll(Authentication.
-						getUser().id),
+						getUser().getId()),
 				Authentication.getUser()));
 	}
 
@@ -67,7 +67,7 @@ public class Patients extends Controller {
 	 */
 	@Security.Authenticated(Secured.class)
 	public static Result show(int patientId) throws SQLException, IOException {
-		Patient p = patientService.get(patientId, Authentication.getUser().id);
+		Patient p = patientService.get(patientId, Authentication.getUser().getId());
 		List<Mutation> mutations = mutationService.getMutations(patientId);
 		HashMap<Mutation, Double> map = new HashMap<Mutation, Double>();
 		for (Mutation m : mutations) {
@@ -98,7 +98,7 @@ public class Patients extends Controller {
 
 		return notFound(patients.render(
 				patientService.getAll(
-						Authentication.getUser().id),
+						Authentication.getUser().getId()),
 						Authentication.getUser()));
 	}
 
@@ -277,7 +277,7 @@ public class Patients extends Controller {
 		}
 		
 		Patient p = patientService.add(
-				Authentication.getUser().id, name,
+				Authentication.getUser().getId(), name,
 				surname, fileName, fileSize, female);
 		return p;
 	}
@@ -291,7 +291,7 @@ public class Patients extends Controller {
 	 */
 	public static Result remove(final int pId) throws SQLException {
 		Patient p = patientService.get(pId,
-				Authentication.getUser().id);
+				Authentication.getUser().getId());
 
 		if (p == null || !p.isProcessed()) {
 			return badRequest();
@@ -309,7 +309,7 @@ public class Patients extends Controller {
 	 * @throws SQLException In case SQL goes wrong
 	 */
 	public static Result isProcessed(int pId) throws SQLException {
-		Patient p = patientService.get(pId, Authentication.getUser().id);
+		Patient p = patientService.get(pId, Authentication.getUser().getId());
 
 		if (p == null) {
 			return badRequest();

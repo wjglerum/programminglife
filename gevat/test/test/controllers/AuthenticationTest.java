@@ -186,9 +186,9 @@ private final Map<String, String> data = new HashMap<String, String>();
 	// @Test
 	public void testGetUser() throws SQLException {
 		User u = Authentication.getUser();
-		assertThat(u.id).isEqualTo(1);
-		assertThat(u.name).isEqualTo("Foo");
-		assertThat(u.surname).isEqualTo("Bar");
-		assertThat(u.username).isEqualTo("foobar");
+		assertThat(u.getId()).isEqualTo(1);
+		assertThat(u.getName()).isEqualTo("Foo");
+		assertThat(u.getSurname()).isEqualTo("Bar");
+		assertThat(u.getUsername()).isEqualTo("foobar");
 	}
 }

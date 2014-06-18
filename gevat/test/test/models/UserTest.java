@@ -35,10 +35,10 @@ public class UserTest {
 		when(repositoryMock.getUser(username)).thenReturn(u);
 		User x = userService.getUser(username);
 
-		assertEquals(x.id, id);
-		assertEquals(x.name, name);
-		assertEquals(x.surname, surname);
-		assertEquals(x.username, username);
+		assertEquals(x.getId(), id);
+		assertEquals(x.getName(), name);
+		assertEquals(x.getSurname(), surname);
+		assertEquals(x.getUsername(), username);
 
 		verify(repositoryMock).getUser(username);
 	}
@@ -48,10 +48,10 @@ public class UserTest {
 		when(repositoryMock.authenticate(username, password)).thenReturn(u);
 
 		User x = userService.authenticate(username, password);
-		assertEquals(x.id, id);
-		assertEquals(x.name, name);
-		assertEquals(x.surname, surname);
-		assertEquals(x.username, username);
+		assertEquals(x.getId(), id);
+		assertEquals(x.getName(), name);
+		assertEquals(x.getSurname(), surname);
+		assertEquals(x.getUsername(), username);
 
 		verify(repositoryMock).authenticate(username, password);
 	}

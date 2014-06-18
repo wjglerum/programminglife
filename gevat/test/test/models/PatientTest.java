@@ -42,7 +42,7 @@ public class PatientTest {
         assertEquals(name, p.getName());
         assertEquals(surname, p.getSurname());
         assertEquals(vcfFile, p.getVcfFile());
-        assertTrue((double) 1 == p.getVcfLengthMB());
+        assertTrue("1" == p.getVcfLengthMB());
         p.setSurname("Doe");
         assertNotEquals(surname, p.getSurname());
     }
@@ -77,7 +77,7 @@ public class PatientTest {
         assertEquals(name, x.getName());
         assertEquals(surname, x.getSurname());
         assertEquals(vcfFile, x.getVcfFile());
-        assertTrue((double) 1 == x.getVcfLengthMB());
+        assertTrue("1" == x.getVcfLengthMB());
 
         verify(repositoryMock).get(id, id);
     }
@@ -105,7 +105,7 @@ public class PatientTest {
         assertEquals(name, x.getName());
         assertEquals(surname, x.getSurname());
         assertEquals(vcfFile, x.getVcfFile());
-        assertTrue(1.0 == x.getVcfLengthMB());
+        assertTrue("1" == x.getVcfLengthMB());
 
         verify(repositoryMock).add(id, name, surname, vcfFile, vcfLength, true);
     }
