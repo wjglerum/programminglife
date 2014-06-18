@@ -12,8 +12,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import org.broadinstitute.variant.variantcontext.VariantContext;
-
 import models.mutation.Mutation;
 import play.Logger;
 import play.db.DB;
@@ -119,9 +117,10 @@ public class QueryProcessor {
         ArrayList<String> list = new ArrayList<String>();
         assert (limit > 0) : "Needs at least 1";
         assert (threshold >= 0) : "Needs at least 0";
-        findRelatedProteins.setString(1, proteine);
-        findRelatedProteins.setInt(2, threshold);
-        findRelatedProteins.setInt(3, limit);
+        int counter = 1;
+        findRelatedProteins.setString(counter++, proteine);
+        findRelatedProteins.setInt(counter++, threshold);
+        findRelatedProteins.setInt(counter++, limit);
         ResultSet rs = findRelatedProteins.executeQuery();
         while (rs.next()) {
             String codeName = rs.getString("preferred_name");
@@ -341,7 +340,8 @@ public class QueryProcessor {
                             + "snp_id IN (";
                     while (rs.next()) {
                         addCounter++;
-                        ArrayList<String> geneList = QueryProcessor.findGenesAssociatedWithSNP(Integer
+                        ArrayList<String> geneList =
+                        		QueryProcessor.findGenesAssociatedWithSNP(Integer
                                 .parseInt(
                                 rs.getString(
                                 "snp_id")));
@@ -478,7 +478,7 @@ public class QueryProcessor {
      * 
      * @throws SQLException
      *             In case SQL goes wrong
-     * @throws IOException
+     * @throws IOException IO Exception
      */
     public static String findGeneConnections(final String p1, final int limit,
             final int threshold) throws SQLException, IOException {
@@ -500,7 +500,9 @@ public class QueryProcessor {
         getSNPFunction.setInt(1, id);
         ResultSet rs = findGenesAssociatedWithSNP.executeQuery();
         while (rs.next()) {
-            list.add(rs.getInt("snp_id") + " " + rs.getString("abbrev") + " " + rs.getString("descrip") + " " + rs.getBoolean("is_coding") + " " + rs.getBoolean("is_exon"));
+            list.add(rs.getInt("snp_id") + " " + rs.getString("abbrev")
+            		+ " " + rs.getString("descrip") + " " + rs.getBoolean("is_coding")
+            		+ " " + rs.getBoolean("is_exon"));
         }
         return list;
     }

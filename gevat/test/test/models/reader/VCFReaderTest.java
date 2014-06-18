@@ -39,11 +39,10 @@ public class VCFReaderTest {
 	private ArrayList<VariantContext> wrong;
 	
 	@Before
-	public void Before()
-	{
+	public void before() {
 		correct = new ArrayList<VariantContext>();
 		wrong = new ArrayList<VariantContext>();
-		FeatureReader reader = AbstractFeatureReader
+		FeatureReader<VariantContext> reader = AbstractFeatureReader
 				.getFeatureReader(testFile, new VCFCodec(),
 						false);
 		try {
@@ -55,15 +54,17 @@ public class VCFReaderTest {
 			wrong.add(it.next());
 			correct.add(it.next());
 			reader.close();
-		} catch (IOException e) {fail("IOException");}
+		} catch (IOException e) { fail("IOException"); }
 	}
 
 	@Test
 	public void testHasMutation() {
-		for(VariantContext vc: correct)
+		for (VariantContext vc: correct) {
 			assertFalse(VCFReader.hasMutation(vc));
-		for(VariantContext vc: wrong)
+		}
+		for (VariantContext vc: wrong) {
 			assertTrue(VCFReader.hasMutation(vc));
+		}
 	}
 
 	@Test
