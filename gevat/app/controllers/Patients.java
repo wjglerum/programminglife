@@ -14,6 +14,7 @@ import models.mutation.MutationService;
 import models.patient.Patient;
 import models.patient.PatientRepositoryDB;
 import models.patient.PatientService;
+import models.reader.ReaderThread;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData;
@@ -262,7 +263,7 @@ public class Patients extends Controller {
 		// Add Patient to database
 		Patient p = makePatient(addForm, fileSize, fileName);
 
-		p.setupReaderThread(filePath);
+		setupReaderThread(filePath, p);
 		return p;
 	}
 
@@ -369,5 +370,18 @@ public class Patients extends Controller {
 
 		  public String getMessage() { return message; }
 		}
+	}
+
+
+	/**
+	 * Sets up a separate thread to read the VCF file.
+	 * @param filePath The path of the VCF file
+	 */
+	public static final void setupReaderThread(final String filePath, final Patient p) {
+		// Setup a thread for processing the VCF
+		ReaderThread readerThread = new ReaderThread(p, filePath);
+
+		// Let the thread process the file in the background
+		readerThread.start();
 	}
 }
