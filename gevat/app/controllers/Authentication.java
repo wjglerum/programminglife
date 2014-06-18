@@ -28,8 +28,8 @@ public class Authentication extends Controller {
 	 */
 	public static class Login {
 
-		private String username;
-		private String password;
+		public String username;
+		public String password;
 
 		/**
 		 * Performs the validation.
