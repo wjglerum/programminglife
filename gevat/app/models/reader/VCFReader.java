@@ -1,10 +1,12 @@
 package models.reader;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+
 import models.database.QueryProcessor;
 import models.mutation.Mutation;
 
@@ -13,8 +15,6 @@ import org.broad.tribble.FeatureReader;
 import org.broadinstitute.variant.variantcontext.Allele;
 import org.broadinstitute.variant.variantcontext.VariantContext;
 import org.broadinstitute.variant.vcf.VCFCodec;
-
-import play.Logger;
 
 /**
  * This class reads the VCF-files.
@@ -61,29 +61,15 @@ public final class VCFReader {
      */
     protected static List<Mutation> getMutations(
             final FeatureReader<VariantContext> fr) {
-        //indel();
-        //return new ArrayList<Mutation>();
         List<Mutation> listSNP = new ArrayList<Mutation>();
         ArrayList<Mutation> output = new ArrayList<Mutation>();
         HashMap<Integer, Mutation> output2 = new HashMap<Integer, Mutation>();
+        
         try {
-            Iterator<VariantContext> it;
-            it = fr.iterator();
+            Iterator<VariantContext> it = fr.iterator();
             while (it.hasNext()) {
                 VariantContext vc = it.next();
-                String[] idAsString = vc.getID().split(";");
-                if (idAsString[0].length() > 2) {
-                    int id = Integer.parseInt(idAsString[0].substring(2));
-                    if (hasMutation(vc)) {
-                        ArrayList<String> list = QueryProcessor.findGenesAssociatedWithSNP(id);
-                        if (!list.isEmpty()) {
-                            listSNP.add(toMutation(vc, "De Novo"));
-                        }
-                    } else if (isPotentialHomozygousRecessive(vc)) {
-                        Mutation m = toMutation(vc, "Recessive Homozygous");
-                        output2.put(id, m);
-                    }
-                }
+                checkVariantContext(listSNP, output2, vc);
             }
             output = QueryProcessor.filterOnFrequency(output2);
         } catch (Exception e) {
@@ -92,6 +78,30 @@ public final class VCFReader {
         listSNP.addAll(output);
         return listSNP;
     }
+
+	private static void checkVariantContext(List<Mutation> listSNP,
+			HashMap<Integer, Mutation> output2, VariantContext vc)
+			throws SQLException {
+		String[] idAsString = vc.getID().split(";");
+		if (idAsString[0].length() > 2) {
+		    int id = Integer.parseInt(idAsString[0].substring(2));
+		    checkForMutation(listSNP, output2, vc, id);
+		}
+	}
+
+	private static void checkForMutation(List<Mutation> listSNP,
+			HashMap<Integer, Mutation> output2, VariantContext vc, int id)
+			throws SQLException {
+		if (hasMutation(vc)) {
+		    ArrayList<String> list = QueryProcessor.findGenesAssociatedWithSNP(id);
+		    if (!list.isEmpty()) {
+		        listSNP.add(toMutation(vc, "De Novo"));
+		    }
+		} else if (isPotentialHomozygousRecessive(vc)) {
+		    Mutation m = toMutation(vc, "Recessive Homozygous");
+		    output2.put(id, m);
+		}
+	}
 
     /**
      * Takes alleles from the child and parents and checks whether a mutation
