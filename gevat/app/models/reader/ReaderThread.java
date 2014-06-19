@@ -1,5 +1,6 @@
 package models.reader;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -7,6 +8,8 @@ import models.database.Database;
 import models.database.QueryProcessor;
 import models.mutation.Mutation;
 import models.patient.Patient;
+import models.protein.ProteinConnection;
+import models.protein.ProteinGraph;
 
 /**
  * Separate thread for reading VCF files.
@@ -47,6 +50,7 @@ public class ReaderThread implements Runnable {
 
         try {
             addMutationsToDatabase(mutations);
+            findProteinConnections(mutations);
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -94,5 +98,23 @@ public class ReaderThread implements Runnable {
 
         Database.insert("data", query);
     }
+	
+	private void findProteinConnections(List<Mutation> mutations)
+	{
+		for(Mutation m: mutations)
+		{
+			try {
+				ProteinGraph pg = new ProteinGraph();
+				pg.addConnectionsOfSnp(Integer.parseInt(m.getRsID().substring(2)), 30, 300);
+				for(ProteinConnection pc : pg.getConnections())
+				{
+					pc.insertIntoDB(patient.getId());
+				}
+			} catch (NumberFormatException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
 
 }
