@@ -1,7 +1,6 @@
 package models.reader;
 
 import java.io.IOException;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,7 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
-import models.database.Database;
 import models.database.QueryProcessor;
 import models.mutation.Mutation;
 
@@ -18,8 +16,6 @@ import org.broad.tribble.FeatureReader;
 import org.broadinstitute.variant.variantcontext.Allele;
 import org.broadinstitute.variant.variantcontext.VariantContext;
 import org.broadinstitute.variant.vcf.VCFCodec;
-
-import play.Logger;
 
 /**
  * This class reads the VCF-files.
@@ -76,7 +72,7 @@ public final class VCFReader {
                 VariantContext vc = it.next();
                 checkVariantContext(listSNP, output2, vc);
             }
-            output = VCFReader.filterOnFrequency(output2);
+            output = QueryProcessor.filterOnFrequency(output2, split(output2));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -178,111 +174,36 @@ public final class VCFReader {
         return (input.get(0).equals(input.get(1)));
     }
 
-	/**
-	 * Filters a hashmap with mutations based on their snp allele frequency.
-	 * 
-	 * @param hm
-	 *            HashMap that has uses a mutation ID as key for a mutation
-	 *            object.
-	 * @return An ArrayList<Mutation> with mutations that had a frequency that
-	 *         is low enough.
-	 * @throws SQLException
-	 *             In case SQL goes wrong
-	 */
-	public static ArrayList<Mutation> filterOnFrequency(
-	        final HashMap<Integer, Mutation> hm)
-	                throws SQLException {
-	    ArrayList<Mutation> output = new ArrayList<Mutation>();
-	    //SPLIT THE LIST INTO LISTS WITH A, T, C OR G
-	    ArrayList<Mutation> mutationListPartA =
-	            new ArrayList<Mutation>();
-	    ArrayList<Mutation> mutationListPartT =
-	            new ArrayList<Mutation>();
-	    ArrayList<Mutation> mutationListPartC =
-	            new ArrayList<Mutation>();
-	    ArrayList<Mutation> mutationListPartG =
-	            new ArrayList<Mutation>();
-	
-	    for (Entry<Integer, Mutation> m : hm.entrySet()) {
-	        switch (m.getValue().child().charAt(1)) {
-	            case 'A':   mutationListPartA
-	            .add(m.getValue());
-	                        break;
-	            case 'T':   mutationListPartT
-	            .add(m.getValue());
-	                        break;
-	            case 'C':   mutationListPartC
-	            .add(m.getValue());
-	                        break;
-	            case 'G':   mutationListPartG
-	            .add(m.getValue());
-	                        break;
-	            default : break;
-	        }
-	    }
-	    int counter = 0;
-	    int counter2 = 0;
-	    int addCounter = 0;
-	    final int split = 10000;
-	    char[] allele = {'A', 'T', 'C', 'G'};
-	    ArrayList<ArrayList<Mutation>> list =
-	            new ArrayList<ArrayList<Mutation>>();
-	    list.add(mutationListPartA);
-	    list.add(mutationListPartT);
-	    list.add(mutationListPartC);
-	    list.add(mutationListPartG);
-	
-	    for (ArrayList<Mutation> ml : list) {
-	        counter = 0;
-	        String q = "SELECT DISTINCT snp_id, allele, chr_cnt, "
-	                + "freq FROM snpallelefreq join allele "
-	                + "ON "
-	                + "snpallelefreq.allele_id = "
-	                + "allele.allele_id "
-	                + "WHERE snp_id IN (";
-	        for (Mutation m : ml) {
-	            String[] idAsString = m.getID().split(";");
-	            int id = Integer.parseInt(idAsString[0]
-	                    .substring(2));
-	            q += id + ",";
-	            if (++counter % split == 0 || counter
-	                    == ml.size() - 1) {
-	                q = q.substring(0, q.length() - 1);
-	                q += ") AND allele = '"
-	                        + allele[counter2]
-	                        + "' AND freq < 0.005 "
-	                        + "AND freq > 0;";
-	                ResultSet rs = Database.select(
-	                        "snp", q);
-	                q = "SELECT DISTINCT snp_id, allele, "
-	                        + "chr_cnt, freq FROM "
-	                        + "snpallelefreq "
-	                        + "join allele "
-	                        + "ON snpallelefreq."
-	                        + "allele_id "
-	                        + "= allele.allele_id "
-	                        + "WHERE "
-	                        + "snp_id IN (";
-	                while (rs.next()) {
-	                    addCounter++;
-	                    ArrayList<String> geneList =
-	                    		QueryProcessor.findGenesAssociatedWithSNP(Integer
-	                            .parseInt(
-	                            rs.getString(
-	                            "snp_id")));
-	                    if (!geneList.isEmpty()) {
-	                        output.add(hm.get(Integer
-	                                .parseInt(
-	                                rs.getString(
-	                                "snp_id"))));                           
-	                    }
-	                }
-	            }
-	        }
-	    }
-	
-	    Logger.info("Added " + addCounter
-	            + " recessive homozygous mutations.");
-	    return output;
-	}
+    /**
+     * Splits a hashmap into four lists based on the bases.
+     *
+     * @param hm The hashmap to be splitted
+     *
+     * @return The splitted list
+     */
+    public static ArrayList<ArrayList<Mutation>> split(final HashMap<Integer, Mutation> hm) {
+        ArrayList<ArrayList<Mutation>> splitted = new ArrayList<ArrayList<Mutation>>();
+        for (int i = 0; i < 4; i++) {
+            splitted.add(new ArrayList<Mutation>());
+        }
+
+        for (Entry<Integer, Mutation> m : hm.entrySet()) {
+            switch (m.getValue().child().charAt(1)) {
+                case 'A':   splitted.get(0)
+                .add(m.getValue());
+                            break;
+                case 'T':   splitted.get(1)
+                .add(m.getValue());
+                            break;
+                case 'C':   splitted.get(2)
+                .add(m.getValue());
+                            break;
+                case 'G':   splitted.get(3)
+                .add(m.getValue());
+                            break;
+                default : break;
+            }
+        }
+        return splitted;
+    }
 }
