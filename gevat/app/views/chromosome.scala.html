@@ -11,11 +11,10 @@
 @template_app("Mutations of patient " + patient.getName + " " + patient.getSurname + " in chromosome " + chromosome.getID(), user, "patients", Map("/patients" -> "Patients", ("/patients/" + patient.getId) -> (patient.getName + " " + patient.getSurname), ("/patients/" + patient.getId + "/chromosome/" + chromosome.getID()) -> ("Chromosome " + chromosome.getID())), scripts) {
 
 <h3>Position</h3>
-<div class="position">
+<div class="position" data-cid="@chromosome.getID()">
 	<script type="text/javascript">
 		var mutationData = @Html(mutationData)
 	</script>
-	@mutationData
 </div>
 
 <h3>Mutations</h3>

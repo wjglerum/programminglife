@@ -1,8 +1,9 @@
+// amount of basepairs per chromosome
 var chromosome = '{"1": 249250621, "2": 243199373, "3": 198022430, "4": 191154276, "5": 180915260, "6": 171115067, "7": 159138663, "8": 146364022, "9": 141213431, "10": 135534747, "11": 135006516, "12": 133851895, "13": 115169878, "14": 107349540, "15": 102531392, "16": 90354753, "17": 81195210, "18": 78077248, "19": 59128983, "20": 63025520, "21": 48129895, "22": 51304566, "X": 155270560, "Y": 59373566}';
 chromosome = JSON.parse(chromosome);
 
-console.log(chromosome);
-
+// the id of the current chromosome
+var cid = $(".position").data("cid");
 
 // make a SVG container
 var svgContainer = d3.select("div.position")
@@ -24,7 +25,7 @@ svgContainer.append("rect")
 
 // convert to relative percentage
 function relativePercentage(value) {
-	value = value / chromosome[1];
+	value = value / chromosome[cid];
 	value = value * 100 * 0.9 + 5;
 	return value += "%";
 }
