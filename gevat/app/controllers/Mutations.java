@@ -110,7 +110,7 @@ public class Mutations extends Controller {
 	private static String mutationJSON(final Patient patient,
 			final Mutation mutation, final int limit, final int threshold)
 			throws SQLException, IOException {
-		ProteinGraph proteinGraph = createProteinGraph(mutation, limit,
+		ProteinGraph proteinGraph = createProteinGraph(patient.getId(), mutation, limit,
 				threshold);
 
 		Collection<Protein> proteins = proteinGraph.getProteines();
@@ -202,7 +202,7 @@ public class Mutations extends Controller {
 	 * @throws SQLException
 	 *             SQL Exception
 	 */
-	public static ProteinGraph createProteinGraph(final Mutation mutation,
+	public static ProteinGraph createProteinGraph(final int patientId, final Mutation mutation,
 			final int limit, final int threshold) throws IOException,
 			SQLException {
 		// Remove the 'rs' part of the rsID
@@ -213,6 +213,8 @@ public class Mutations extends Controller {
 		for (String protein : QueryProcessor.findGenesAssociatedWithSNP(rsID)) {
 			proteinGraph.putMutation(protein);
 		}
+		proteinGraph.getOtherConnectedMutatedProteins(patientId);
+		
 		return proteinGraph;
 	}
 

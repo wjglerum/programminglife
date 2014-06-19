@@ -30,6 +30,7 @@ public class QueryProcessor {
     private static PreparedStatement findGenesAssociatedWithSNP;
     private static PreparedStatement executeScoreQuery;
     private static PreparedStatement getSNPFunction;
+    private static PreparedStatement listMutatedProteins;
 
     /**
      * Done because it is a utility-class.
@@ -71,6 +72,11 @@ public class QueryProcessor {
         }
         try (Connection connection3 = DB.getConnection("score");) {
             executeScoreQuery = prepareQuery("executeScoreQuery", connection3);
+        } catch (SQLException e) {
+            Logger.error((e.toString()));
+        }
+        try (Connection connection4 = DB.getConnection("data");) {
+        	listMutatedProteins = prepareQuery("listMutatedProteins", connection4);
         } catch (SQLException e) {
             Logger.error((e.toString()));
         }
@@ -453,4 +459,50 @@ public class QueryProcessor {
         }
         return list;
     }
+
+    /**
+     * @param patientId Id of the patient
+     * @param p1 The first protein (with mutation)
+     * @param p2 The second protein
+     * @param combinedScore The combined score or threshold of the two proteins
+     */
+	public static void insertConnectionIntoDB(int patientId, String p1, String p2, int combinedScore)	{
+		String query = "INSERT INTO protein_connections VALUES ("
+			+ patientId
+			+ ",'"
+			+ p1
+			+ "','"
+			+ p2
+			+ "',"
+			+ combinedScore
+			+ ");";
+		// Logger.info(query);
+		Database.insert("data", query);
+	}
+	
+	public static Collection<String> listMutatedProteins(int patientId) throws SQLException
+	{
+		listMutatedProteins.setInt(1, patientId);
+		ResultSet rs = listMutatedProteins.executeQuery();
+		Collection<String> list = new ArrayList<String>();
+		while(rs.next()) {
+			list.add(rs.getString("protein_a_id"));
+		}
+		return list;
+	}
+	
+	public static ResultSet getOtherConnectedMutatedProteins(int patientId, Collection<String> currMutation, Collection<String> proteins) throws SQLException
+	{
+		String query = "SELECT * "
+				+ "FROM protein_connections "
+				+ "WHERE p_id = "
+				+ patientId
+				+ "AND protein_a_id NOT IN ( "
+				+ formatForIN(currMutation)
+				+ " ) AND protein_b_id IN ( "
+				+ formatForIN(proteins)
+				+ " );";
+			Logger.info(query);
+			return Database.select("data", query);
+	}
 }
