@@ -1,6 +1,6 @@
 //retrieve data from html
-var startPoint = $(".position").data("startpoint");
-var id = $(".position").data("mid");
+var position = $(".position").data("position");
+var id = $(".position").data("rsid");
 var mutationType = $(".position").data("sort");
 
 
@@ -14,13 +14,20 @@ for(i in positionsData) {
 	if(positionsData[i].end > high) high = positionsData[i].end;
 }
 
-// also check the location of the startPoint
-if(startPoint < low) low = startPoint;
-if(startPoint > high) high = startPoint;
+// also check the location of the position
+if(position < low) low = position;
+if(position > high) high = position;
 
 // convert to relative percentage
-var marker = (startPoint - low)/(high - low)*100*0.9+5;
-marker += "%";
+function relativePercentage(value) {
+	value = (value - low) / (high - low);
+	value = value * 100 * 0.9 + 5;
+	value += "%";
+	return value;
+}
+
+// compute marker
+var marker = relativePercentage(position);
 
 //make a container for svg
 var SVGheight = 100 + positionsData.length*20
@@ -29,28 +36,38 @@ var svgContainer = d3.select("div.position")
 	.attr("width", "100%")
 	.attr("height", SVGheight + 100);
 
+// make a container for the mutation
+var g = svgContainer.append("g")
+	.attr("original-title", 
+		id
+		+ "<br>Position: "
+		+ position
+		+ "<br>Sort: "
+		+ mutationType
+	);
+
 // draw the line for the mutation
-svgContainer.append("line")
+g.append("line")
 	.attr("x1", marker)
 	.attr("y1", 50)
 	.attr("x2", marker)
 	.attr("y2", SVGheight)
 	.attr("stroke", "red")
 	.attr("stroke-width", 3)
-	.attr("original-title", 
-		id
-		+ "<br>Position: "
-		+ startPoint
-		+ "<br>Sort: "
-		+ mutationType
-	);
 
 // append a label to the mutation
-svgContainer.append("svg:text") 
+g.append("svg:text") 
 	.attr("x", marker) 
 	.attr("y", 45) 
-	.attr("original-title", "mutation")
 	.text(id);
+
+$('svg g').tipsy({
+	gravity: 's',
+	html: true,
+	fallback: "No information found about this mutation!",
+	delayOut: 250,
+	fade: true
+});
 
 // add nearby mutations
 for(i in nearbyData) {
@@ -58,8 +75,18 @@ for(i in nearbyData) {
 	var mark = (nearbyData[i].position - low)/(high - low)*100*0.9+5;
 	mark += "%";
 
+	// make a container for nearby mutations
+	var g = svgContainer.append("g")
+			.attr("original-title",
+			nearbyData[i].rsid
+			+ "<br>Position: "
+			+ nearbyData[i].position
+			+ "<br>Sort: "
+			+ nearbyData[i].sort
+		);
+
 	// draw the line for the mutation and add href to the mutation
-	svgContainer.append("svg:a")
+	g.append("svg:a")
 		.attr("xlink:href",
 			"/patients/"
 			+ nearbyData[i].pid
@@ -71,21 +98,24 @@ for(i in nearbyData) {
 		.attr("x2", mark)
 		.attr("y2", SVGheight)
 		.attr("stroke", "red")
-		.attr("stroke-width", 2)
-		.attr("original-title",
-			nearbyData[i].rsid
-			+ "<br>Position: "
-			+ nearbyData[i].position
-			+ "<br>Sort: "
-			+ nearbyData[i].sort
-		);
+		.attr("stroke-width", 2);
 
 	// append a hoverbox with basic info
-	$('svg line').tipsy({
-		gravity: 'w',
+	$('svg g').tipsy({
+		gravity: 's',
 		html: true,
-		fallback: "gene"
+		fallback: "No information found about this mutation!",
+		delayOut: 250,
+		fade: true
 	});
+}
+
+// format tooltip for genes
+function formatString(gene) {
+	var res = gene.name + "<br>Start: " + gene.start + "<br>End: " + gene.end;
+	if(gene.annotation.length != 0) res += "<br>Annotation: " + gene.annotation;
+	if(gene.disease.length != 0) res += "<br>Disease: " + gene.disease;
+	return res;
 }
 
 // add a line per gene
@@ -97,47 +127,46 @@ for(i in positionsData) {
 	// compute the relative position to the lowest and highest value
 	var left = (positionsData[i].start - low)/(high - low)*100*0.9+5;
 	var right = (positionsData[i].end - low)/(high - low)*100*0.9+5;
-	var middle = (left + right)/2;
+	var middle = (left + right)/2;	
+	right = right - left;
 
 	// make the visualisation larger for very small genes
-	if(right-left < 0.1) right = left + 0.1;
+	if(right < 0.2) right += 0.1;
 
 	// make everything a percentage for nice scaling
 	left += "%";
 	right += "%";
 	middle += "%";
 
+	// add container for gene line and text
+	var geneContainer = svgContainer.append("g")
+		.attr("original-title", formatString(positionsData[i]));
+
 	// add the line per gene
-	svgContainer.append("line")
-		.attr("x1", left)
-		.attr("y1", height)
-		.attr("x2", right)
-		.attr("y2", height)
+	geneContainer.append("rect")
+		.attr("x", left)
+		.attr("y", height)
+		.attr("rx", 3)
+		.attr("ry", 3)
+		.attr("width", right)
+		.attr("height", 3)		
 		.attr("stroke", "black")
-		.attr("stroke-width", 5)
+		.attr("stroke-width", 1)
 		.attr("id", "gene");
 
 	// append a text label per gene
-	svgContainer.append("svg:text")
+	geneContainer.append("svg:text")
 		.attr("x", middle)
 		.attr("y", height - 5)
-		.attr("original-title",
-			positionsData[i].name 
-			+ "<br>Start: "
-			+ positionsData[i].start
-			+ "<br>End: "
-			+ positionsData[i].end
-			+ "<br>Annotation: "
-			+ positionsData[i].annotation
-			+ "<br>Disease: "
-			+ positionsData[i].disease)
 		.text(positionsData[i].name);
 
 	// append a hoverbox with basic info
-	$('svg text').tipsy({
-		gravity: 'nw',
+	$('svg g').tipsy({
+		gravity: 's',
 		html: true,
-		fallback: "gene"
+		fallback: "No information found about this gene!",
+		delayOut: 250,
+		fade: true
 	});
 }
 
@@ -182,7 +211,7 @@ if(marker != "5%" && marker != "95%"){
 	svgContainer.append("svg:text")
 		.attr("x", marker)
 		.attr("y", height + 20)
-		.text(startPoint);
+		.text(position);
 	svgContainer.append("line")
 		.attr("x1", marker)
 		.attr("y1", height - 5)

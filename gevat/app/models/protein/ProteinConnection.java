@@ -1,5 +1,7 @@
 package models.protein;
 
+import models.database.QueryProcessor;
+
 /**
  * 
  * @author robbertvs
@@ -66,5 +68,9 @@ public class ProteinConnection {
 			}
 		}
 		return false;
+	}
+
+	public void insertIntoDB(int patientId)	{
+		QueryProcessor.insertConnectionIntoDB(patientId, p1.getName(), p2.getName(), combinedScore);
 	}
 }

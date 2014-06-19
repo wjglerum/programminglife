@@ -24,6 +24,7 @@ import models.reader.GeneDiseaseLinkReader;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
@@ -109,7 +110,7 @@ public class Mutations extends Controller {
 	private static String mutationJSON(final Patient patient,
 			final Mutation mutation, final int limit, final int threshold)
 			throws SQLException, IOException {
-		ProteinGraph proteinGraph = createProteinGraph(mutation, limit,
+		ProteinGraph proteinGraph = createProteinGraph(patient.getId(), mutation, limit,
 				threshold);
 
 		Collection<Protein> proteins = proteinGraph.getProteines();
@@ -201,7 +202,7 @@ public class Mutations extends Controller {
 	 * @throws SQLException
 	 *             SQL Exception
 	 */
-	public static ProteinGraph createProteinGraph(final Mutation mutation,
+	public static ProteinGraph createProteinGraph(final int patientId, final Mutation mutation,
 			final int limit, final int threshold) throws IOException,
 			SQLException {
 		// Remove the 'rs' part of the rsID
@@ -212,6 +213,8 @@ public class Mutations extends Controller {
 		for (String protein : QueryProcessor.findGenesAssociatedWithSNP(rsID)) {
 			proteinGraph.putMutation(protein);
 		}
+		proteinGraph.getOtherConnectedMutatedProteins(patientId);
+		
 		return proteinGraph;
 	}
 
@@ -299,7 +302,8 @@ public class Mutations extends Controller {
 	 * @return The JSON string
 	 * @throws SQLException
 	 *             SQL Exception
-	 * @throws IOException exception
+	 * @throws IOException
+	 *             exception
 	 */
 	@SuppressWarnings("unchecked")
 	public static String positionJSON(Mutation m, int amount)
@@ -312,9 +316,9 @@ public class Mutations extends Controller {
 		for (String name : map.keySet()) {
 			ArrayList<String> diseases = GeneDiseaseLinkReader
 					.findGeneDiseaseAssociation(name);
-			String disease = diseases.toString().substring(1, diseases.toString().length() - 1);
-			System.out.println(disease);
-			
+			String disease = diseases.toString().substring(1,
+					diseases.toString().length() - 1);
+
 			JSONObject positionJSON = new JSONObject();
 			positionJSON.put("name", name);
 			positionJSON.put("start", map.get(name).get(0));

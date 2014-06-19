@@ -1,27 +1,23 @@
 package test.models.reader;
 
-import static play.test.Helpers.*;
-import static org.fest.assertions.Assertions.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import models.mutation.Mutation;
 import models.reader.VCFReader;
 
-import java.io.IOException;
-
-import org.broadinstitute.variant.variantcontext.VariantContext;
 import org.broad.tribble.AbstractFeatureReader;
 import org.broad.tribble.FeatureReader;
+import org.broadinstitute.variant.variantcontext.VariantContext;
 import org.broadinstitute.variant.vcf.VCFCodec;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import org.junit.Test;
 import org.junit.Before;
-
-import play.Logger;
-import scalaz.std.list;
+import org.junit.Test;
 
 public class VCFReaderTest {
 	/*
