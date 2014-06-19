@@ -11,6 +11,7 @@
 
 	<properties>
 		<play.version>2.2.1</play.version>
+    	<checkstyle.config.location>${basedir}/checkstyle.xml</checkstyle.config.location>
 	</properties>
 
 	<repositories>

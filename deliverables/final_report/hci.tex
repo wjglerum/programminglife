@@ -1,1 +1,26 @@
-Blaat
+As described before, we developed an application for doctors to browse through genetic information. A big challenge in this assignment was to make our product intuitive for the end users: people that have a complete other background then we all have. We couldn't just deliver a product, and hope it was good, we had to have some feedback from a person that was not involved in the project (but still had biological background). 
+\subsection{Our action plan}
+After meeting with Willem-Paul Brinkman, we decided that we were going to organise an empirical evaluation. This evaluation should be of the type experiment, the experiment would make use of the \textbf{think aloud protocol}. As testing person, we had a fellow student at the TU Delft that studied nanobiologie named Max. We were going to give him a computer with our application on it, and give the following assignment:\\
+\begin{addmargin}[2em]{2em}
+\textit{You want to browse through the genome of patient John Doe, he is sick. He has the symptoms of Marfan's syndrome, can you look if you can find any traces of this sickness?\\ }
+\end{addmargin} 
+We deliberately added the patient to the application, because adding a new patient and unploading his SNPs aren't the main concern in our project.
+\subsection{The realisation of our experiment}
+As expected, our test person didn't have any trouble to find his way through our dashboard (See Figure ~\ref{fig:dashboard}), this dashboard has a clear "Getting started" instruction that easily helps the user to navigate to the Patients page. Also when at the Patients page (See Figure ~\ref{fig:patients}), Max was able to directly navigate to John Doe. \\
+When clicking on the patient John Doe, the patient overview page appeared (See Figure ~\ref{fig:patient}) . Here are a couple of quotes that our testing person made:
+\begin{enumerate}
+\item \textit{``I see browse mutations, and a lot of vertical red lines. I suppose these lines represent the mutations that are found in the patient".}
+\item After hovering over these so called mutations (they represent chromosomes), a new block with the title Mutations in chromosome X appeared, it became clear that Max was wrong. \textit{``Ah, I see, these vertical lines represent chromosomes. Not that obvious since the header says: Browse mutations".}
+\end{enumerate}
+Initially, our testing person was a bit confused by all the information that appeared. What is a rsID, what is a frequency and what is the CADD score? After some explanation (we basically told that the CADD score is an indication about how harmful a mutation could be), Max immediately sorted the column with mutations by the CADD score, and clicked on the mutation with the highest value. Our tester saw the mutation view (See Figure ~\ref{fig:mutation} and Figure ~\ref{fig:mutation2}). Here are a couple of useful quotes that the tester made: 
+\begin{enumerate}
+\setcounter{enumi}{2}
+\item \textit{``I see a big vertical red line with a id on it, and a couple of horizontal lines next to it. I can imagine that the red line symbolizes the mutation, and that the black lines symbolize the proteins around it". }
+\item \textit{``So I guess that this central green bulb symbolizes the protein that has a mutation, but I'm not really sure how I can get more information to confirm that this is the mutation that causes the Marfan syndrome". }
+\end{enumerate}
+Our tester was clearly not going to come further, we explained that the green bulb was clickable and useful information appeared. We stopped the experiment and started with the debriefing.
+\subsection{Debriefing}
+The first thing we asked Max was: ``So what did you think of our application?" He was quite positive, most parts were quite intuitive. The main problem in our experiment was that Max wasn't exactly the end user. A couple of terms (like CADD score) were terms that he never heard of. We asked if there were any observations that Max had, and if he wanted to share them with us. Max answered that he didn't have a lot, he did think that the navigation in a mutation view could be more intuitive. 
+\subsection{Conclusion}
+The numbered quotes that Max made and are included in this report are all quotes that we used in making our product better. Quote number one for example made us realise that the heading "Browse Mutations" is inappropriate when it is placed above 23 pairs of chromosomes, this was confusing an is renamed. \\
+Quote number three was a confirmation that our mutation overview is quite intuitive, quote number four however still gave us an improvement: we should make it clear that the round Proteins are clickable. We implemented this with a tooltip that pops up when hoovering over the protein.  
