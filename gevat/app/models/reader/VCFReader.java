@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 
 import models.database.QueryProcessor;
 import models.mutation.Mutation;
@@ -71,7 +72,7 @@ public final class VCFReader {
                 VariantContext vc = it.next();
                 checkVariantContext(listSNP, output2, vc);
             }
-            output = QueryProcessor.filterOnFrequency(output2);
+            output = QueryProcessor.filterOnFrequency(output2, split(output2));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -171,5 +172,38 @@ public final class VCFReader {
             return false;
         }
         return (input.get(0).equals(input.get(1)));
+    }
+
+    /**
+     * Splits a hashmap into four lists based on the bases.
+     *
+     * @param hm The hashmap to be splitted
+     *
+     * @return The splitted list
+     */
+    public static ArrayList<ArrayList<Mutation>> split(final HashMap<Integer, Mutation> hm) {
+        ArrayList<ArrayList<Mutation>> splitted = new ArrayList<ArrayList<Mutation>>();
+        for (int i = 0; i < 4; i++) {
+            splitted.add(new ArrayList<Mutation>());
+        }
+
+        for (Entry<Integer, Mutation> m : hm.entrySet()) {
+            switch (m.getValue().child().charAt(1)) {
+                case 'A':   splitted.get(0)
+                .add(m.getValue());
+                            break;
+                case 'T':   splitted.get(1)
+                .add(m.getValue());
+                            break;
+                case 'C':   splitted.get(2)
+                .add(m.getValue());
+                            break;
+                case 'G':   splitted.get(3)
+                .add(m.getValue());
+                            break;
+                default : break;
+            }
+        }
+        return splitted;
     }
 }

@@ -10,7 +10,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Map.Entry;
 
 import models.mutation.Mutation;
 import play.Logger;
@@ -91,9 +90,80 @@ public class QueryProcessor {
      */
     public static PreparedStatement prepareQuery(String queryName,
             Connection connection) throws IOException, SQLException {
-        String path = "public/sql/queryprocessor/" + queryName + ".sql";
+        String path = "private/sql/queryprocessor/" + queryName + ".sql";
         return connection.prepareStatement(new String(Files.readAllBytes(Paths
                 .get(path))));
+    }
+
+    /**
+     * Filters a hashmap with mutations based on their snp allele frequency.
+     * 
+     * @param hm
+     *            HashMap that has uses a mutation ID as key for a mutation
+     *            object.
+     * @param list The splitted list
+     *
+     * @return An ArrayList<Mutation> with mutations that had a frequency that
+     *         is low enough.
+     *
+     * @throws SQLException
+     *             In case SQL goes wrong
+     */
+    public static ArrayList<Mutation> filterOnFrequency(
+            final HashMap<Integer, Mutation> hm, final ArrayList<ArrayList<Mutation>> list)
+                    throws SQLException {
+        ArrayList<Mutation> output = new ArrayList<Mutation>();
+        int counter = 0, counter2 = 0;
+        final int split = 10000;
+        char[] allele = {'A', 'T', 'C', 'G'};
+        for (ArrayList<Mutation> ml : list) {
+            counter = 0;
+            String q = "SELECT DISTINCT snp_id, allele, chr_cnt, "
+                    + "freq FROM snpallelefreq join allele "
+                    + "ON "
+                    + "snpallelefreq.allele_id = "
+                    + "allele.allele_id "
+                    + "WHERE snp_id IN (";
+            for (Mutation m : ml) {
+                String[] idAsString = m.getID().split(";");
+                int id = Integer.parseInt(idAsString[0]
+                        .substring(2));
+                q += id + ",";
+                if (++counter % split == 0 || counter
+                        == ml.size() - 1) {
+                    q = q.substring(0, q.length() - 1);
+                    q += ") AND allele = '"
+                            + allele[counter2]
+                            + "' AND freq < 0.005 "
+                            + "AND freq > 0;";
+                    ResultSet rs = Database.select(
+                            "snp", q);
+                    q = "SELECT DISTINCT snp_id, allele, "
+                            + "chr_cnt, freq FROM "
+                            + "snpallelefreq "
+                            + "join allele "
+                            + "ON snpallelefreq."
+                            + "allele_id "
+                            + "= allele.allele_id "
+                            + "WHERE "
+                            + "snp_id IN (";
+                    while (rs.next()) {
+                        ArrayList<String> geneList =
+                                QueryProcessor.findGenesAssociatedWithSNP(Integer
+                                .parseInt(
+                                rs.getString(
+                                "snp_id")));
+                        if (!geneList.isEmpty()) {
+                            output.add(hm.get(Integer
+                                    .parseInt(
+                                    rs.getString(
+                                    "snp_id"))));                           
+                        }
+                    }
+                }
+            }
+        }
+        return output;
     }
 
     /**
@@ -195,53 +265,39 @@ public class QueryProcessor {
     /**
      * Finds the score.
      * 
-     * @param mutation
-     *            The mutation for which to find the score
+     * @param chr The chromome the mutation is on
+     * @param positionGRCH37 The position according to GRCH37
      * 
-     * @return Returns a list containing the score
+     * @return Returns a ResultSet containing the score
      * 
      * @throws SQLException
      *             In case SQL goes wrong
      */
-    public float executeScoreQuery(final Mutation mutation) throws SQLException {
-        executeScoreQuery.setString(1, mutation.getChr());
-        executeScoreQuery.setInt(2, mutation.getPositionGRCH37());
+    public ResultSet executeScoreQuery(final String chr, final int positionGRCH37)
+            throws SQLException {
+        executeScoreQuery.setString(1, chr);
+        executeScoreQuery.setInt(2, positionGRCH37);
         // Get all the records from database score that have mutations
         // on the
         // same position as our position
-        ResultSet rs = executeScoreQuery.executeQuery();
-
-        // If the mutation is the same value as the reference, return 0
-        while (rs.next()) {
-            String alt = rs.getString("alt");
-            float phred = rs.getFloat("phred");
-            String a = mutation.getAlleles().get(0).getBaseString();
-            String b = mutation.getAlleles().get(1).getBaseString();
-            if (alt.equals(a) || alt.equals(b)) {
-
-                return phred;
-            }
-        }
-        return 0;
+        return executeScoreQuery.executeQuery();
     }
 
     /**
      * Gets the snp allele frequency of a mutation.
      * 
-     * @param mutation
-     *            The mutation for which to find the frequency
-     * 
+     * @param idString The id of the mutation
+     * @param base The base
      * @return float Returns the frequency
      * 
      * @throws SQLException
      *             In case SQL goes wrong
      */
-    public static float getFrequency(final Mutation mutation)
+    public static float getFrequency(final String idString, final String base)
             throws SQLException {
-        String[] idAsString = mutation.getID().split(";");
+        String[] idAsString = idString.split(";");
         // Get variables for query
         int id = Integer.parseInt(idAsString[0].substring(2));
-        String base = mutation.getAlleles().get(0).getBaseString();
         // Insert variables in query
         getFrequency.setInt(1, id);
         getFrequency.setString(2, base);
@@ -252,115 +308,6 @@ public class QueryProcessor {
         }
         return 0;
     }
-
-    /**
-     * Filters a hashmap with mutations based on their snp allele frequency.
-     * 
-     * @param hm
-     *            HashMap that has uses a mutation ID as key for a mutation
-     *            object.
-     * @return An ArrayList<Mutation> with mutations that had a frequency that
-     *         is low enough.
-     * @throws SQLException
-     *             In case SQL goes wrong
-     */
-    public static ArrayList<Mutation> filterOnFrequency(
-            final HashMap<Integer, Mutation> hm)
-                    throws SQLException {
-        ArrayList<Mutation> output = new ArrayList<Mutation>();
-        //SPLIT THE LIST INTO LISTS WITH A, T, C OR G
-        ArrayList<Mutation> mutationListPartA =
-                new ArrayList<Mutation>();
-        ArrayList<Mutation> mutationListPartT =
-                new ArrayList<Mutation>();
-        ArrayList<Mutation> mutationListPartC =
-                new ArrayList<Mutation>();
-        ArrayList<Mutation> mutationListPartG =
-                new ArrayList<Mutation>();
-
-        for (Entry<Integer, Mutation> m : hm.entrySet()) {
-            switch (m.getValue().child().charAt(1)) {
-                case 'A':   mutationListPartA
-                .add(m.getValue());
-                            break;
-                case 'T':   mutationListPartT
-                .add(m.getValue());
-                            break;
-                case 'C':   mutationListPartC
-                .add(m.getValue());
-                            break;
-                case 'G':   mutationListPartG
-                .add(m.getValue());
-                            break;
-                default : break;
-            }
-        }
-        int counter = 0;
-        int counter2 = 0;
-        int addCounter = 0;
-        final int split = 10000;
-        char[] allele = {'A', 'T', 'C', 'G'};
-        ArrayList<ArrayList<Mutation>> list =
-                new ArrayList<ArrayList<Mutation>>();
-        list.add(mutationListPartA);
-        list.add(mutationListPartT);
-        list.add(mutationListPartC);
-        list.add(mutationListPartG);
-
-        for (ArrayList<Mutation> ml : list) {
-            counter = 0;
-            String q = "SELECT DISTINCT snp_id, allele, chr_cnt, "
-                    + "freq FROM snpallelefreq join allele "
-                    + "ON "
-                    + "snpallelefreq.allele_id = "
-                    + "allele.allele_id "
-                    + "WHERE snp_id IN (";
-            for (Mutation m : ml) {
-                String[] idAsString = m.getID().split(";");
-                int id = Integer.parseInt(idAsString[0]
-                        .substring(2));
-                q += id + ",";
-                if (++counter % split == 0 || counter
-                        == ml.size() - 1) {
-                    q = q.substring(0, q.length() - 1);
-                    q += ") AND allele = '"
-                            + allele[counter2]
-                            + "' AND freq < 0.005 "
-                            + "AND freq > 0;";
-                    ResultSet rs = Database.select(
-                            "snp", q);
-                    q = "SELECT DISTINCT snp_id, allele, "
-                            + "chr_cnt, freq FROM "
-                            + "snpallelefreq "
-                            + "join allele "
-                            + "ON snpallelefreq."
-                            + "allele_id "
-                            + "= allele.allele_id "
-                            + "WHERE "
-                            + "snp_id IN (";
-                    while (rs.next()) {
-                        addCounter++;
-                        ArrayList<String> geneList =
-                        		QueryProcessor.findGenesAssociatedWithSNP(Integer
-                                .parseInt(
-                                rs.getString(
-                                "snp_id")));
-                        if (!geneList.isEmpty()) {
-                            output.add(hm.get(Integer
-                                    .parseInt(
-                                    rs.getString(
-                                    "snp_id"))));                           
-                        }
-                    }
-                }
-            }
-        }
-
-        Logger.info("Added " + addCounter
-                + " recessive homozygous mutations.");
-        return output;
-    }
-
 
     /**
      * Gets the annotation of a protein.

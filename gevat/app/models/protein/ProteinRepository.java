@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import models.mutation.Mutation;
-import models.patient.Patient;
 
 /**
  * Interface for protein.
@@ -24,11 +23,11 @@ public interface ProteinRepository {
 
 	/**
 	 * 
-	 * @param p The patient
+	 * @param patientId The ID of the patient
 	 * @param m The mutation
 	 * @return A list of related mutations
 	 * @throws SQLException SQL Exception
 	 */
-	ArrayList<Mutation> getRelatedMutations(Patient p, Mutation m)
+	ArrayList<Mutation> getRelatedMutations(int patientId, Mutation m)
 			throws SQLException;
 }

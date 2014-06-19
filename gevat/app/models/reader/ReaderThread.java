@@ -79,9 +79,9 @@ public class ReaderThread implements Runnable {
                     + ","
                     + m.getPositionGRCH37()
                     + ","
-                    + qp.executeScoreQuery(m)
+                    + m.getScore()
                     + ","
-                    + QueryProcessor.getFrequency(m)
+                    + QueryProcessor.getFrequency(m.getID(), m.getAlleles().get(0).getBaseString())
                     + ");";
             System.out.println(query);
             Database.insert("data", query);
