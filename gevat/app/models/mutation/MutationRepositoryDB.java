@@ -12,6 +12,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
+import models.database.MutationQueries;
+import models.database.QueryProcessing;
 import models.database.QueryProcessor;
 
 import org.broadinstitute.variant.variantcontext.Allele;
@@ -27,19 +29,15 @@ public class MutationRepositoryDB implements MutationRepository {
 
     private static PreparedStatement getAll;
     private static PreparedStatement get;
-    private static QueryProcessor qp;
+
+    private static MutationQueries mq;
     private static PreparedStatement getPosition;
 
     /**
      * Constructor.
      */
     public MutationRepositoryDB() {
-        qp = new QueryProcessor();
-        try {
-            prepareQueries("data");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        mq = new MutationQueries();
     }
 
     /**
@@ -55,8 +53,7 @@ public class MutationRepositoryDB implements MutationRepository {
      */
     @Override
     public final List<Mutation> getMutations(final int pId) throws SQLException {
-        getAll.setInt(1, pId);
-        ResultSet rs = getAll.executeQuery();
+        ResultSet rs = mq.getMutations(pId);
         List<Mutation> mutations = new ArrayList<Mutation>();
 
         while (rs.next()) {
@@ -98,9 +95,7 @@ public class MutationRepositoryDB implements MutationRepository {
     @Override
     public final List<Mutation> getMutations(final int pId, final String cId)
             throws SQLException {
-        get.setInt(1, pId);
-        get.setString(2, cId);
-        ResultSet rs = get.executeQuery();
+        ResultSet rs = mq.getMutations(pId, cId);
         List<Mutation> mutations = new ArrayList<Mutation>();
 
         while (rs.next()) {
@@ -137,7 +132,7 @@ public class MutationRepositoryDB implements MutationRepository {
      */
     @Override
     public final float getScore(final Mutation m) throws SQLException {
-        ResultSet rs = qp.executeScoreQuery(m.getChr(), m.getPositionGRCH37());
+        ResultSet rs = mq.executeScoreQuery(m.getChr(), m.getPositionGRCH37());
 
         // If the mutation is the same value as the reference, return 0
         while (rs.next()) {
@@ -167,11 +162,10 @@ public class MutationRepositoryDB implements MutationRepository {
     @Override
     public HashMap<String, ArrayList<Integer>> getPositions(Mutation m,
             int amount) throws SQLException {
-        HashMap<String, ArrayList<Integer>> map = new HashMap<String, ArrayList<Integer>>();
-        getPosition.setString(1, m.getChromosome());
-        getPosition.setInt(2, m.getPositionGRCH37());
-        getPosition.setInt(3, amount);
-        ResultSet rs = getPosition.executeQuery();
+        ResultSet rs = mq.getPositions(m.getChromosome(),
+                m.getPositionGRCH37(), amount);
+        HashMap<String, ArrayList<Integer>> map = new HashMap<String, 
+                ArrayList<Integer>>();
         while (rs.next()) {
             ArrayList<Integer> list = new ArrayList<Integer>();
             list.add(rs.getInt("startpoint"));
