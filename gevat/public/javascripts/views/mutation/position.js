@@ -30,7 +30,9 @@ var svgContainer = d3.select("div.position")
 	.attr("height", SVGheight + 100);
 
 // draw the line for the mutation
-svgContainer.append("line")
+var g = svgContainer.append("g");
+
+g.append("line")
 	.attr("x1", marker)
 	.attr("y1", 50)
 	.attr("x2", marker)
@@ -43,14 +45,21 @@ svgContainer.append("line")
 		+ startPoint
 		+ "<br>Sort: "
 		+ mutationType
-	);
+	)
 
-// append a label to the mutation
-svgContainer.append("svg:text") 
+g.append("svg:text") 
 	.attr("x", marker) 
 	.attr("y", 45) 
-	.attr("original-title", "mutation")
 	.text(id);
+
+$('svg g').tipsy({
+	gravity: 'w',
+	html: true,
+	fallback: "testing"
+});
+
+// append a label to the mutation
+//svgContainer.
 
 // add nearby mutations
 for(i in nearbyData) {
@@ -107,20 +116,8 @@ for(i in positionsData) {
 	right += "%";
 	middle += "%";
 
-	// add the line per gene
-	svgContainer.append("line")
-		.attr("x1", left)
-		.attr("y1", height)
-		.attr("x2", right)
-		.attr("y2", height)
-		.attr("stroke", "black")
-		.attr("stroke-width", 5)
-		.attr("id", "gene");
-
-	// append a text label per gene
-	svgContainer.append("svg:text")
-		.attr("x", middle)
-		.attr("y", height - 5)
+	// add container for gene line and text
+	var geneContainer = svgContainer.append("g")
 		.attr("original-title",
 			positionsData[i].name 
 			+ "<br>Start: "
@@ -130,14 +127,31 @@ for(i in positionsData) {
 			+ "<br>Annotation: "
 			+ positionsData[i].annotation
 			+ "<br>Disease: "
-			+ positionsData[i].disease)
+			+ positionsData[i].disease);
+
+	// add the line per gene
+	geneContainer.append("line")
+		.attr("x1", left)
+		.attr("y1", height)
+		.attr("x2", right)
+		.attr("y2", height)
+		.attr("stroke", "black")
+		.attr("stroke-width", 5)
+		.attr("id", "gene");
+
+	// append a text label per gene
+	geneContainer.append("svg:text")
+		.attr("x", middle)
+		.attr("y", height - 5)
 		.text(positionsData[i].name);
 
 	// append a hoverbox with basic info
-	$('svg text').tipsy({
-		gravity: 'nw',
+	$('svg g').tipsy({
+		gravity: 's',
 		html: true,
-		fallback: "gene"
+		fallback: "No information found about this gene!",
+		delayOut: 250,
+		fade: true
 	});
 }
 

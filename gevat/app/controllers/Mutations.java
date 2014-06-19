@@ -313,7 +313,6 @@ public class Mutations extends Controller {
 			ArrayList<String> diseases = GeneDiseaseLinkReader
 					.findGeneDiseaseAssociation(name);
 			String disease = diseases.toString().substring(1, diseases.toString().length() - 1);
-			System.out.println(disease);
 			
 			JSONObject positionJSON = new JSONObject();
 			positionJSON.put("name", name);
