@@ -110,6 +110,14 @@ for(i in nearbyData) {
 	});
 }
 
+// format tooltip for genes
+function formatString(gene) {
+	var res = gene.name + "<br>Start: " + gene.start + "<br>End: " + gene.end;
+	if(gene.annotation.length != 0) res += "<br>Annotation: " + gene.annotation;
+	if(gene.disease.length != 0) res += "<br>Disease: " + gene.disease;
+	return res;
+}
+
 // add a line per gene
 var height = 75;
 for(i in positionsData) {
@@ -120,10 +128,7 @@ for(i in positionsData) {
 	var left = (positionsData[i].start - low)/(high - low)*100*0.9+5;
 	var right = (positionsData[i].end - low)/(high - low)*100*0.9+5;
 	var middle = (left + right)/2;	
-	console.log(left + " " + right);
-	console.log(right-left);
 	right = right - left;
-	console.log(right);
 
 	// make the visualisation larger for very small genes
 	if(right < 0.2) right += 0.1;
@@ -132,20 +137,10 @@ for(i in positionsData) {
 	left += "%";
 	right += "%";
 	middle += "%";
-	
 
 	// add container for gene line and text
 	var geneContainer = svgContainer.append("g")
-		.attr("original-title",
-			positionsData[i].name 
-			+ "<br>Start: "
-			+ positionsData[i].start
-			+ "<br>End: "
-			+ positionsData[i].end
-			+ "<br>Annotation: "
-			+ positionsData[i].annotation
-			+ "<br>Disease: "
-			+ positionsData[i].disease);
+		.attr("original-title", formatString(positionsData[i]));
 
 	// add the line per gene
 	geneContainer.append("rect")

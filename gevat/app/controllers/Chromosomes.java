@@ -31,6 +31,8 @@ public class Chromosomes extends Controller {
 	private static MutationRepositoryDB mutationRepository = new MutationRepositoryDB();
 	private static MutationService mutationService = new MutationService(
 			mutationRepository);
+	
+	private static final int round = 1000;
 
 	/**
 	 * Display all the mutations in a certain chromosome of a patient.
@@ -54,7 +56,8 @@ public class Chromosomes extends Controller {
 				chromosomeId);
 		HashMap<Mutation, Double> map = new HashMap<Mutation, Double>();
 		for (Mutation m : mutations) {
-			map.put(m, (double) mutationService.getScore(m));
+			map.put(m, (double) Math.round(((double) mutationService
+					.getScore(m)) * round) / round);
 		}
 
 		models.chromosome.Chromosome c = new models.chromosome.Chromosome(

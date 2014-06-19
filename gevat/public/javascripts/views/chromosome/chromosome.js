@@ -9,11 +9,11 @@ var cid = $(".position").data("cid");
 var svgContainer = d3.select("div.position")
 	.append("svg")
 	.attr("width", "100%")
-	.attr("height", 200);
+	.attr("height", 150);
 
 svgContainer.append("rect")
 	.attr("x", "5%")
-	.attr("y", 150)
+	.attr("y", 100)
 	.attr("rx", 10)
 	.attr("ry", 10)
 	.attr("width", "90%")
@@ -54,9 +54,9 @@ for(i in mutationData) {
 			+ mutationData[i].mid)
 		.append("line")
 		.attr("x1", line)
-		.attr("y1", 150)
+		.attr("y1", 100)
 		.attr("x2", line)
-		.attr("y2", 175)
+		.attr("y2", 125)
 		.attr("stroke", "red")
 		.attr("stroke-width", 2);
 
@@ -69,3 +69,9 @@ for(i in mutationData) {
 		fade: true
 	});
 }
+
+// Start the table sorter
+    $(".table-mutations").tablesorter({
+        // Automatically sort on the phred quality score
+        sortList:  [[1,0]]
+    });
