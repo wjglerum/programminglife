@@ -26,13 +26,15 @@ public class MutationTest {
 	private Mutation m;
 	private Mutation m2;
     private Mutation m3;
+    private Mutation m4;
 	private static int id = 1;
 	private static String mutationType = "SNP";
 	private static String rsID = "rsID";
 	private static String chromosome = "1";
 	private static char[] alleles1 = { 'A', 'T', 'T', 'T', 'T', 'T' };
     private static char[] alleles2 = { 'T', 'A', 'T', 'T', 'T', 'T' };
-    private static char[] alleles3 = { 'A', 'T', 'A', 'T', 'T', 'T' };
+    private static char[] alleles3 = { 'A', 'T', 'A', 'T', 'A', 'T' };
+    private static char[] alleles4 = { 'A', 'A', 'A', 'T', 'T', 'T' };
 	private static Collection<Allele> alleleCollection =
 	        Mutation.toAlleleCollection(new String(alleles1));
 	private static GenotypesContext genotypesContext =
@@ -56,6 +58,8 @@ public class MutationTest {
 		m2 = new Mutation(id, mutationType, rsID, chromosome, alleles2,
 				startPoint, endPoint, position, cadd, frequency);
         m3 = new Mutation(id, mutationType, rsID, chromosome, alleles3,
+                startPoint, endPoint, position, cadd, frequency);
+        m4 = new Mutation(id, mutationType, rsID, chromosome, alleles4,
                 startPoint, endPoint, position, cadd, frequency);
 	}
 
@@ -86,6 +90,7 @@ public class MutationTest {
 		assertEquals(m.getUniqueBase(), "A");
 		assertEquals(m2.getUniqueBase(), "A");
         assertEquals(m3.getUniqueBase(), "");
+        assertEquals(m4.getUniqueBase(), "A");
 	}
 
 	@Test

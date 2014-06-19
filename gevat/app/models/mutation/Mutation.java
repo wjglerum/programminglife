@@ -253,7 +253,6 @@ public class Mutation extends VariantContext {
 	 * @return Unique base of the child that the parents don't have
 	 */
 	public final String getUniqueBase() {
-		String output = "";
 		final int posA = 1;
 		final int posB = 4;
 		// Get all the individual base pairs
@@ -263,14 +262,29 @@ public class Mutation extends VariantContext {
 		char f2 = father().charAt(posB);
 		char m1 = mother().charAt(posA);
 		char m2 = mother().charAt(posB);
+		if ((p1 == f1 || p1 == f2)) {
+		    if (p2 == m1 || p2 == m2) {
+		        return "";              
+		    }
+		}
+		else if ((p2 == f1 || p2 == f2)) {
+		    if (p1 == m1 || p1 == m2) {
+		        return "";
+		    }
+		    else if (p1 == p2){
+		        return "" + p1;
+		    }
+		    return "" + p1;
+		}
+		return "" + p2;
 		// Check if the mutation is in the first, or the second basepair
-		if (p1 != f1 && p1 != f2 && p1 != m1 && p1 != m2) {
-			output = "" + p1;
-		}
-		if (p2 != f1 && p2 != f2 && p2 != m1 && p2 != m2) {
-			output = "" + p2;
-		}
-		return output;
+		//if (p1 != f1 && p1 != f2 && p1 != m1 && p1 != m2) {
+		//	output = "" + p1;
+		//}
+		//if (p2 != f1 && p2 != f2 && p2 != m1 && p2 != m2) {
+		//	output = "" + p2;
+		//}
+		//return output;
 	}
 
 	/**
