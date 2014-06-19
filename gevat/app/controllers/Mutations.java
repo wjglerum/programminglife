@@ -24,6 +24,7 @@ import models.reader.GeneDiseaseLinkReader;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
@@ -301,7 +302,8 @@ public class Mutations extends Controller {
 	 * @return The JSON string
 	 * @throws SQLException
 	 *             SQL Exception
-	 * @throws IOException exception
+	 * @throws IOException
+	 *             exception
 	 */
 	@SuppressWarnings("unchecked")
 	public static String positionJSON(Mutation m, int amount)
@@ -314,8 +316,9 @@ public class Mutations extends Controller {
 		for (String name : map.keySet()) {
 			ArrayList<String> diseases = GeneDiseaseLinkReader
 					.findGeneDiseaseAssociation(name);
-			String disease = diseases.toString().substring(1, diseases.toString().length() - 1);
-			
+			String disease = diseases.toString().substring(1,
+					diseases.toString().length() - 1);
+
 			JSONObject positionJSON = new JSONObject();
 			positionJSON.put("name", name);
 			positionJSON.put("start", map.get(name).get(0));
@@ -356,6 +359,9 @@ public class Mutations extends Controller {
 			nearbyMutationJSON.put("mid", mutation.getId());
 			nearbyMutationJSON.put("pid", pid);
 			nearbyMutationsJSON.add(nearbyMutationJSON);
+		}
+		if (!list.isEmpty()) {
+			Logger.info(m.getRsID());
 		}
 		return nearbyMutationsJSON.toString();
 	}
