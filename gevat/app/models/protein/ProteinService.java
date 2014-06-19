@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import models.mutation.Mutation;
-import models.patient.Patient;
 
 /**
  * Service for protein.
@@ -35,13 +34,13 @@ public class ProteinService {
 	}
 
 	/**
-	 * @param p The patient
+	 * @param patientId The ID of the patient
 	 * @param m The mutation
 	 * @return A list of related mutations
 	 * @throws SQLException SQL Exception
 	 */
-	public ArrayList<Mutation> getRelatedMutations(Patient p, Mutation m)
+	public ArrayList<Mutation> getRelatedMutations(int patientId, Mutation m)
 			throws SQLException {
-		return proteinRepository.getRelatedMutations(p, m);
+		return proteinRepository.getRelatedMutations(patientId, m);
 	}
 }

@@ -163,7 +163,7 @@ public class Mutations extends Controller {
 		JSONArray mutationsJSON = new JSONArray();
 
 		ArrayList<Mutation> relatedMutations = proteinService
-				.getRelatedMutations(patient, mutation);
+				.getRelatedMutations(patient.getId(), mutation);
 
 		for (Mutation m : relatedMutations) {
 			JSONObject mutationJSON = createMutationJSON(patient, m);
