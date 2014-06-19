@@ -1,12 +1,14 @@
 package test.models;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import models.mutation.Mutation;
@@ -14,53 +16,82 @@ import models.mutation.MutationRepository;
 import models.mutation.MutationService;
 
 import org.broadinstitute.variant.variantcontext.Allele;
+import org.broadinstitute.variant.variantcontext.GenotypesContext;
+import org.broadinstitute.variant.variantcontext.VariantContext;
 import org.junit.Before;
 import org.junit.Test;
 
 public class MutationTest {
 
 	private Mutation m;
+	private Mutation m2;
+    private Mutation m3;
 	private static int id = 1;
 	private static String mutationType = "SNP";
 	private static String rsID = "rsID";
 	private static String chromosome = "1";
-	private static char[] alleles = { 'A', 'T', 'T', 'T', 'T', 'T' };
+	private static char[] alleles1 = { 'A', 'T', 'T', 'T', 'T', 'T' };
+    private static char[] alleles2 = { 'T', 'A', 'T', 'T', 'T', 'T' };
+    private static char[] alleles3 = { 'A', 'T', 'A', 'T', 'T', 'T' };
+	private static Collection<Allele> alleleCollection =
+	        Mutation.toAlleleCollection(new String(alleles1));
+	private static GenotypesContext genotypesContext =
+	        Mutation.toGenotypesContext(new String(alleles1));
 	private static int startPoint = 1;
 	private static int endPoint = 2;
 	private static int position = 3;
 	private static float cadd = 2;
 	private static float frequency = 0;
 
-	private final MutationRepository repositoryMock = mock(MutationRepository.class);
+	private final MutationRepository repositoryMock =
+	        mock(MutationRepository.class);
 	private final MutationService mutationService = new MutationService(
 			repositoryMock);
 
 	@Before
 	public void setUp() {
-		m = new Mutation(id, mutationType, rsID, chromosome, alleles,
+        m = new Mutation(id, mutationType , rsID, chromosome, alleleCollection,
+                startPoint, endPoint, genotypesContext,
+                position, cadd, frequency);
+		m2 = new Mutation(id, mutationType, rsID, chromosome, alleles2,
 				startPoint, endPoint, position, cadd, frequency);
+        m3 = new Mutation(id, mutationType, rsID, chromosome, alleles3,
+                startPoint, endPoint, position, cadd, frequency);
 	}
 
+    @Test
+    public void testFirstConstructor() {
+        assertEquals(m.getId(), id);
+        assertEquals(m.getMutationType(), mutationType);
+        assertEquals(m.getRsID(), rsID);
+        assertEquals(m.getChromosome(), chromosome);
+        assertEquals(m.getStartPoint(), startPoint);
+        assertEquals(m.getEndPoint(), endPoint);
+        assertEquals(m.getPositionGRCH37(), position);        
+    }
+
 	@Test
-	public void testConstructor() {
-		assertEquals(m.getId(), id);
-		assertEquals(m.getMutationType(), mutationType);
-		assertEquals(m.getRsID(), rsID);
-		assertEquals(m.getChromosome(), chromosome);
-		assertEquals(m.getStartPoint(), startPoint);
-		assertEquals(m.getEndPoint(), endPoint);
-		assertEquals(m.getPositionGRCH37(), position);
+	public void testSecondConstructor() {
+		assertEquals(m2.getId(), id);
+		assertEquals(m2.getMutationType(), mutationType);
+		assertEquals(m2.getRsID(), rsID);
+		assertEquals(m2.getChromosome(), chromosome);
+		assertEquals(m2.getStartPoint(), startPoint);
+		assertEquals(m2.getEndPoint(), endPoint);
+		assertEquals(m2.getPositionGRCH37(), position);
 	}
 
 	@Test
 	public void testGetUnigueBase() {
 		assertEquals(m.getUniqueBase(), "A");
+		assertEquals(m2.getUniqueBase(), "A");
+        assertEquals(m3.getUniqueBase(), "");
 	}
 
 	@Test
 	public void testToBaseString() {
 		List<Allele> list = new ArrayList<Allele>();
-		for (char allele : alleles) {
+		for (char allele : alleles1) {
 			list.add(Mutation.toAllele(allele + "", true));
 		}
 		assertEquals(m.toBaseString(list), "[A, T]");
@@ -152,4 +183,21 @@ public class MutationTest {
 		verify(repositoryMock).getScore(m);
 	}
 
+	@Test
+    public void testSetGetScoreMutation() {
+        assertEquals(m.getScore(), cadd, 0.0001);
+	    final float newScore = 1;
+        assertNotEquals(m.getScore(), newScore, 0.0001);
+        m.setScore(newScore);
+        assertEquals(m.getScore(), newScore, 0.0001);
+    }
+	
+	@Test
+	public void testGetSetFrequency() {
+        assertEquals(m.getFrequency(), frequency, 0.0001);
+        final float newFrequency = 1;
+        assertNotEquals(m.getFrequency(), newFrequency, 0.0001);
+        m.setFrequency(newFrequency);
+        assertEquals(m.getFrequency(), newFrequency, 0.0001);	    
+	}
 }
