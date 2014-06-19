@@ -138,8 +138,7 @@ public class PatientRepositoryDB implements PatientRepository {
         add.setString(counter++, vcfFile);
         add.setLong(counter++, vcfLength);
         add.setBoolean(counter++, female);
-        int i = add.executeUpdate();
-        System.out.println("Dit ging goed: " + i);
+        add.executeUpdate();
         // TODO get id of added patient efficiently
         List<Patient> patients = null;
         try {

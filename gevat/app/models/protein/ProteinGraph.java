@@ -1,6 +1,7 @@
 package models.protein;
 
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -317,5 +318,32 @@ public class ProteinGraph {
 	 */
 	public void putMutation(final String protein) {
 		this.getProtein(protein).setMutation(true);
+	}
+	
+	public Collection<String> getMutatedProteinsAsString() {
+		Collection<String> proteins = new ArrayList<String>();
+		for(Protein p : getProteines()) {
+			if(p.hasMutation())
+				proteins.add(p.getName());
+		}
+		return proteins;
+	}
+	
+	public void getOtherConnectedMutatedProteins(int patientId)
+	{
+		ResultSet rs;
+		try {
+			rs = QueryProcessor.getOtherConnectedMutatedProteins(patientId, getMutatedProteinsAsString(), getProteinesAsString());
+			while(rs.next()) {
+				String p1 = rs.getString("protein_a_id");
+				String p2 = rs.getString("protein_b_id");
+				int combinedScore = rs.getInt("combined_score");
+				add(p1, p2, combinedScore);
+				this.putMutation(p1);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
