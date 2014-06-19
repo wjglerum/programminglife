@@ -11,7 +11,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
+import com.fasterxml.jackson.annotation.ObjectIdGenerators.IntSequenceGenerator;
+
 import models.mutation.Mutation;
+import models.mutation.MutationService;
 import play.Logger;
 import play.db.DB;
 
@@ -31,6 +34,7 @@ public class QueryProcessor {
     private static PreparedStatement executeScoreQuery;
     private static PreparedStatement getSNPFunction;
     private static PreparedStatement listMutatedProteins;
+    private static PreparedStatement insertMutation;
 
     /**
      * Done because it is a utility-class.
@@ -56,7 +60,6 @@ public class QueryProcessor {
                     connection);
             getConnectedProteinScore = prepareQuery("getConnectedProteinScore",
                     connection);
-            
             getAnnotationsOfProtein = prepareQuery("getAnnotationsOfProtein",
                     connection);
         } catch (SQLException e) {
@@ -76,7 +79,9 @@ public class QueryProcessor {
             Logger.error((e.toString()));
         }
         try (Connection connection4 = DB.getConnection("data");) {
-        	listMutatedProteins = prepareQuery("listMutatedProteins", connection4);
+        	listMutatedProteins = prepareQuery("listMutatedProteins",
+        			connection4);
+        	insertMutation = prepareQuery("insertMutation", connection4);
         } catch (SQLException e) {
             Logger.error((e.toString()));
         }
@@ -279,8 +284,8 @@ public class QueryProcessor {
      * @throws SQLException
      *             In case SQL goes wrong
      */
-    public ResultSet executeScoreQuery(final String chr, final int positionGRCH37)
-            throws SQLException {
+    public ResultSet executeScoreQuery(final String chr,
+    		final int positionGRCH37) throws SQLException {
         executeScoreQuery.setString(1, chr);
         executeScoreQuery.setInt(2, positionGRCH37);
         // Get all the records from database score that have mutations
@@ -289,7 +294,25 @@ public class QueryProcessor {
         return executeScoreQuery.executeQuery();
     }
 
-    /**
+    public static void insertMutation(int patientId, String mutationType,
+    		String rsId, String chromosome, String alleles, int start,
+    		int end, int position, float score, float frequency)
+			throws SQLException {
+    			int i = 1;
+		        insertMutation.setInt(i++, patientId);
+		        insertMutation.setString(i++, mutationType);
+		        insertMutation.setString(i++, rsId);
+		        insertMutation.setString(i++, chromosome);
+		        insertMutation.setString(i++, alleles);
+		        insertMutation.setInt(i++, start);
+		        insertMutation.setInt(i++, end);
+		        insertMutation.setInt(i++, position);
+		        insertMutation.setFloat(i++, score);
+		        insertMutation.setFloat(i++, frequency);
+		        insertMutation.executeQuery();
+	}
+
+	/**
      * Gets the snp allele frequency of a mutation.
      * 
      * @param idString The id of the mutation
@@ -448,7 +471,8 @@ public class QueryProcessor {
      * @throws SQLException In case SQL goes wrong
      * @throws IOException In case the .sql cannot be found
      */
-    public static ArrayList<String> getSNPFunction(final int id) throws SQLException, IOException {
+    public static ArrayList<String> getSNPFunction(final int id)
+    		throws SQLException, IOException {
         ArrayList<String> list = new ArrayList<String>();
         getSNPFunction.setInt(1, id);
         ResultSet rs = findGenesAssociatedWithSNP.executeQuery();
@@ -497,12 +521,11 @@ public class QueryProcessor {
 				+ "FROM protein_connections "
 				+ "WHERE p_id = "
 				+ patientId
-				+ "AND protein_a_id NOT IN ( "
+				+ " AND protein_a_id NOT IN ( "
 				+ formatForIN(currMutation)
 				+ " ) AND protein_b_id IN ( "
 				+ formatForIN(proteins)
 				+ " );";
-			Logger.info(query);
 			return Database.select("data", query);
 	}
 }
