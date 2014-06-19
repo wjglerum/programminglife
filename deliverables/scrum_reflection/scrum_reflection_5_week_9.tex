@@ -1,0 +1,58 @@
+\documentclass[a4paper]{report}
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage{natbib}
+\usepackage{hyperref}
+\usepackage[english]{babel}
+\usepackage{lscape}
+\usepackage{longtable}
+
+\begin{document}
+\input{title.tex}
+
+\begin{landscape}
+\setlength\extrarowheight{5pt}
+\begin{longtable}{p{3cm}|p{5cm}|l|l|l|l|p{7cm}}
+
+\textbf{Story} & \textbf{Task} & \textbf{Effort} & \textbf{Assignment} & \textbf{Actual effort} & \textbf{Done} & \textbf{Notes}\\
+\hline \hline
+
+A user wants to have an overview of mutations per patient 
+& Look for homozygoot mutations & 4 & Mathijs & 10 hours & No & Almost done, had some help from Ruben, was hard to optimize queries to make the processing quick enough.\\
+& Look up the exact definition of CADD score and look if the score of 0 can be avoided & 4 & Ruben & 2 hours & Yes & After some help of TA's, it all became clear.\\
+& Implement the XY/XX chromosome & 10 & - & - & No & Haven't started yet.\\
+\hline
+
+A user wants to view links between genes and proteins related to a mutation 
+& Protein visualization per node in the mutation view & 4 & Jasper & 2 & Yes & It was a challenge to design the queries that gave the proper data.\\
+& Link diseases to genes & 4 & Ruben & 3 hours & Yes & Had to make a few getters and setters and perform shotgun surgery\\
+& Show multiple mutations per graph & 6 & Jasper \& Robbert & 3 hours & No & Haven't had enough time to finish it.\\
+& Extend the proteine graph (Make them clickable) & 3 & Robbert \& Jasper & 4 hours & Yes & Wasn't too difficult.\\
+& And make them click-able & 1 & Jasper & 1 hour & Yes & After Robbert finished the extending, making them click-able was quite simple.\\
+\hline
+
+A user looks at an overview of the location of a mutation & Link Ensemble ID to String database & 4 & Willem Jan & 4 hours & Yes. & Was not very hard once I found out how they had to be linked.\\
+& Store GTF information in database & 4 & Willem Jan & 6 hours & Yes & Was hard to store the GTF information in the database, figured it out after some trial and error.\\
+& Look if other genes are near the starting point of a mutation & 6 & Willem Jan & 3 hours & No & Have found 1, but want to have more.\\
+& Show neighbouring mutations & 6 & - & - & No & Haven't started yet.\\
+\hline
+
+Database testing 
+& Test database, mocking doesn't work, use a test database & 8 & Willem Jan & 6 hours & Yes & Had to implement the service-interface pattern.\\
+& Give proper errors when database fails & 4 & - & - & No & Haven't started yet.\\
+\hline
+
+A user logs in and views basic information 
+& Optimize dashboard information & 2 & - & - & No & Haven't started yet.\\
+& Make breadcrumbs on each page & 2 & Jasper & 2 hours & Yes & Wasn't that hard to implement.\\
+\hline
+
+Deliverables \\
+& Scrum reflection 5 week 9 & 2 & Jasper & 1 hour & Yes & None.\\
+\hline
+\end{longtable}
+\end{landscape}
+
+\section*{General Reflection}
+When we look at our scrum reflection, the first thing that we see is that there were quite a couple of tasks that we weren't able to start with. This was mainly because most tasks took more time then we expected, we lost (or invested?) a lot of time in making proper queries and looking through database schemas. We would also like to point out that we have not thought clearly about the second day of 'Pinksteren'.\\
+\end{document}
