@@ -18,6 +18,10 @@ import org.broadinstitute.variant.variantcontext.VariantContext;
  */
 public class Mutation extends VariantContext {
 
+    private static MutationRepositoryDB mutationRepository = new MutationRepositoryDB();
+    private static MutationService mutationService = new MutationService(
+            mutationRepository);
+    
 	private String mutationType;
 	private int id;
 	private int positionGRCH37;
@@ -168,7 +172,7 @@ public class Mutation extends VariantContext {
 	 * @return mutation score
 	 */
 	public final float getScore() {
-		return this.cadd;
+	    return this.cadd;
 	}
 
 	/**

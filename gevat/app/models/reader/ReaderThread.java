@@ -6,6 +6,9 @@ import java.util.List;
 import models.database.Database;
 import models.database.QueryProcessor;
 import models.mutation.Mutation;
+import models.mutation.MutationRepository;
+import models.mutation.MutationRepositoryDB;
+import models.mutation.MutationService;
 import models.patient.Patient;
 
 /**
@@ -61,6 +64,9 @@ public class ReaderThread implements Runnable {
 
     private void addMutationsToDatabase(List<Mutation> mutations) throws SQLException {
         // Add each mutation to the database
+        MutationRepositoryDB mutationRepository = new MutationRepositoryDB();
+        MutationService mutationService = new MutationService(
+                mutationRepository);
         for (Mutation m : mutations) {
             String query = "INSERT INTO mutations VALUES (nextval('m_id_seq'::regclass),"
                     + patient.getId()
@@ -79,7 +85,7 @@ public class ReaderThread implements Runnable {
                     + ","
                     + m.getPositionGRCH37()
                     + ","
-                    + m.getScore()
+                    + mutationService.getScore(m)
                     + ","
                     + QueryProcessor.getFrequency(m.getID(), m.getAlleles().get(0).getBaseString())
                     + ");";
