@@ -48,6 +48,10 @@
 					\caption{Programming Life database design}
 				\end{figure}
 		\end{itemize}
+		
+		To be able to test our application neatly we use a Repository and Service design pattern. This isolates the methods that require database access to a different class. The repository interface defines the methods and next we can implement this repository. And because of the interface we can have multiple kind of databases to store information, for example MySQL, PostgreSQL or an In-Memory database. 
+		
+		Next we build a service around this, so other classes can reach these methods through a service. Because of this setup we can easily mock the methods that require database access, instead of mocking an entire database connection, which is not possible because of its static behavior.
 	\subsection{Concurrency }
 		At the moment we have no indication how computationally intense our calculations are, thus we cannot say for sure whether or not we will use multiple threads. Until we know more, our program will run on a single thread.
 		
