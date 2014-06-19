@@ -16,3 +16,8 @@ log/
 target/
 .target/
 gevat/.cache
+
+# LaTeX
+.pdf
+
+.gtf

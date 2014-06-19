@@ -9,7 +9,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 
+import models.mutation.Mutation;
 import play.Logger;
 import play.db.DB;
 
@@ -99,6 +101,77 @@ public class QueryProcessor {
         String path = "private/sql/queryprocessor/" + queryName + ".sql";
         return connection.prepareStatement(new String(Files.readAllBytes(Paths
                 .get(path))));
+    }
+
+    /**
+     * Filters a hashmap with mutations based on their snp allele frequency.
+     * 
+     * @param hm
+     *            HashMap that has uses a mutation ID as key for a mutation
+     *            object.
+     * @param list The splitted list
+     *
+     * @return An ArrayList<Mutation> with mutations that had a frequency that
+     *         is low enough.
+     *
+     * @throws SQLException
+     *             In case SQL goes wrong
+     */
+    public static ArrayList<Mutation> filterOnFrequency(
+            final HashMap<Integer, Mutation> hm, final ArrayList<ArrayList<Mutation>> list)
+                    throws SQLException {
+        ArrayList<Mutation> output = new ArrayList<Mutation>();
+        int counter = 0, counter2 = 0;
+        final int split = 10000;
+        char[] allele = {'A', 'T', 'C', 'G'};
+        for (ArrayList<Mutation> ml : list) {
+            counter = 0;
+            String q = "SELECT DISTINCT snp_id, allele, chr_cnt, "
+                    + "freq FROM snpallelefreq join allele "
+                    + "ON "
+                    + "snpallelefreq.allele_id = "
+                    + "allele.allele_id "
+                    + "WHERE snp_id IN (";
+            for (Mutation m : ml) {
+                String[] idAsString = m.getID().split(";");
+                int id = Integer.parseInt(idAsString[0]
+                        .substring(2));
+                q += id + ",";
+                if (++counter % split == 0 || counter
+                        == ml.size() - 1) {
+                    q = q.substring(0, q.length() - 1);
+                    q += ") AND allele = '"
+                            + allele[counter2]
+                            + "' AND freq < 0.005 "
+                            + "AND freq > 0;";
+                    ResultSet rs = Database.select(
+                            "snp", q);
+                    q = "SELECT DISTINCT snp_id, allele, "
+                            + "chr_cnt, freq FROM "
+                            + "snpallelefreq "
+                            + "join allele "
+                            + "ON snpallelefreq."
+                            + "allele_id "
+                            + "= allele.allele_id "
+                            + "WHERE "
+                            + "snp_id IN (";
+                    while (rs.next()) {
+                        ArrayList<String> geneList =
+                                QueryProcessor.findGenesAssociatedWithSNP(Integer
+                                .parseInt(
+                                rs.getString(
+                                "snp_id")));
+                        if (!geneList.isEmpty()) {
+                            output.add(hm.get(Integer
+                                    .parseInt(
+                                    rs.getString(
+                                    "snp_id"))));                           
+                        }
+                    }
+                }
+            }
+        }
+        return output;
     }
 
     /**
@@ -200,15 +273,16 @@ public class QueryProcessor {
     /**
      * Finds the score.
      * 
-     * @param mutation
-     *            The mutation for which to find the score
+     * @param chr The chromome the mutation is on
+     * @param positionGRCH37 The position according to GRCH37
      * 
      * @return Returns a ResultSet containing the score
      * 
      * @throws SQLException
      *             In case SQL goes wrong
      */
-    public ResultSet executeScoreQuery(final String chr, final int positionGRCH37) throws SQLException {
+    public ResultSet executeScoreQuery(final String chr, final int positionGRCH37)
+            throws SQLException {
         executeScoreQuery.setString(1, chr);
         executeScoreQuery.setInt(2, positionGRCH37);
         // Get all the records from database score that have mutations
@@ -220,9 +294,8 @@ public class QueryProcessor {
     /**
      * Gets the snp allele frequency of a mutation.
      * 
-     * @param mutation
-     *            The mutation for which to find the frequency
-     * 
+     * @param idString The id of the mutation
+     * @param base The base
      * @return float Returns the frequency
      * 
      * @throws SQLException

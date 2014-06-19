@@ -1,1 +1,12 @@
-Blaat
+This section describes the evaluation of the functional modules and how they are tested to guarantee that each module performs as required.
+Furthermore the failure analysis is discussed to show where the product does not perform as needed.
+
+\subsection{Evaluation of functional models}
+asdf.
+
+\subsection{Failure analysis}
+We rely a lot on data coming from other systems. First of all we have to read VCF-files to load the data of a patient. This is done by a doctor which could load a corrupted file to our server. This causes the system to stop processing the current file and the error will be written to the log. At the moment there is no notification to warn the user of this error, however this could be simply added in a future release.
+
+Second we need access to external databases to retrieve relevant data. As these databases are too large to host them on the same webserver as the application, we cannot expect to always have a connection to the remote server. However we also store basic information in a small database on the webserver which stores the basic information such as authentication, user data and patient data. This helps us to always have a basic running system. If for some reason the connection to the database is dropped the application will continue to function, but now information is loaded. In the future we could added useful notifications to the user about database problems.
+
+Thirdly a user could direct his webbrowser to an invalid URL, in this case a "Not found" page will show, to prevent retrieving private information from the webapplication. Also when something goes wrong in the application the user will be sent to an "Error" page, which will only show a basic error and not the full error trace, which could expose our application logic.
