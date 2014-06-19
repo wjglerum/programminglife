@@ -31,7 +31,6 @@ public class QueryProcessor {
     private static PreparedStatement executeScoreQuery;
     private static PreparedStatement getSNPFunction;
     private static PreparedStatement listMutatedProteins;
-    private static PreparedStatement getOtherConnectedMutatedProteins;
 
     /**
      * Done because it is a utility-class.
@@ -78,7 +77,6 @@ public class QueryProcessor {
         }
         try (Connection connection4 = DB.getConnection("data");) {
         	listMutatedProteins = prepareQuery("listMutatedProteins", connection4);
-        	getOtherConnectedMutatedProteins = prepareQuery("getOtherConnectedMutatedProteins", connection4);
         } catch (SQLException e) {
             Logger.error((e.toString()));
         }
