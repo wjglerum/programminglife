@@ -17,10 +17,6 @@ import org.broadinstitute.variant.variantcontext.VariantContext;
  *
  */
 public class Mutation extends VariantContext {
-
-    private static MutationRepositoryDB mutationRepository = new MutationRepositoryDB();
-    private static MutationService mutationService = new MutationService(
-            mutationRepository);
     
 	private String mutationType;
 	private int id;
