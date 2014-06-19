@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import models.User;
+import models.user.User;
 
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -40,12 +40,10 @@ import controllers.Authentication;
  * 
  */
 public class AuthenticationTest {
-
-	/**
-	 * Contains data for login form.
-	 */
-	private final Map<String, String> data = new HashMap<String, String>();
-
+/**
+ * Contains data for login form.
+ */
+private final Map<String, String> data = new HashMap<String, String>();
 	/**
 	 * Save the result of the called action to authenticate.
 	 */
@@ -188,9 +186,9 @@ public class AuthenticationTest {
 	// @Test
 	public void testGetUser() throws SQLException {
 		User u = Authentication.getUser();
-		assertThat(u.id).isEqualTo(1);
-		assertThat(u.name).isEqualTo("Foo");
-		assertThat(u.surname).isEqualTo("Bar");
-		assertThat(u.username).isEqualTo("foobar");
+		assertThat(u.getId()).isEqualTo(1);
+		assertThat(u.getName()).isEqualTo("Foo");
+		assertThat(u.getSurname()).isEqualTo("Bar");
+		assertThat(u.getUsername()).isEqualTo("foobar");
 	}
 }

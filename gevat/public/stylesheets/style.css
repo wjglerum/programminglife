@@ -99,6 +99,9 @@ body {
 .main {
   padding: 20px;
 }
+.main nav.breadcrumbs {
+  margin: 0 0 1em;
+}
 .main .page-header {
   margin-top: 0;
 }
@@ -159,14 +162,34 @@ th.headerSortDown {
 .form-add-patient p {
 	margin-bottom: 15px;
 }
-.table-mutations tr.highlight {
+.table-mutations tr.highlight td {
 	background-color: #ebebeb;
+}
+
+/*
+ * Mutatation page
+ */
+.visualisation-proteins-relations p {
+	margin: 1em 0;
+}
+.visualisation-proteins-relations svg ellipse.selected {
+	fill: #9EE062;
+	stroke: #71BF42;
+}
+.table-proteins.table-hover > tbody > tr:hover > td, .table-proteins tr.highlight td {
+	background-color: #f5f5f5;
+}
+.table-proteins tr.selected td {
+	background-color: rgba(158,224,98,0.5);
+}
+.table-proteins.table-hover > tbody > tr.selected:hover > td, .table-proteins tr.selected.highlight td {
+	background-color: rgba(113,191,66,0.5);
 }
 
 /*
  * Miscellaneous
  */
-.bg-success, .bg-info, .bg-danger {
+.bg-success, .bg-info, .bg-danger, .bg-warning {
   padding: 1em;
 }
 .clickable-rows tbody tr:hover {

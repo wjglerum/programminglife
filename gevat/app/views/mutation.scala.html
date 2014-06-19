@@ -1,14 +1,14 @@
-@(patient: Patient, mutation: Mutation, user: User, proteinsData: String)
+@(patient: models.patient.Patient, mutation: models.mutation.Mutation, user: models.user.User, proteinsData: String, positionsData: String, nearbyData: String)
+
+@import scala.collection.immutable.Map
+
 @scripts = {
-<script src="@routes.Assets.at("javascripts/proteins.js")" type="text/javascript"></script>
-<script src="@routes.Assets.at("javascripts/position.js")" type="text/javascript"></script>
+<script src="@routes.Assets.at("javascripts/views/mutation/proteins.js")" type="text/javascript"></script>
+<script src="@routes.Assets.at("javascripts/views/mutation/position.js")" type="text/javascript"></script>
 }
 
-@template_app("Mutation " + mutation.getRsID + " of patient " + patient.getName + " " + patient.getSurname, user, "patients", scripts) {
-	
-	<h2>Position</h2>
-	<div class="position" data-left="@mutation.getPositions().get(0)" data-right="@mutation.getPositions().get(1)" data-marker="@mutation.getStartPoint()"></div>
-	
+@template_app("Mutation " + mutation.getRsID + " of patient " + patient.getName + " " + patient.getSurname, user, "patients", Map("/patients" -> "Patients", ("/patients/" + patient.getId) -> (patient.getName + " " + patient.getSurname), ("/patients/" + patient.getId + "/mutation/" + mutation.getId) -> ("Mutation " + mutation.getRsID)), scripts) {
+        
 	<table class="table-mutation table">
 		<thead>
 			<tr>
@@ -68,8 +68,9 @@
 			</div>
 		</form>
 		
-		
 		<div id="canvas"></div>
+		
+		<p class="bg-warning no-proteins" style="display:none">No related proteins found...</p>
 	</div>
 	
 	<h3>Proteins overview</h3>
@@ -79,6 +80,8 @@
 			<tr>
 				<th>Name</th>
 				<th>Annotations</th>
+				<th>Disease</th>
+				<th>Related mutations</th>
 			</tr>
 		</thead>
 		<tbody>
