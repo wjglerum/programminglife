@@ -360,9 +360,6 @@ public class Mutations extends Controller {
 			nearbyMutationJSON.put("pid", pid);
 			nearbyMutationsJSON.add(nearbyMutationJSON);
 		}
-		if (!list.isEmpty()) {
-			Logger.info(m.getRsID());
-		}
 		return nearbyMutationsJSON.toString();
 	}
 
