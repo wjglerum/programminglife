@@ -495,9 +495,16 @@ public class QueryProcessor {
 	
 	public static ResultSet getOtherConnectedMutatedProteins(int patientId, Collection<String> currMutation, Collection<String> proteins) throws SQLException
 	{
-		getOtherConnectedMutatedProteins.setInt(1, patientId);
-		getOtherConnectedMutatedProteins.setString(2, formatForIN(currMutation));
-		getOtherConnectedMutatedProteins.setString(3, formatForIN(proteins));
-		return getOtherConnectedMutatedProteins.executeQuery();
+		String query = "SELECT * "
+				+ "FROM protein_connections "
+				+ "WHERE p_id = "
+				+ patientId
+				+ "AND protein_a_id NOT IN ( "
+				+ formatForIN(currMutation)
+				+ " ) AND protein_b_id IN ( "
+				+ formatForIN(proteins)
+				+ " );";
+			Logger.info(query);
+			return Database.select("data", query);
 	}
 }
