@@ -4,7 +4,7 @@
 
 	<groupId>nl.tudelft.contextproject</groupId>
 	<artifactId>programminglife2</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>3.0-SNAPSHOT</version>
 	<name>GEVAT</name>
 
 	<packaging>play2</packaging>

@@ -131,7 +131,6 @@ public class Mutations extends Controller {
 			JSONObject connectionJSON = createConnectionJSON(connection);
 			connectionsJSON.add(connectionJSON);
 		}
-
 		dataJSON.put("proteins", proteinsJSON);
 		dataJSON.put("relations", connectionsJSON);
 		dataJSON.put("limit", limit);
@@ -300,7 +299,7 @@ public class Mutations extends Controller {
 	 * @return The JSON string
 	 * @throws SQLException
 	 *             SQL Exception
-	 * @throws IOException
+	 * @throws IOException exception
 	 */
 	@SuppressWarnings("unchecked")
 	public static String positionJSON(Mutation m, int amount)
