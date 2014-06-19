@@ -19,7 +19,7 @@
     </tr>
     </thead>
     <tbody>
-		@if(mutations.length > 0){
+	@if(mutations.length > 0){
     @for(mutation <- mutations) {
         <tr href="/patients/@patient.getId/mutation/@mutation.getId()" class="table-mutation" data-chr-id="@mutation.getChromosome()" data-mutation-id="@mutation.getId()">
                     <td>@mutation.getMutationType()</td>

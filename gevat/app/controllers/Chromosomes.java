@@ -40,4 +40,11 @@ public class Chromosomes extends Controller {
 	  // Render the chromosome view if there are mutations in the view
 	  return ok(chromosome.render(p, c, mutations, Authentication.getUser()));
   }
+  
+  public String getMutationJSON(List<Mutation> mutations){
+	  
+	  
+  }
+  
+  
 }
