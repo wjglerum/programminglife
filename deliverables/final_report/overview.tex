@@ -1,23 +1,23 @@
-The developed product, a secured web application, is built on de Play Framework. It contains several parts that work together to deliver a user friendly environment for the users to explore genetic information.
+The developed product, a secured web application, is built on de Play Framework. It contains several parts that work together to deliver a user friendly environment to explore genetic information.
 
 \subsection{Authentication}
 
-Starting with the basis, it's a secured web application where a user needs to log in. After logging in some secured pages become accessible. Some other pages already are accessible before logging in, e.g. the documentation and about pages. We distinguish the following parts:
+Starting with the basis, it's a secured web application where a user needs to log in. After logging in some secured pages become accessible. Some other pages are already accessible before logging in, e.g. the 'documentation' and 'about' pages. We distinguish the following parts:
 
 \begin{itemize}
   \item A login page
-  \item Securing pages that aren't publicly accessible
-  \item Redirect if secured page is unauthenticated requested
-  \item Prevent doctors from accessing patients data of other doctors
+  \item Secure pages that aren't publicly accessible
+  \item Redirect if secured page is requested while unauthenticated
+  \item Prevent doctors from accessing data of patients of other doctors
 \end{itemize}
 
 \subsection{Context specific}
 
-The web framework and it's builtin securing module isn't developed by ourselves so we could focus on developing the context specific parts. This was mainly separable in three parts: analysing data, retrieval of relevant data of databases and visualising data.
+The web framework and it's built-in secure module isn't developed by ourselves so we could focus on developing the context specific parts. This was mainly separable in three parts: analysing data, retrieval of relevant data from databases and visualising data.
 
 \subsubsection{Data analysation}
 
-Analysing the data is done by processing the VCF file and detecting mutations. The outcomes of the processing is used in the visualisation. At both of these parts there's information used given by some databases. The information was used the get more information about mutations and find relations between several mutations. The application does the following:
+Analysing the data is done by processing the VCF file and detecting mutations. The outcome of the processing is used in the visualisation. At both of these parts there's information used given by some databases. The information is used to get more information about mutations and find relations between several mutations. The application does the following:
 
 \begin{itemize}
   \item Read the VCF file and find mutations of two types: de novo's and recessive homozygous
@@ -36,14 +36,13 @@ Information from multiple databases is used for both visualisation and finding r
 
 \subsubsection{Visualisation}
 
-The most important part of the application: visualisation. Multiple views at the same found mutations are taken to give as most insights as possible. This includes the following visualisations:
+The most important part of the application: visualisation. Multiple views of the same found mutations are made to give as much insight as possible. This includes the following visualisations:
 
 \begin{itemize}
-  \item An overview of all found mutations in a patients VCF file with a view per chromosome
-  \item Per separate mutation a distinct page with:
-  \item
+  \item An overview of all mutations in a patients VCF file with a view per chromosome
+  \item A distinct page per mutation, showing:
   \begin{itemize}
-     \item The position of the mutations relative to nearby genes
-     \item A graph with a protein related to the mutations and related proteins to that protein
+     \item The position of the mutation relative to nearby genes
+     \item A graph with a protein related to the mutation, and proteins related to that protein
   \end{itemize}
 \end{itemize}

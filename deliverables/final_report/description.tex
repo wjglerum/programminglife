@@ -1,29 +1,28 @@
-This chapter covers a detailed description of the developed functionalities in the product. The description is based  on the overview of functionalities given in the previous chapter and therefore has the same structure.
+This chapter covers a detailed description of the developed functionality in the product. This description is based  on the overview of all functionality given in the previous chapter and therefore has the same structure.
 
 \subsection{Webapplication}
 
-The application is a web application based on the Play Framework. This means the application is accessible via devices with an internet connection and a browser. The layout is optimised for devices with a screen with a minimum width of 1024 pixels. The page structure is as follows:
+The application is a web-application based on the Play Framework. This means the application is accessible via devices with an internet connection and a browser. The layout is optimised for devices with a screen with a minimum width of 1024 pixels. The page structure is as follows:
 
 \begin{itemize}
   \item A login page (see authentication below)
-  \item A dashboard page with an introduction of the application and links to the context specific parts
-  \item
+  \item A dashboard page with an introduction to the application and links to the following context specific parts:
   \begin{itemize}
-     \item The patient overview with a sortable list of all patients with some meta data. By clicking on a patient the user gets on a patient specific page
+     \item The patient overview with a sortable list of all patients with some meta data. By clicking on a patient the user goes the patient specific page
      \item On the patient page an overview of the found mutations is given. It contains a visual overview of the chromosomes and the mutations found per chromosome
-     \item Per mutation there's a separate page with visualisations and information (see visualisation below)
+     \item A separate page with visualisations and information (see visualisation below) per mutation
      \item There's a separate page for adding new patients to the database
   \end{itemize}
 \end{itemize}
 
 \subsection{Authentication}
 
-The authentication part takes care of securing the pages and data of the application from being accessible to everyone. It does the following:
+The authentication part takes care of securing the pages and data of the application to prevent it from being accessible to everyone. It does the following:
 
 \begin{itemize}
-  \item If a user isn't authenticated and tries to open a secured page, he is redirect to the login page
-  \item At the login page, a user needs to fill in his username and password to sign in. When these credentials aren't recognised, the user receives an error message
-  \item When logged in, each page contains some user specific information, like his name. Furthermore, the links to application specific pages become visible and a logout button appears
+  \item If a user isn't authenticated and tries to open a secured page, he is redirected to the login page
+  \item At the login page, a user needs to supply his username and password to sign in. When these credentials aren't recognised, the user receives an error message
+  \item When logged in, each page contains some user specific information, like his name. Furthermore, links to application specific pages become visible and a logout button appears
 \end{itemize}
 
 \subsection{Context specific}
@@ -33,9 +32,9 @@ The authentication part takes care of securing the pages and data of the applica
 The analysing of data is done after a VCF file is uploaded.
 
 \begin{itemize}
-  \item When a user has added a patient by filling the associated information and uploading a VCF file, the user gets redirect to the patient overview. In the background the file gets processed. After processing the patient overview gets automatically updated and the patient becomes available.
+  \item When a user has added a patient by filling in the associated information and uploading a VCF file, the user gets redirected to the patient overview. In the background the file gets processed, so the user can continue browsing. After processing, the patient overview gets updated automatically and the patient view becomes available.
   \item The mutations that are found are stored in a databases dedicated to the application
-  \item There's searched to relations between the found mutations and those relations are also stored in the database
+  \item The application searches for relations between the found mutations and stores them in the database
 \end{itemize}
 
 \subsubsection{Data retrieval}
@@ -43,21 +42,21 @@ The analysing of data is done after a VCF file is uploaded.
 We use the following databases to retrieve relevant information:
 
 \begin{itemize}
-  \item CADD for retrieving scores of danger of mutations
+  \item CADD for retrieving scores representing the dangerousness of mutations
   \item dbSNP for retrieving all kind of information related to SNPs
   \item STRING for retrieving everything related to proteins
 \end{itemize}
 
 \subsubsection{Visualisation}
 
-Several visualisations are used the bring the retrieved information in a clear way to the user.
+Several visualisations are used to bring show retrieved information in a clear way to the user.
 
 \begin{itemize}
-  \item The first visualisation is about giving an overview of all mutations found and showing them per chromosome. This overview is given on the patient overview page. It contains a graphical representation of all chromosome pairs and each pair is colored red or black if it respectively contains a mutation or not. While hovering over a chromosome pair, a list appears with links to the mutations found in that chromosome pair.
+  \item The first visualisation is about giving an overview of all found mutations, showing them per chromosome. This overview is given on the patient overview page. It contains a graphical representation of all chromosome pairs and each pair is colored red or black if it respectively contains a mutation or not. While hovering over a chromosome pair, a list appears with links to the mutations found in that pair.
   \item On the pages for individual mutations there are two extra visualisations
   \item
   \begin{itemize}
-     \item The first mutation specific visualisation is the top one found on the mutation page. It shows a part of the chromosome the mutation is on and displays the position of genes relative to base pairs in the chromosome indicated by a number.
-     \item There's also an overview in a graph form of proteins related to the mutation. The protein directly related to the mutation is marked and in a graph structure related proteins are shown. This graph is interactive so proteins can be dragged around to get a clearer view. Connections between protein are shown darker and thicker if the connectivity between two proteins is high relatively to the other connections in the graph.
+     \item The first mutation-specific visualisation is the top one found on the mutation page. It shows the part of the chromosome that the mutation is on, and displays the position of the base pair and the genes relatively close to this pair.
+     \item There's also an overview in the form of a graph containing proteins related to the mutation. The protein directly related to the mutation is marked and proteins related to the marked one are shown in the graph. This graph is interactive so proteins can be dragged around to get a clearer view. Connections between protein are shown darker and thicker if the connectivity between two proteins is high relative to the other connections in the graph.
   \end{itemize}
 \end{itemize}
