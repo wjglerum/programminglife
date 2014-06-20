@@ -9,7 +9,9 @@ import static org.mockito.Mockito.when;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import models.mutation.Mutation;
 import models.mutation.MutationRepository;
@@ -17,7 +19,6 @@ import models.mutation.MutationService;
 
 import org.broadinstitute.variant.variantcontext.Allele;
 import org.broadinstitute.variant.variantcontext.GenotypesContext;
-import org.broadinstitute.variant.variantcontext.VariantContext;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -135,8 +136,18 @@ public class MutationTest {
 	}
 
 	@Test
-	public void testGetPositions() {
-		// TODO
+	public void testGetPositions() throws SQLException {
+	    HashMap<String, ArrayList<Integer>> hm = new HashMap<String, ArrayList<Integer>>();
+		ArrayList<Integer> list = new ArrayList<Integer>();
+		list.add(startPoint);
+		list.add(endPoint);
+	    hm.put("Gene", list);
+	    when(repositoryMock.getPositions(m, 1)).thenReturn(hm);
+	    HashMap<String, ArrayList<Integer>> result = mutationService.getPositions(m, 1);
+	    for (Entry<String, ArrayList<Integer>> entry : result.entrySet()) {
+	        assertEquals(entry.getKey(), "Gene");
+	        assertEquals(entry.getValue(), list);
+	    }
 	}
 
 	@Test
@@ -204,5 +215,13 @@ public class MutationTest {
         assertNotEquals(m.getFrequency(), newFrequency, 0.0001);
         m.setFrequency(newFrequency);
         assertEquals(m.getFrequency(), newFrequency, 0.0001);	    
+	}
+	
+	@Test
+	public void testGetNearbyMutations() throws SQLException {
+	    ArrayList<Mutation> list = new ArrayList<Mutation>();
+	    list.add(m2);
+	    when(repositoryMock.getNearbyMutations(m, 1, 1)).thenReturn(list);
+	    assertEquals(mutationService.getNearbyMutations(m, 1, 1), list);
 	}
 }
