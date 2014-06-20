@@ -232,9 +232,10 @@ public class QueryProcessor {
         if (formatted.length() == 0) {
             return list;
         }
-        getConnectedProteinScore.setString(1, formatted);
-        getConnectedProteinScore.setString(2, formatted);
-        ResultSet rs = getConnectedProteinScore.executeQuery();
+        
+        String query = getConnectedProteinScore.toString().replaceAll("\\?", formatted);
+        
+        ResultSet rs = Database.select("string", query);
 
         if (rs != null) {
             while (rs.next()) {
