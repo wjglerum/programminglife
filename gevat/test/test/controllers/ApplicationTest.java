@@ -29,10 +29,20 @@ public class ApplicationTest {
 	}
 
 	/**
+	 * Test the dashboard
+	 */
+	@Test
+	public void testDashboard() {
+		Result result = callAction(controllers.routes.ref.Application
+				.dashboard());
+		assertThat(status(result)).isEqualTo(SEE_OTHER);
+	}
+
+	/**
 	 * Test the JS routes.
 	 */
 	@Test
-	public void testJavaScriptRoutes() {
+	public void testJavascriptRoutes() {
 		Result result = callAction(controllers.routes.ref.Application
 				.javascriptRoutes());
 		assertThat(status(result)).isEqualTo(OK);

@@ -15,6 +15,7 @@ public class Application extends Controller {
 
 	/**
 	 * Redirect the index page to the dashboard.
+	 * 
 	 * @return action result
 	 */
 	public static Result index() {
@@ -23,8 +24,9 @@ public class Application extends Controller {
 
 	/**
 	 * Secure the dashboard page.
-	 *
-	 * @throws SQLException exception
+	 * 
+	 * @throws SQLException
+	 *             exception
 	 * @return action result
 	 */
 	@Security.Authenticated(Secured.class)
@@ -34,6 +36,7 @@ public class Application extends Controller {
 
 	/**
 	 * JavaScript routing for handling Ajax request.
+	 * 
 	 * @return action result
 	 */
 	public static Result javascriptRoutes() {
@@ -41,13 +44,9 @@ public class Application extends Controller {
 
 		// Routes for Projects
 		return ok(Routes.javascriptRouter("jsRoutes",
-				controllers.routes.javascript.
-				Patients.remove(),
-				controllers.routes.javascript.
-				Patients.isProcessed(),
-				controllers.routes.javascript.
-				Mutations.proteinsJSON()
-				));
+				controllers.routes.javascript.Patients.remove(),
+				controllers.routes.javascript.Patients.isProcessed(),
+				controllers.routes.javascript.Mutations.proteinsJSON()));
 	}
 
 }

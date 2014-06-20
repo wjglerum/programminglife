@@ -188,17 +188,17 @@ public final class VCFReader {
         }
 
         for (Entry<Integer, Mutation> m : hm.entrySet()) {
-            switch (m.getValue().getUniqueBase()) {
-                case "A":   splitted.get(0)
+            switch (m.getValue().child().charAt(1)) {
+                case 'A':   splitted.get(0)
                 .add(m.getValue());
                             break;
-                case "T":   splitted.get(1)
+                case 'T':   splitted.get(1)
                 .add(m.getValue());
                             break;
-                case "C":   splitted.get(2)
+                case 'C':   splitted.get(2)
                 .add(m.getValue());
                             break;
-                case "G":   splitted.get(3)
+                case 'G':   splitted.get(3)
                 .add(m.getValue());
                             break;
                 default : break;
