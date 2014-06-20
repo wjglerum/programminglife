@@ -1,6 +1,7 @@
 package test.models;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -54,6 +55,38 @@ public class UserTest {
 		assertEquals(x.getUsername(), username);
 
 		verify(repositoryMock).authenticate(username, password);
+	}
+
+	@Test
+	public void testGetSetName() {
+		assertEquals(u.getName(), name);
+		final String newName = "new";
+		u.setName(newName);
+		assertNotEquals(u.getName(), name);
+		assertEquals(u.getName(), newName);
+	}
+	
+	@Test
+	public void testGetSetSurName() {
+		assertEquals(u.getSurname(), surname);
+		final String newName = "new";
+		u.setSurname(newName);
+		assertNotEquals(u.getSurname(), surname);
+		assertEquals(u.getSurname(), newName);
+	}
+	
+	@Test
+	public void testGetSetUserName() {
+		assertEquals(u.getUsername(), username);
+		final String newName = "new";
+		u.setUsername(newName);
+		assertNotEquals(u.getUsername(), username);
+		assertEquals(u.getUsername(), newName);
+	}
+	
+	@Test
+	public void testGetId() {
+		assertEquals(u.getId(), id);
 	}
 
 }
