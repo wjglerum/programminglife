@@ -94,8 +94,6 @@ public class ChromosomesTest {
 				+ type + "\",\"pid\":" + pid + ",\"mid\":" + mid
 				+ ",\"rsid\":\"" + rsID + "\"}]";
 		String res = Chromosomes.mutationsJSON(list, pid);
-		Logger.info(mutationsJSON);
-		Logger.info(res);
 		assertThat(res).isEqualTo(mutationsJSON);
 	}
 }
