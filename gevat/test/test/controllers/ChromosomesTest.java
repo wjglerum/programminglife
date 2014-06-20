@@ -90,10 +90,12 @@ public class ChromosomesTest {
 	public void testMutationsJSON() {
 		List<Mutation> list = new ArrayList<Mutation>();
 		list.add(m);
-		String mutationsJSON = "[{\"position\":" + position + ",\"sort\":\""
-				+ type + "\",\"pid\":" + pid + ",\"mid\":" + mid
-				+ ",\"rsid\":\"" + rsID + "\"}]";
 		String res = Chromosomes.mutationsJSON(list, pid);
-		assertThat(res).isEqualTo(mutationsJSON);
+		assertThat(res).contains(rsID);
+		assertThat(res).contains(pid + "");
+		assertThat(res).contains(mid + "");
+		assertThat(res).contains(type);
+		assertThat(res).contains(position + "");
+		
 	}
 }
