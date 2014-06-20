@@ -1,4 +1,13 @@
-INSERT INTO
- mutations 
+INSERT INTO mutations 
 VALUES
- (nextval('m_id_seq'::regclass), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+	(nextval('m_id_seq'::regclass),
+	?,
+	?,
+	?,
+	?,
+	?,
+	?,
+	?,
+	?,
+	?,
+	?);

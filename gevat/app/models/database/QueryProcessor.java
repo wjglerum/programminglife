@@ -309,7 +309,7 @@ public class QueryProcessor {
 		        insertMutation.setInt(i++, position);
 		        insertMutation.setFloat(i++, score);
 		        insertMutation.setFloat(i++, frequency);
-		        insertMutation.executeQuery();
+		        insertMutation.executeUpdate();
 	}
 
 	/**
