@@ -29,14 +29,12 @@ public class ProteinRepositoryDB implements ProteinRepository {
 	@Override
 	public ArrayList<Mutation> getRelatedMutations(int patientId, Mutation m)
 			throws SQLException {
-//		TODO getRelatedMutations
 		List<Mutation> mutations = mutationService.getMutations(patientId);
 		ArrayList<Mutation> related = new ArrayList<Mutation>();
 
 		// Find mutation related to this protein (should be faster)
 		for (Mutation mutation : mutations) {
 			if (mutation.getId() != m.getId()) {
-				// TODO add related proteins found in mutation
 				assert (true);
 			}
 		}

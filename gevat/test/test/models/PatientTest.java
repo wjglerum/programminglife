@@ -61,7 +61,7 @@ public class PatientTest {
         p.setName("John");
         assertEquals("John", p.getName());
     }
-    
+
     @Test
     public void isFemaleSetTest() {
         assertTrue(p.isFemale());
