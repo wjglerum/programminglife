@@ -54,8 +54,6 @@ public class ReaderThread implements Runnable {
             		mutations);
         } catch (
         		SQLException e) {
-            // TODO Auto-generated catch
-        	// block
             e.printStackTrace();
         }
 
@@ -106,7 +104,6 @@ public class ReaderThread implements Runnable {
 					pc.insertIntoDB(patient.getId());
 				}
 			} catch (NumberFormatException | IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

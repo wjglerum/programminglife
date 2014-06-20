@@ -63,6 +63,11 @@ public class PatientTest {
     }
 
     @Test
+    public void isFemaleSetTest() {
+        assertTrue(p.isFemale());
+    }
+
+    @Test
     public void vcfFileGetSetTest() {
         assertNotEquals("TestFile.vcf", p.getVcfFile());
         p.setVcfFile("TestFile.vcf");
@@ -110,10 +115,4 @@ public class PatientTest {
 
         verify(repositoryMock).add(id, name, surname, vcfFile, vcfLength, true);
     }
-
-    @Test
-    public void removePatientTest() {
-
-    }
-
 }

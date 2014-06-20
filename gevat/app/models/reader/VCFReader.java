@@ -114,7 +114,6 @@ public final class VCFReader {
      * @return Returns whether or not it is a valid set.
      */
     public static boolean hasMutation(final VariantContext vc) {
-        // TODO: take names like "DAUGHTER" from file
         List<Allele> d = vc.getGenotype("DAUGHTER").getAlleles();
         List<Allele> f = vc.getGenotype("FATHER").getAlleles();
         List<Allele> m = vc.getGenotype("MOTHER").getAlleles();
