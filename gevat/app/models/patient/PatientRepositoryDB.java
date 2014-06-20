@@ -139,12 +139,10 @@ public class PatientRepositoryDB implements PatientRepository {
         add.setLong(counter++, vcfLength);
         add.setBoolean(counter++, female);
         add.executeUpdate();
-        // TODO get id of added patient efficiently
         List<Patient> patients = null;
         try {
             patients = getAll(uId);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
