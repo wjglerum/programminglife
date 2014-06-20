@@ -1,17 +1,5 @@
 package test.controllers;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static play.mvc.Http.Status.SEE_OTHER;
-import static play.mvc.Http.Status.OK;
-import static play.test.Helpers.callAction;
-import static play.test.Helpers.fakeApplication;
-import static play.test.Helpers.start;
-import static play.test.Helpers.status;
-import static play.test.Helpers.stop;
-import static org.mockito.Mockito.*;
-
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,22 +11,26 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import controllers.Chromosomes;
-import controllers.Mutations;
 import play.Logger;
 import play.mvc.Result;
 import play.test.FakeApplication;
+import static org.fest.assertions.Assertions.assertThat;
+import static play.mvc.Http.Status.OK;
+import static play.mvc.Http.Status.SEE_OTHER;
+import static play.mvc.Http.Status.NOT_FOUND;
+import static play.test.Helpers.callAction;
+import static play.test.Helpers.charset;
+import static play.test.Helpers.contentAsString;
+import static play.test.Helpers.contentType;
+import static play.test.Helpers.fakeApplication;
+import static play.test.Helpers.start;
+import static play.test.Helpers.status;
+import static play.test.Helpers.stop;
 
-/**
- * Test the Mutations controller.
- * 
- * @author willem
- * 
- */
-public class MutationsTest {
+public class ChromosomesTest {
 
 	private Mutation m;
-	private final int amount = 20;
-	private final int pid = 1;
+	private final int pid = 10;
 	private final int mid = 1;
 	private final String type = "SNP";
 	private final String rsID = "rs001";
@@ -82,38 +74,28 @@ public class MutationsTest {
 	}
 
 	/**
-	 * Test the rendering of the mutation page.
+	 * Test the rendering of the chromosome page.
 	 */
 	@Test
 	public void testShow() {
-		Result result = callAction(controllers.routes.ref.Mutations.show(1, 1));
-		assertThat(status(result)).isEqualTo(SEE_OTHER);
-
-		// invalid user
-		result = callAction(controllers.routes.ref.Mutations.show(
-				Integer.MAX_VALUE, 1));
+		Result result = callAction(controllers.routes.ref.Chromosomes.show(pid,
+				chromosome));
 		assertThat(status(result)).isEqualTo(SEE_OTHER);
 	}
 
 	/**
-	 * Test the mutationNotFound error.
+	 * Test the mutation list to JSON.
 	 */
 	@Test
-	public void testMutationNotFound() {
-		Result result = callAction(controllers.routes.ref.Mutations.show(1,
-				Integer.MAX_VALUE));
-		assertThat(status(result)).isEqualTo(SEE_OTHER);
-	}
-
-	/**
-	 * Test the nearby mutations to JSON.
-	 * 
-	 * @throws SQLException
-	 */
-	@Test
-	public void testNearbyMutationsJSON() throws SQLException {
-		String mutationsJSON = "[]";
-		String res = Mutations.nearbyMutationsJSON(m, amount, pid);
+	public void testMutationsJSON() {
+		List<Mutation> list = new ArrayList<Mutation>();
+		list.add(m);
+		String mutationsJSON = "[{\"position\":" + position + ",\"sort\":\""
+				+ type + "\",\"pid\":" + pid + ",\"mid\":" + mid
+				+ ",\"rsid\":\"" + rsID + "\"}]";
+		String res = Chromosomes.mutationsJSON(list, pid);
+		Logger.info(mutationsJSON);
+		Logger.info(res);
 		assertThat(res).isEqualTo(mutationsJSON);
 	}
 }
