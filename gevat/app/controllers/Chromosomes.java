@@ -54,11 +54,6 @@ public class Chromosomes extends Controller {
 				.getId());
 		List<Mutation> mutations = mutationService.getMutations(patientId,
 				chromosomeId);
-		HashMap<Mutation, Double> map = new HashMap<Mutation, Double>();
-		for (Mutation m : mutations) {
-			map.put(m, (double) Math.round(((double) mutationService
-					.getScore(m)) * round) / round);
-		}
 
 		models.chromosome.Chromosome c = new models.chromosome.Chromosome(
 				chromosomeId);
@@ -70,7 +65,7 @@ public class Chromosomes extends Controller {
 		String mutationsJSON = mutationsJSON(mutations, patientId);
 
 		// Render the chromosome view if there are mutations in the view
-		return ok(chromosome.render(p, c, map, Authentication.getUser(),
+		return ok(chromosome.render(p, c, mutations, Authentication.getUser(),
 				mutationsJSON));
 	}
 
