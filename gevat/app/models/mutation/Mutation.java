@@ -397,4 +397,8 @@ public class Mutation extends VariantContext {
 		alleles.add(toAllele(allelesString.substring(1, 2), false));
 		return GenotypeBuilder.create(name, alleles);
 	}
+
+	public void setId(int newId) {
+		id = newId;
+	}
 }

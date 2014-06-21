@@ -70,7 +70,7 @@ public class ProteinConnection {
 		return false;
 	}
 
-	public void insertIntoDB(int patientId)	{
-		QueryProcessor.insertConnectionIntoDB(patientId, p1.getName(), p2.getName(), combinedScore);
+	public void insertIntoDB(int patientId, int mutationId)	{
+		QueryProcessor.insertConnectionIntoDB(patientId, p1.getName(), p2.getName(), combinedScore, mutationId);
 	}
 }

@@ -213,7 +213,7 @@ public class Mutations extends Controller {
         ProteinGraph proteinGraph = new ProteinGraph(rsID, limit, threshold);
 
         for (String protein : QueryProcessor.findGenesAssociatedWithSNP(rsID)) {
-            proteinGraph.putMutation(protein);
+            proteinGraph.putMutation(protein, patientId);
         }
         proteinGraph.getOtherConnectedMutatedProteins(patientId);
 

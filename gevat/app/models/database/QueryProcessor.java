@@ -35,6 +35,8 @@ public class QueryProcessor {
     private static PreparedStatement getSNPFunction;
     private static PreparedStatement listMutatedProteins;
     private static PreparedStatement insertMutation;
+    private static PreparedStatement getMutationId;
+    private static PreparedStatement getMutationIds;
 
     /**
      * Done because it is a utility-class.
@@ -82,6 +84,8 @@ public class QueryProcessor {
         	listMutatedProteins = prepareQuery("listMutatedProteins",
         			connection4);
         	insertMutation = prepareQuery("insertMutation", connection4);
+        	getMutationId = prepareQuery("getMutationId", connection4);
+        	getMutationId = prepareQuery("getMutationIds", connection4);
         } catch (SQLException e) {
             Logger.error((e.toString()));
         }
@@ -491,7 +495,7 @@ public class QueryProcessor {
      * @param p2 The second protein
      * @param combinedScore The combined score or threshold of the two proteins
      */
-	public static void insertConnectionIntoDB(int patientId, String p1, String p2, int combinedScore)	{
+	public static void insertConnectionIntoDB(int patientId, String p1, String p2, int combinedScore, int mutationId)	{
 		String query = "INSERT INTO protein_connections VALUES ("
 			+ patientId
 			+ ",'"
@@ -500,6 +504,8 @@ public class QueryProcessor {
 			+ p2
 			+ "',"
 			+ combinedScore
+			+ ","
+			+ mutationId
 			+ ");";
 		// Logger.info(query);
 		Database.insert("data", query);
@@ -528,5 +534,28 @@ public class QueryProcessor {
 				+ formatForIN(proteins)
 				+ " );";
 			return Database.select("data", query);
+	}
+
+	public static int getMutationId(int id, String rsID) throws SQLException {
+        getMutationId.setInt(1, id);
+        getMutationId.setString(2, rsID);
+        ResultSet rs = getMutationId.executeQuery();
+        if(rs.next()) {
+        	return rs.getInt("m_id");
+        }
+        return 0;
+	}
+	
+	public static Collection<Integer> getMutationIds(String protein, int patientId) throws SQLException
+	{
+		Collection<Integer> mutations = new ArrayList<Integer>();
+
+        getMutationIds.setInt(1, patientId);
+        getMutationIds.setString(2, protein);
+        ResultSet rs = getMutationIds.executeQuery();
+        while(rs.next()) {
+        	mutations.add(rs.getInt("m_id"));
+        }
+		return mutations;
 	}
 }

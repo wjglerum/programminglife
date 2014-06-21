@@ -316,8 +316,8 @@ public class ProteinGraph {
 	 * @param protein
 	 *            The name of the protein that has a mutation
 	 */
-	public void putMutation(final String protein) {
-		this.getProtein(protein).setMutation(true);
+	public void putMutation(final String protein, int patientId) {
+		this.getProtein(protein).setMutation(true, patientId);
 	}
 	
 	public Collection<String> getMutatedProteinsAsString() {
@@ -339,7 +339,7 @@ public class ProteinGraph {
 				String p2 = rs.getString("protein_b_id");
 				int combinedScore = rs.getInt("combined_score");
 				add(p1, p2, combinedScore);
-				this.putMutation(p1);
+				this.putMutation(p1, patientId);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

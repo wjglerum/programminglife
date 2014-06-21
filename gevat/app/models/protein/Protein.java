@@ -1,8 +1,11 @@
 package models.protein;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import models.database.QueryProcessor;
 
 /**
  * The proteine class contains the name, disease and connections to other
@@ -31,6 +34,8 @@ public class Protein {
 	 * True if the proteine has a mutation of type defined by the mutation class.
 	 */
 	private boolean hasMutation;
+	
+	private Collection<Integer> mutations = new ArrayList<Integer>();
 
 	/**
 	 * The constructor for Proteine.
@@ -100,8 +105,18 @@ public class Protein {
 		return this.disease;
 	}
 	
-	public final void setMutation(boolean mutation) {
+	public final void setMutation(boolean mutation, int patientId) {
 		hasMutation = mutation;
+		try {
+			mutations = QueryProcessor.getMutationIds(getName(), patientId);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public final Collection<Integer> getMutations()
+	{
+		return mutations;
 	}
 	
 	/**

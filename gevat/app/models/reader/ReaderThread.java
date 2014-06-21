@@ -85,6 +85,7 @@ public class ReaderThread implements Runnable {
 				mutationService.getScore(m),
 				QueryProcessor.getFrequency(m.getID(),
 						m.getAlleles().get(0).getBaseString()));
+		m.setId(QueryProcessor.getMutationId(patient.getId(), m.getRsID()));
 	}
 
 	private void updatePatientToProcessed() {
@@ -103,7 +104,7 @@ public class ReaderThread implements Runnable {
 				pg.addConnectionsOfSnp(Integer.parseInt(m.getRsID()
 						.substring(2)), limit, threshold);
 				for (ProteinConnection pc : pg.getConnections()) {
-					pc.insertIntoDB(patient.getId());
+					pc.insertIntoDB(patient.getId(), (int) m.getId());
 				}
 			} catch (NumberFormatException | IOException e) {
 				// TODO Auto-generated catch block
