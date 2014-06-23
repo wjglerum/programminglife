@@ -2,22 +2,22 @@ The developed product, a secured web application, is built on de Play Framework.
 
 \subsection{Authentication}
 
-Starting with the basis, it's a secured web application where a user needs to log in. After logging in some secured pages become accessible. Some other pages are already accessible before logging in, e.g. the 'documentation' and 'about' pages. We distinguish the following parts:
+Starting with the basis, it is a secured web application where a user needs to log in. After logging in some secured pages become accessible. Some other pages are already accessible before logging in, e.g. the 'documentation' and 'about' pages. We distinguish the following parts:
 
 \begin{itemize}
   \item A login page
-  \item Secure pages that aren't publicly accessible
+  \item Secure pages that are not publicly accessible
   \item Redirect if secured page is requested while unauthenticated
   \item Prevent doctors from accessing data of patients of other doctors
 \end{itemize}
 
 \subsection{Context specific}
 
-The web framework and it's built-in secure module isn't developed by ourselves so we could focus on developing the context specific parts. This was mainly separable in three parts: analysing data, retrieval of relevant data from databases and visualising data.
+The web framework and it is built-in secure module is not developed by ourselves so we could focus on developing the context specific parts. This was mainly separable in three parts: analysing data, retrieval of relevant data from databases and visualising data.
 
 \subsubsection{Data analysation}
 
-Analysing the data is done by processing the VCF file and detecting mutations. The outcome of the processing is used in the visualisation. At both of these parts there's information used given by some databases. The information is used to get more information about mutations and find relations between several mutations. The application does the following:
+Analysing the data is done by processing the VCF file and detecting mutations. The outcome of the processing is used in the visualisation. At both of these parts there is information used given by some databases. The information is used to get more information about mutations and find relations between several mutations. The application does the following:
 
 \begin{itemize}
   \item Read the VCF file and find mutations of two types: de novo's and recessive homozygous
