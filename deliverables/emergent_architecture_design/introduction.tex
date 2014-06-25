@@ -1,12 +1,12 @@
 \section{Introduction}
-	This document provides information on the system that will be built during the context project programming life. We have also set up a couple of goals which will be followed as much as possible. The architecture of the product will be discussed in the form of high level components. These may be split up into subcomponents and/or subsystems.
+	This document contains information regarding our design goals, used languages and used programs. It also explains our general composition of components and subsystems, as well as our data management and use of concurrency.
 	\subsection{Design goals}
 	Our product will focus on:
 	\begin{itemize}
 		\item Availability
-			\subitem We are building this program using scrum, a development process consisting of sprints of a predetermined length. At the end of each sprint, we plan to have a working system, with more functionality being added each sprint. Using this approach, our customer can try the product after each iteration, resulting in feasible feedback which we can use to quickly alter course.
+			\subitem We are building this program using scrum, a development process consisting of sprints of a predetermined length. At the end of each sprint, we plan to have a working system, with more functionality being added each sprint. Using this approach, our customer can test the product after each iteration, resulting in feasible feedback which we can use to quickly alter course.
 		\item Manageability
-			\subitem Doctors will not have to manage anything besides adding or deleting patients, as they have no direct access to the databases or any data. They will only be provided visualizations to interact with. 
+			\subitem Doctors will not have to manage any data besides adding or deleting patients, as they have no direct access to the databases. The only things they can do besides add and delete patients is interact with the visualizations. 
 			\subitem As for the software manageability, we are using checkstyle and JavaDoc comments to make sure all the code is in a correct and uniform layout while everything is also well documented.
 			\subitem Since our application runs on a server and a doctor can access our data with a web page, no extra programs are required. The user will log on with his credentials and can select a VCF-file to upload to our server as well as provide some data on the trio.
 		\item Performance
@@ -16,7 +16,7 @@
 		\item Reliability
 			\subitem The application should be very reliable, as servers are generally always on. The user only needs to connect to the web page. To make sure the software does not suddenly break, it will be tested thoroughly. In case something does go terribly wrong, we are using GitHub with branches so changes can be reverted easily.
 		\item Secureness
-			\subitem Doctors are required to log onto our system via the secure web page, thus unauthorized access is prevented. The data sent over will only be saved for a short time, long enough for it to be analyzed. After this it is deleted and the results are submitted to the user and saved into the database for quick access later.
+			\subitem Doctors are required to log onto our system via the secure web page, thus unauthorized access is prevented. The data sent over will only be saved for a short time, long enough for it to be analyzed. After this, it is deleted and the results are submitted to the user and saved into the database for quick access later.
 	\end{itemize}
 	\subsection{Programming languages and programs}
 	The system features a web application which we can separate in a frontend and backend. The Play Framework is used to realize this. The main programming language used in the backend and in Play is Java. For templating, the Play framework also uses Scala. The frontend is based on regular web languages: HTML, CSS and JavaScript. We fasten frontend develop by using both JavaScript and CSS libraries: Bootstrap for visual aspects and jQuery for faster JavaScript development. Both jQuery and Bootstrap increase cross-browser compatibility.

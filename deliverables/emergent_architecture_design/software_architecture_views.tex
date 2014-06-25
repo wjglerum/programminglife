@@ -9,16 +9,18 @@
 		These visualization form three big parts of the architecture. Every part is dividable into two sub-parts; visualization itself and the database information retrieval. Our team members can work independently on these three parts, specifically on database or visualization.\\		
 		Furthermore the system features a server to client with model view controller architecture, which is used by the Play framework. Play handles request from users.
 	\subsection{Subsystem decomposition}
-	\begin{figure}
-		\centering
-		\includegraphics[scale=0.5]{schema1-improvedv2.png}
-		\caption{Subsystem decomposition of GEVATT}
-	\end{figure}
+		For a visual overview, take a look at Figure \ref{fig:subsystemdecomp}.
+		\begin{figure}
+			\centering
+			\includegraphics[scale=0.5]{schema1-improvedv2.png}
+			\caption{Subsystem decomposition of GEVATT}
+			\label{fig:subsystemdecomp}
+		\end{figure}
 		\begin{itemize}
 			\item Watson server
 				\subitem The Watson server owned by the TU Delft hosts the databases STRING\cite{franceschini2013string}, dbSNP\cite{sherry2001dbsnp} and CADD\cite{kircher2014general} and processes queries given by the Java server and returns the results.
 			\item Java server
-				\subitem The java server makes queries and sends these to Watson. It makes these based on the VCF-file given by the web page. It processes these and determines which data is to be retrieved. The data retrieved is then sent to the web page.
+				\subitem The Java server makes queries and sends these to Watson. It makes these based on the VCF-file given by the web page. It processes these and determines which data is to be retrieved. The data retrieved is then sent to the web page.
 			\item PL database
 				\subitem The Programming Life database contains the user and patient information. It is needed to log in and add or view patients.
 			\item Website
@@ -31,7 +33,7 @@
 	\subsection{Database Connectivity}
 		\begin{itemize}
 			\item dbSNP
-				\subitem The database dbSNP is used by the java server to get information on the SNP's found in the VCF-file supplied by the user. What is most often retrieved is the gene associated with this SNP so we can use it to search for information about this gene in the STRING database.
+				\subitem The database dbSNP is used by the Java server to get information on the SNP's found in the VCF-file supplied by the user. What is most often retrieved is the gene associated with this SNP so we can use it to search for information about this gene in the STRING database.
 			\item STRING
 				\subitem The STRING database contains information about genes and proteins and how these are connected. Using information retrieved from dbSNP, we can look at which SNP affects which gene(s) and what genes it/they affect.
 			\item CADD
@@ -40,12 +42,14 @@
 				\subitem We use an extra database hosted at the webserver to store extra information for the web-application. \\
 				The credentials of the users, the doctors, are stored in the database, the passwords are hashed and salted.\\
 				Each user can have multiple patients which are linked through the id of the user.
-				Some basic information is stored per user including the uploaded VCF-file.
+				Some basic information is stored per user, including the uploaded VCF-file.
 				For every patient the mutations found in the VCF-file are stored as a single mutation, which is linked to each patient with the patients id.\\
+				The complete schema can be seen in figure \ref{fig:dbdesign}.
 				\begin{figure}
 					\centering
 					\includegraphics[scale=0.55]{erd.png}
 					\caption{Programming Life database design}
+					\label{fig:dbdesign}
 				\end{figure}
 		\end{itemize}
 		

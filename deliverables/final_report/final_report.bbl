@@ -1,0 +1,31 @@
+\begin{thebibliography}{1}
+
+\bibitem{kircher2014general}
+Martin Kircher, Daniela~M Witten, Preti Jain, Brian~J O'Roak, Gregory~M Cooper,
+  and Jay Shendure.
+\newblock A general framework for estimating the relative pathogenicity of
+  human genetic variants.
+\newblock {\em Nature genetics}, 46(3):310--315, 2014.
+
+\bibitem{sherry2001dbsnp}
+Stephen~T Sherry, M-H Ward, M~Kholodov, J~Baker, Lon Phan, Elizabeth~M
+  Smigielski, and Karl Sirotkin.
+\newblock dbsnp: the ncbi database of genetic variation.
+\newblock {\em Nucleic acids research}, 29(1):308--311, 2001.
+
+\bibitem{franceschini2013string}
+Andrea Franceschini, Damian Szklarczyk, Sune Frankild, Michael Kuhn, Milan
+  Simonovic, Alexander Roth, Jianyi Lin, Pablo Minguez, Peer Bork, Christian
+  von Mering, et~al.
+\newblock String v9. 1: protein-protein interaction networks, with increased
+  coverage and integration.
+\newblock {\em Nucleic acids research}, 41(D1):D808--D815, 2013.
+
+\bibitem{landrum2013clinvar}
+Melissa~J Landrum, Jennifer~M Lee, George~R Riley, Wonhee Jang, Wendy~S
+  Rubinstein, Deanna~M Church, and Donna~R Maglott.
+\newblock Clinvar: public archive of relationships among sequence variation and
+  human phenotype.
+\newblock {\em Nucleic acids research}, page gkt1113, 2013.
+
+\end{thebibliography}
