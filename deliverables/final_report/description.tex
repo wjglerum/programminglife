@@ -44,9 +44,12 @@ The analysing of data is done after a VCF file is uploaded.
 We use the following databases to retrieve relevant information:
 
 \begin{itemize}
-  \item CADD for retrieving scores representing the dangerousness of mutations
-  \item dbSNP for retrieving all kind of information related to SNPs
-  \item STRING for retrieving everything related to proteins
+  \item CADD\cite{kircher2014general}
+  	\subitem This database is used for retrieving scores representing the dangerousness of mutations. It contains all 8.6 billion mutations compared to the reference genome. These scores range from 0 to 99, and estimate how dangerous a mutation is. A score between 0 and 10 means the mutation is among the 90\% least dangerous ones, greater than 10 means among the top 10\%, greater than 20 means top 1\% and so on.
+  \item dbSNP\cite{sherry2001dbsnp}
+  	\subitem This database is used for retrieving all kind of information related to SNPs. This is by far the most used database in this project, as all we start with are rsIDs, which we have to look up in dbSNP. Here we retrieve information concerning the location of the SNP, the gene it is on and the frequency of its occurrence.
+  \item STRING\cite{franceschini2013string}
+  	\subitem This database is used for retrieving everything related to proteins. We mostly use the genes connected to SNPs found with dbSNP to find connections with proteins. These proteins are then checked for links to other proteins, and how much interaction is between them. This is shown with a number between 0 and 999, as shown in Figure \ref{fig:mutation2}. We can also use the name of proteins to check if there is a disease associated with them, thanks to a file from the ClinVar database\cite{landrum2013clinvar}.
 \end{itemize}
 
 \subsubsection{Visualisation}
