@@ -2,7 +2,7 @@ The developed product, a secured web application, is built on de Play Framework.
 
 \subsection{Authentication}
 
-Starting with the basis, it is a secured web application where a user needs to log in. After logging in some secured pages become accessible. Some other pages are already accessible before logging in, e.g. the 'documentation' and 'about' pages. We distinguish the following parts:
+Starting with the basis, it is a secured web application where a user needs to log in. The application is secured because sensitive information is used and stored (namely genetic information) and patients probably do not want this information to be public. It is a web application so it is easily accessible from multiple devices and updates do not have to be done locally. After logging in some secured pages become accessible. Some other pages are already accessible before logging in, e.g. the 'documentation' and 'about' pages. We distinguish the following parts:
 
 \begin{itemize}
   \item A login page
@@ -13,15 +13,15 @@ Starting with the basis, it is a secured web application where a user needs to l
 
 \subsection{Context specific}
 
-The web framework and it is built-in secure module is not developed by ourselves so we could focus on developing the context specific parts. This was mainly separable in three parts: analysing data, retrieval of relevant data from databases and visualising data.
+The web framework Play and it is built-in secure module is not developed by ourselves so we could focus on developing the context specific parts. This was mainly separable in three parts: analysing data, retrieval of relevant data from databases and visualising data.
 
-\subsubsection{Data analysation}
+\subsubsection{Data analysis}
 
 Analysing the data is done by processing the VCF file and detecting mutations. The outcome of the processing is used in the visualisation. At both of these parts there is information used given by some databases. The information is used to get more information about mutations and find relations between several mutations. The application does the following:
 
 \begin{itemize}
-  \item Read the VCF file and find mutations of two types: de novo's and recessive homozygous
-  \item Save metadata about the uploaded file
+  \item Read the VCF file and find mutations of two types: de novo's and recessive homozygous. We have chosen these two types of mutations since they are the most suspicious, most likely to cause a decease, and therefore the most interesting
+  \item Save metadata about the uploaded file, like the filename, file size, etc.
   \item Find relations between found mutations
 \end{itemize}
 
@@ -46,3 +46,5 @@ The most important part of the application: visualisation. Multiple views of the
      \item A graph with a protein related to the mutation, and proteins related to that protein
   \end{itemize}
 \end{itemize}
+
+These visualisations each help to meet the requirements because they each have a different view on the found mutations. The chromosome overview gives a direct overview of everything found. The other two visualisations focus on two specific parts. The location of mutations relative to genes could help the doctor understand that a mutation is related to another gene and therefore probably a disease. The protein graph visualisation makes relations between other proteins related to mutations understandable. This could help a docter to identify symptoms or diseases caused by other proteins that are indirectly related to the mutation.
